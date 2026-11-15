@@ -3,12 +3,12 @@
 \includegraphics[width=\linewidth]{fig/teaser.pdf}
 \captionsetup{hypcap=false}
 \captionof{figure}{\textbf{A sentence that does not pin down its target, and the same target rewritten so that it does.}
-A Multi3DRefer annotator describes chair~I in a ScanNet dining room (scene0011\_00) as ``the chair at the right end of the table \ldots the last one on its side''.
-Read blind, without being told the target, the only cue that binds to geometry is \emph{last one on its side}, and two chairs satisfy it (B and I); ``right'' has no stated standpoint.
-Our rewrite names anchors that exist in the room (the kitchen counter, the TV) and relations our operators computed and checked (side of the table, end of the row, nearest / farthest), and the same blind reader and verifier leave exactly one chair.
-Tags and boxes follow the convention used throughout: target in red, same-class candidates in teal, anchors named by the sentences in blue.
-Bottom: the four numbers the paper is about---how many sentences pin down their target, how many verifiable relations they carry, what a grounding model gains when only its training text changes, and what a frontier model can resolve from the same renders.
-\TODO{replace the point-cloud render by a mesh render when the ply arrives; numbers to be re-synced with the final tables.}}
+A Multi3DRefer annotator describes chair~I in a ScanNet dining room (scene0011\_00).
+Read blind---without being told the target---the only clause that binds to geometry is \emph{the last one on its side}, and two chairs satisfy it (B and I); \emph{right end} and \emph{right of} name no standpoint (grey).
+Our rewrite uses anchors that exist in the room (the kitchen counter, the TV) and relations our operators computed and checked; each clause is coloured like its chip and like the relation drawn on the scene, and the same blind reader and verifier leave one chair.
+Tags: target red, same-class candidates teal, anchors named by the sentences blue.
+Bottom, left to right: how many sentences pin down their target; how many verifiable relations they carry; what 3D-LLaVA scores when each model is trained and tested on its own text (and, on the original text alone, on targets with same-class distractors); what GPT-6 resolves from the same renders.
+\TODO{re-sync the four numbers with the final tables.}}
 \captionsetup{hypcap=true}
 \label{fig:\currfilebase}%
 \end{strip}
