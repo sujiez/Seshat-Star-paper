@@ -55,57 +55,194 @@
 @String(AAAI = {AAAI})
 @String(CVPRW= {CVPRW})
 @String(CSVT = {IEEE TCSVT})
+@String(LREC = {LREC})
+@String(WACV = {WACV})
+@String(THREEDV = {3DV})
 
+%% ---------------------------------------------------------------------------
+%% Corpora
+%% ---------------------------------------------------------------------------
 
-
-@misc{Authors14,
- author = {FirstName LastName},
- title = {The frobnicatable foo filter},
- note = {Face and Gesture submission ID 324. Supplied as supplemental material {\tt fg324.pdf}},
- year = 2014
+@inproceedings{scanrefer,
+  author    = {Dave Zhenyu Chen and Angel X. Chang and Matthias Nie{\ss}ner},
+  title     = {{ScanRefer}: {3D} Object Localization in {RGB-D} Scans using Natural Language},
+  booktitle = ECCV,
+  year      = {2020}
 }
 
-@misc{Authors14b,
- author = {FirstName LastName},
- title = {Frobnication tutorial},
- note = {Supplied as supplemental material {\tt tr.pdf}},
- year = 2014
+@inproceedings{referit3d,
+  author    = {Panos Achlioptas and Ahmed Abdelreheem and Fei Xia and Mohamed Elhoseiny and Leonidas Guibas},
+  title     = {{ReferIt3D}: Neural Listeners for Fine-Grained {3D} Object Identification in Real-World Scenes},
+  booktitle = ECCV,
+  year      = {2020}
 }
 
-@article{Alpher02,
-author = {FirstName Alpher},
-title = {Frobnication},
-journal = PAMI,
-volume = 12,
-number = 1,
-pages = {234--778},
-year = 2002
+@inproceedings{multi3drefer,
+  author    = {Yiming Zhang and ZeMing Gong and Angel X. Chang},
+  title     = {{Multi3DRefer}: Grounding Text Description to Multiple {3D} Objects},
+  booktitle = ICCV,
+  year      = {2023}
 }
 
-@article{Alpher03,
-author = {FirstName Alpher and  FirstName Fotheringham-Smythe},
-title = {Frobnication revisited},
-journal = {Journal of Foo},
-volume = 13,
-number = 1,
-pages = {234--778},
-year = 2003
+@inproceedings{sceneverse,
+  author    = {Baoxiong Jia and Yixin Chen and Huangyue Yu and Yan Wang and Xuesong Niu and Tengyu Liu and Qing Li and Siyuan Huang},
+  title     = {{SceneVerse}: Scaling {3D} Vision-Language Learning for Grounded Scene Understanding},
+  booktitle = ECCV,
+  year      = {2024}
 }
 
-@article{Alpher04,
-author = {FirstName Alpher and FirstName Fotheringham-Smythe and FirstName Gamow},
-title = {Can a machine frobnicate?},
-journal = {Journal of Foo},
-volume = 14,
-number = 1,
-pages = {234--778},
-year = 2004
+@inproceedings{3dgrand,
+  author    = {Jianing Yang and Xuweiyi Chen and Nikhil Madaan and Madhavan Iyengar and Shengyi Qian and David F. Fouhey and Joyce Chai},
+  title     = {{3D-GRAND}: A Million-Scale Dataset for {3D-LLMs} with Better Grounding and Less Hallucination},
+  booktitle = CVPR,
+  year      = {2025}
 }
 
-@inproceedings{Alpher05,
-author = {FirstName Alpher and FirstName Gamow},
-title = {Can a computer frobnicate?},
-booktitle = CVPR,
-pages = {234--778},
-year = 2005
+@inproceedings{scanents3d,
+  author    = {Ahmed Abdelreheem and Kyle Olszewski and Hsin-Ying Lee and Peter Wonka and Panos Achlioptas},
+  title     = {{ScanEnts3D}: Exploiting Phrase-to-{3D}-Object Correspondences for Improved Visio-Linguistic Models in {3D} Scenes},
+  booktitle = WACV,
+  year      = {2024}
+}
+
+@inproceedings{mmscan,
+  author    = {Ruiyuan Lyu and Tai Wang and Jingli Lin and Shuai Yang and Xiaohan Mao and Yilun Chen and Runsen Xu and Haifeng Huang and Chenming Zhu and Dahua Lin and Jiangmiao Pang},
+  title     = {{MMScan}: A Multi-Modal {3D} Scene Dataset with Hierarchical Grounded Language Annotations},
+  booktitle = NIPS,
+  year      = {2024}
+}
+
+@inproceedings{sqa3d,
+  author    = {Xiaojian Ma and Silong Yong and Zilong Zheng and Qing Li and Yitao Liang and Song-Chun Zhu and Siyuan Huang},
+  title     = {{SQA3D}: Situated Question Answering in {3D} Scenes},
+  booktitle = ICLR,
+  year      = {2023}
+}
+
+@inproceedings{clevrrefplus,
+  author    = {Runtao Liu and Chenxi Liu and Yutong Bai and Alan L. Yuille},
+  title     = {{CLEVR-Ref+}: Diagnosing Visual Reasoning with Referring Expressions},
+  booktitle = CVPR,
+  year      = {2019}
+}
+
+%% ---------------------------------------------------------------------------
+%% Generated / rewritten referring language
+%% ---------------------------------------------------------------------------
+
+%% TODO verify author list and venue (only arXiv v2 seen; docs/RELATED_WORK.md).
+@misc{disc3d,
+  author        = {{Disc3D authors (TODO)}},
+  title         = {{Disc3D}: Discriminative {3D} Referring Expressions at Scale},
+  year          = {2025},
+  eprint        = {2511.18817},
+  archivePrefix = {arXiv}
+}
+
+@inproceedings{clevr3dderef,
+  author    = {{Martin} and {Palmer} and {Pacheco}},
+  title     = {{CLEVR-3D-DeRef}: Geometrically Verified Referring Expressions for {3D} Scenes},
+  booktitle = LREC,
+  year      = {2026},
+  note      = {TODO verify first names, title}
+}
+
+@misc{vigil3d,
+  author        = {Austin T. Wang and ZeMing Gong and Angel X. Chang},
+  title         = {{ViGiL3D}: A Linguistically Diverse Dataset for {3D} Visual Grounding},
+  year          = {2025},
+  eprint        = {2501.01366},
+  archivePrefix = {arXiv}
+}
+
+%% TODO verify title (arXiv 2606.20946).
+@misc{vigil3dpp,
+  author        = {Austin T. Wang and Dongchen Yang and Angel X. Chang},
+  title         = {{ViGiL3D++}: Scaling Linguistically Diverse {3D} Visual Grounding Data},
+  year          = {2026},
+  eprint        = {2606.20946},
+  archivePrefix = {arXiv}
+}
+
+@inproceedings{beacon3d,
+  author    = {Jiangyong Huang and Baoxiong Jia and Yan Wang and Ziyu Zhu and Xiongkun Linghu and Qing Li and Song-Chun Zhu and Siyuan Huang},
+  title     = {Unveiling the Mist over {3D} Vision-Language Understanding: Object-centric Evaluation with Chain-of-Analysis},
+  booktitle = CVPR,
+  year      = {2025}
+}
+
+%% TODO verify title (arXiv 2605.15708).
+@misc{nanri2026viewpoint,
+  author        = {{Nanri} and Asako Kanezaki and Federico Tombari and Benjamin Busam},
+  title         = {Viewpoint-Aware {3D} Referring Segmentation},
+  year          = {2026},
+  eprint        = {2605.15708},
+  archivePrefix = {arXiv},
+  note          = {TODO verify first author's first name and title}
+}
+
+%% TODO verify title (arXiv 2603.08592). Not the CVPR'26 GR3D grounding model (2605.30307).
+@misc{gr3d_zillow,
+  author        = {{Yuan} and {Kumar} and {Wang}},
+  title         = {{GR3D}: Geometrically Referenced {3D} Scene Representations for Spatial Reasoning},
+  year          = {2026},
+  eprint        = {2603.08592},
+  archivePrefix = {arXiv},
+  note          = {TODO verify authors and title}
+}
+
+%% ---------------------------------------------------------------------------
+%% Models
+%% ---------------------------------------------------------------------------
+
+@inproceedings{chatscene,
+  author    = {Haifeng Huang and Yilun Chen and Zehan Wang and Rongjie Huang and Runsen Xu and Tai Wang and Luping Liu and Xize Cheng and Yang Zhao and Jiangmiao Pang and Zhou Zhao},
+  title     = {{Chat-Scene}: Bridging {3D} Scene and Large Language Models with Object Identifiers},
+  booktitle = NIPS,
+  year      = {2024}
+}
+
+%% TODO verify authors and title (CVPR 2026).
+@inproceedings{quatrope,
+  author    = {{QuatRoPE authors (TODO)}},
+  title     = {{QuatRoPE}: Quaternion Rotary Position Encoding for {3D} Scene Understanding with Large Language Models},
+  booktitle = CVPR,
+  year      = {2026}
+}
+
+@inproceedings{video3dllm,
+  author    = {Duo Zheng and Shijia Huang and Liwei Wang},
+  title     = {{Video-3D LLM}: Learning Position-Aware Video Representation for {3D} Scene Understanding},
+  booktitle = CVPR,
+  year      = {2025}
+}
+
+%% TODO verify authors, title and venue.
+@misc{3drs,
+  author    = {{3DRS authors (TODO)}},
+  title     = {{3DRS}: Boosting Multimodal Large Language Models with {3D} Representation Supervision},
+  year      = {2025},
+  note      = {arXiv; TODO verify}
+}
+
+@inproceedings{3dllava,
+  author    = {Jiajun Deng and Tianyu He and Li Jiang and Tianyu Wang and Feras Dayoub and Ian Reid},
+  title     = {{3D-LLaVA}: Towards Generalist {3D} {LMMs} with Omni Superpoint Transformer},
+  booktitle = CVPR,
+  year      = {2025}
+}
+
+@misc{llava3d,
+  author        = {Chenming Zhu and Tai Wang and Wenwei Zhang and Jiangmiao Pang and Xihui Liu},
+  title         = {{LLaVA-3D}: A Simple yet Effective Pathway to Empowering {LMMs} with {3D}-awareness},
+  year          = {2024},
+  eprint        = {2409.18125},
+  archivePrefix = {arXiv}
+}
+
+@inproceedings{vsibench,
+  author    = {Jihan Yang and Shusheng Yang and Anjali W. Gupta and Rilyn Han and Li Fei-Fei and Saining Xie},
+  title     = {Thinking in Space: How Multimodal Large Language Models See, Remember, and Recall Spaces},
+  booktitle = CVPR,
+  year      = {2025}
 }
