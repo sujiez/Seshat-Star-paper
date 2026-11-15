@@ -1,12 +1,17 @@
+% Spacing knobs (tune on Overleaf): \stripsep = gap above/below the strip (cuted default 12pt);
+% the \vspace at the top pulls the figure towards the author block; skip= is the figure-to-caption gap;
+% the \vspace at the end pulls the abstract/intro up.  cvpr.sty itself is untouched.
+\setlength{\stripsep}{3pt plus 2pt minus 2pt}
 \begin{strip}
+\vspace{-14pt}
 \centering
 \includegraphics[width=\linewidth]{fig/teaser.pdf}
-\captionsetup{hypcap=false}
+\captionsetup{hypcap=false,skip=4pt}
 \captionof{figure}{\textbf{The same chair (I), described by a Multi3DRefer annotator and by our rewrite.}
-Read blind---without being told the target---only one clause of the original binds to geometry, and two chairs satisfy it; its \emph{right} has no standpoint (grey).
-The rewrite names anchors that exist in the room and relations our operators computed and checked, each clause coloured like its chip and like the relation drawn on the scene; the same reader and verifier leave one chair.
+Colour marks a clause the reader bound to the room, drawn on the scene in the same colour; grey marks one it could not; \emph{survives} is what the verifier leaves.
 Bottom: Multi3DRefer val sentences that pin down their target under a strict reading (lenient: 21\%$\to$85\%); verifiable relations per sentence; 3D-LLaVA accuracy with each model trained and tested on its own text; GPT-6 resolving the hardest targets from renders alone (given labels and positions: 80\%$\to$98\%).
 \TODO{re-sync the four numbers with the final tables.}}
 \captionsetup{hypcap=true}
 \label{fig:\currfilebase}%
+\vspace{-8pt}
 \end{strip}

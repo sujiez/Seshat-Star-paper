@@ -1,0 +1,11 @@
+% Mandatory for CVPR 2027 (Author Guidelines §2, LLM Policy): a section titled exactly "LLM Usage Statement",
+% after the main text and before the references; does not count toward the page limit; must stay anonymous;
+% must disclose ANY use of LLMs / generative AI (including editing and grammar), name the tools, the parts affected,
+% and the extent.  A missing or incomplete statement is a desk-rejection reason.  See RED_FILE.md §1.
+\section*{LLM Usage Statement}
+Large language models are part of the method studied in this paper and were also used in preparing it.
+\emph{In the research.} The writer that rewrites each annotation and the reader that translates a sentence into predicates (\cref{sec:pipeline,sec:scorer}) are prompted GPT-5.5 models accessed through an API; their prompts and outputs are described in the paper and released with the data.
+The frontier-model experiments in \cref{sec:model} query GPT-6 through the same kind of API.
+No LLM was used to fabricate, select or alter experimental results; every number in the paper is computed by the released scripts from the released outputs.
+\emph{In the writing.} The text, figures and figure scripts were drafted and revised with an LLM-based coding and writing assistant (Claude, via the Cursor editor) under the authors' direction; the authors wrote the claims, checked every statement and number against the experimental records, and are responsible for the whole paper.
+\TODO{confirm the model names (GPT-5.5 writer/reader/judge, GPT-6 for E5) and the assistant used, then remove this note.}
