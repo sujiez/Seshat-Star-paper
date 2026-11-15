@@ -4,6 +4,12 @@
 % * For scale: adding a geometry channel with the training text unchanged moved ScanRefer accuracy by about two points (other protocol; see related work -- do not subtract).
 % * E5: GPT-6 under four levels of information, from the sentence plus a list of class names up to every object's position and the relations
 %   computed between them; rewrites stripped of their attribute words; they lead at every level, by 5 to 19 points.
+% --- Parked from related v1 (11-16; full text in parked/related_v1_full.tex) ---
+% * Score band 55--64 Acc@0.25 on ScanRefer across Chat-Scene / QuatRoPE / Video-3D-LLM / 3DRS / 3D-LLaVA (protocols differ: box vs mask
+%   IoU -- do not subtract); a coordinate channel moved Chat-Scene by 2.3 points; 3D-LLaVA zero-shot mIoU 0.08 on direction-only expressions.
+% * Cost of generating from scratch: a model trained only on ViGiL3D++ scores below one trained only on human text on ScanRefer and
+%   Multi3DRefer (45.5 vs 53.4, 23.1 vs 33.5) and recovers when human data is mixed back in.
+% * TDVR reports the best zero-shot ScanRefer accuracy so far (different protocol; never put next to our numbers).
 \section{What models learn from them}
 \label{sec:model}
 
