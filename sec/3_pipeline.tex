@@ -12,6 +12,18 @@
 %   viewpoint words, asks its vision model one yes/no on a rule-given relation; ViGiL3D++ samples the standpoint at random and its ordinals
 %   do not require a row; nobody computes stacks. CLEVR-3D-DeRef scores paraphrases by word overlap with the template.
 % * GR3D: its gain disappears when the identifiers are not also marked in the image -- supports our identifier-bound writer / reader input.
+% --- To write here (user, 11-16) ---
+% * Explain the four properties the intro names, and say for each whether it is MEASURED or holds BY CONSTRUCTION:
+%     unambiguous  -- measured (scorer: exact rate; humans: E7-A1). Not guaranteed: the scorer's verdicts are never fed back to the writer.
+%     rich         -- measured (checkable relations per sentence).
+%     verifiable   -- by construction: every relation taken from the structured channel is one of the 42 predicates and is stored with the
+%                     sentence; the free-text remainder (13% of relations) is outside this guarantee -- say so.
+%     reads as a person would say -- by design only (free text, not templates; the annotator's attributes and landmarks kept); we have NO
+%                     measurement of naturalness. Either keep it qualitative or add a human naturalness judgement.
+% * Human involvement, two different things, do not merge them:
+%     (a) operators were revised against human inspection of real rooms -- process evidence, belongs here with the operators;
+%     (b) the independent human check (E7: B predicate-level, A1 / A2 sentence-level) -- one small table in the scorer section; cite its
+%         predicate-level row from here with a \cref rather than splitting the table.
 \section{The Seshat-Star pipeline}
 \label{sec:pipeline}
 
