@@ -1,4 +1,13 @@
 % Claims and numbers for this section: Seshat-Star/docs/CLAIMS.md; narrative: docs/PAPER_FRAMING.md
+% --- Parked from intro v2 (11-16): say these here, in new words, not in the intro ---
+% * Blind reader: a frontier model given the sentence and an unmarked list of the room's objects; never told the target; translates the
+%   sentence into predicates over object ids.
+% * Verifier: no model in it; 42 geometric predicates evaluated on the point cloud; exact = objects satisfying every predicate are precisely the target set.
+% * Two failure kinds: a distractor the sentence failed to rule out; a member of the target set it failed to cover.
+% * Strict = a clause false of the target counts against the sentence; lenient = such a clause is skipped. Originals 19% / 21%.
+% * Same ruler on both versions, so the rates are measurements.
+% * The scorer is a LOWER BOUND (conservative certificate): state it and report the E7 table (PAPER_FRAMING, 11-16 notes):
+%   certified -> humans resolve 77%; not certified -> 54%; by same-class group size; predicate-level agreement (E7-B) 79%.
 \section{Scoring exactness}
 \label{sec:scorer}
 

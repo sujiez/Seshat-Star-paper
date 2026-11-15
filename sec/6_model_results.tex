@@ -1,4 +1,9 @@
 % Claims and numbers for this section: Seshat-Star/docs/CLAIMS.md; narrative: docs/PAPER_FRAMING.md
+% --- Parked from intro v2 (11-16): say these here, in new words, not in the intro ---
+% * 3D-LLaVA on the original ScanRefer val: overall Acc@0.5 44.6 -> 50.7; with same-class distractors 35.2 -> 42.4; targets without distractors do not move (the control).
+% * For scale: adding a geometry channel with the training text unchanged moved ScanRefer accuracy by about two points (other protocol; see related work -- do not subtract).
+% * E5: GPT-6 under four levels of information, from the sentence plus a list of class names up to every object's position and the relations
+%   computed between them; rewrites stripped of their attribute words; they lead at every level, by 5 to 19 points.
 \section{What models learn from them}
 \label{sec:model}
 
