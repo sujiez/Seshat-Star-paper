@@ -59,7 +59,7 @@ Without an original sentence the same prompt runs minus the paragraphs that ment
 We run the pipeline over ScanRefer, Multi3DRefer, Nr3D and Sr3D in full, except Multi3DRefer's zero-target entries.
 
 \paragraph{The writer obeys evidence; it does not weigh it.}
-Told that our label lookup found nothing in the scene for a word of the original sentence, the writer kept that word in 22 of 114 cases; told nothing, in 108; told the same with a disclaimer attached, again in 108.
+Told that our label lookup found nothing in the scene for a word of the original sentence, the writer kept that word in 22 of 114 cases; told the same with the caveat that the lookup is incomplete, in 108; told nothing at all, again in 108.
 Three instructions to keep such words were in force throughout.
 When the evidence said the target stood in no row, none of 410 rewrites said otherwise (\supp{supp:writer}).
 An operator's mistake therefore enters the corpus at full strength, and nothing downstream corrects it---including the scorer: fed back, its verdict would be obeyed like any other assertion, and it would then measure sentences written to satisfy it.

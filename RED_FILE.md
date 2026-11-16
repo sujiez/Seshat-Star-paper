@@ -53,6 +53,7 @@
 - **层级不复述**：上一层（摘要 → intro → related → method / 实验）说过的话，下一层不重说——原句不许，同义句也不许；一个小从句带过，然后给上一层没有的细节。唯一例外：重大数据结果可在 method / 实验节再出现，用来带出更细的数（总数 → 分层 / 拆分项）。
 - 细微的措辞强弱不必逐条 surface（用户 11-16）；只报 §1 硬性项和本节纪律项。
 - **全篇英式拼写**（用户 11-16）：colour / centre / neighbour / metre / grey / labelled / judgement / learnt / towards，-ise 不用 -ize。例外只有两类原样保留：引用的数据原句（如 teaser 里模型写的 "neighboring"）和参考文献标题。
+- **语气也是英式**（用户 11-16）：克制、平实、干脆，少形容词和程度副词，让数字和事实自己说话；宁可说轻（understatement），不说满。不用 novel / significantly / dramatically / state-of-the-art / leverage / utilise 这类推销词。intro 和摘要那种短、直、硬的句子是标准，改稿不许把它磨软。
 
 ## §5 当前稿件检查结果（11-16，按 §1–§2 扫）
 
@@ -79,4 +80,5 @@ rg -n -i 'TODO' main.bib; rg -c 'TODO' sec/*.tex fig/*.tex                      
 rg -n '\\(sub)*section\{[a-z]*[ -][A-Z]' sec                                    # 节标题多余大写
 rg -n 'e\.g\.|i\.e\.|et al\.' sec                                                # 应改用 \eg \ie \etal
 rg -n -i -w 'colors?|colored|centers?|neighbors?|neighboring|meters?|gray|labeled|judgments?|learned|toward|analyze[sd]?|behaviors?|[a-z]{3,}(ize[sd]?|izing|ization)' sec fig/*.tex tab | rg -v ':[0-9]+:%'   # 美式拼写（全篇英式；有输出即异常）
+rg -n -i -w 'novel|significantly|dramatically|remarkabl[ey]|state-of-the-art|leverag\w*|utili[sz]\w*|groundbreaking|cutting-edge|extremely|incredibl[ey]|paradigm' sec fig/*.tex | rg -v ':[0-9]+:%'   # 推销词（英式语气；有输出即异常）
 ```
