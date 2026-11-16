@@ -37,7 +37,7 @@ It evaluates 42 predicates on the instance table and the points: proximity, supp
 It shares four measuring primitives with the operators behind the writer's evidence---surface gap, support, collinearity and row decomposition---and nothing above them (\supp{supp:operators}).
 
 \paragraph{Strict and lenient.}
-A predicate the reader extracts can be false of the target itself.
+The verifier may find that a predicate the reader extracted does not hold for the target itself.
 The \emph{strict} score intersects it like any other, and the sentence fails; the \emph{lenient} score skips it.
 The two differ in this rule and nothing else.
 A skipped predicate may be the writer's mistake, the reader's over-translation or the verifier's rigidity; we cannot yet separate the three, so we report both and take the strict score as the measurement.
