@@ -1,14 +1,77 @@
-% Claims and numbers for this section: Seshat-Star/docs/CLAIMS.md; narrative: docs/PAPER_FRAMING.md
-% --- Parked from intro v2 (11-16): say these here, in new words, not in the intro ---
-% * Blind reader: a frontier model given the sentence and an unmarked list of the room's objects; never told the target; translates the
-%   sentence into predicates over object ids.
-% * Verifier: no model in it; 42 geometric predicates evaluated on the point cloud; exact = objects satisfying every predicate are precisely the target set.
-% * Two failure kinds: a distractor the sentence failed to rule out; a member of the target set it failed to cover.
-% * Strict = a clause false of the target counts against the sentence; lenient = such a clause is skipped. Originals 19% / 21%.
-% * Same ruler on both versions, so the rates are measurements.
-% * The scorer is a LOWER BOUND (conservative certificate): state it and report the E7 table (PAPER_FRAMING, 11-16 notes):
-%   certified -> humans resolve 77%; not certified -> 54%; by same-class group size; predicate-level agreement (E7-B) 79%.
+% Claims and numbers for this section: Seshat-Star/docs/CLAIMS.md §4; RESULTS.md §1.4, §3.4, §4; narrative: docs/PAPER_FRAMING.md
+% v1 drafted 11-16.  Number provenance (check before freeze):
+% * Blind vs aware reader 16.5 -> 17.5 on originals, n = 200 pairs: RESULTS §1.4 (10-21 run, older verifier).
+% * Wrong-target probe 2 of 15: RESULTS §3.4 (scene0549_00_ann39 is the inspected case). n is small; do not quote an interval.
+% * Human check (tab:human, and 75 / 79 / 12 / 51 in the text): E7-A1 SNAPSHOT, analysis/_e7_snapshot.py.  12% / 51% = scorer
+%   certifies 23 / 101 of the 200 A1 items (a1_items.jsonl, field `ours`).  79% = P(second annotator resolves | first resolves) = 146/186.
+% * Predicate cards (E7-B SNAPSHOT, 218 judgements): three self-defined families 114/146 = 78%; stacks 53/61 = 87%; rows 26/35;
+%   faces 35/50; control next_to 37/44 = 84%; near misses 35/53 = 66%; clear negatives 36/40 = 90%.
+% * GPT-6 98 / 96 / 90 (n = 536 / 248 / 349): CLAIMS §4 "E5-fail", hard/e5_fail/REPORT.md.  T2 = labels + positions (oracle perception).
+% * Surface-gap correction, 9.5% of closest / farthest claims: RESULTS §4.5 (11-12).
+% * Writer's own relations vs the reader's, 15--25 points: RESULTS §1.6 (generation mode); quoted in sec/5.
+% Parked for the supplement: q-sensitivity (3.5 / 7.2 / 14.5% at q = 0.05 / 0.10 / 0.20), text-channel loss by relation family,
+% unbound-reason distribution, verifier revision history, per-family human table.
 \section{Scoring exactness}
 \label{sec:scorer}
 
-\TODO{to be drafted}
+\paragraph{Definition.}
+Let $T$ be the target set of a sentence, $C \supseteq T$ its candidates and $D = C \setminus T$ its distractors (\cref{sec:pipeline}).
+The reader turns the sentence into predicates $p_1,\dots,p_K$ over object ids; the verifier evaluates each on the scene and returns $\hat{E}_k \subseteq C$, the candidates that satisfy it.
+The sentence is \emph{certified} when
+\begin{equation}
+  K \ge 1 \quad\text{and}\quad \bigcap_{k=1}^{K} \hat{E}_k = T .
+  \label{eq:exact}
+\end{equation}
+It can fail in two ways: a distractor survives every predicate, or one predicate excludes a target.
+A sentence that coordinates groups (\emph{the two by the window and the one at the door}) is read in parts; predicates conjoin within a part and the parts are united (\supp{supp:parts}).
+The condition $K \ge 1$ is deliberate.
+A sentence that offers nothing to check is not certified, even when its target is the only object of its class and the class name would do: we score what the sentence says about space.
+
+\paragraph{The reader is blind.}
+The reader is GPT-5.5 with the sentence and the room's instance list.
+It does not see the target, the candidates, our evidence or the relations the writer reported, and for every clause it cannot bind to object ids it must give the reason: no viewpoint, ambiguous anchor, object not in the list, not spatial.
+We keep it blind because a reader that knows the answer reads toward it.
+Given a \emph{wrong} target on purpose, it certified that object in 2 of 15 trials, in one of them by silently dropping the two clauses that excluded it.
+Blindness costs little: in an earlier run of 200 pairs, telling the reader the true target raised the rate of the original sentences by one point.
+
+\paragraph{The verifier contains no model.}
+It evaluates 42 predicates on the instance table and the points: proximity (\emph{next to}, \emph{closest to}, \emph{touching}, \emph{between}), support and vertical order, places in the room (wall, corner, centre), directions from a stated standpoint, rows and positions in them, and the faces and ends of large furniture (\supp{supp:vocab}).
+The same input always gives the same verdict.
+With the operators that produce the writer's evidence it shares only a few measuring primitives---surface gap, support, collinearity, row decomposition; above these, neither calls the other.
+An error in a primitive therefore shows on both sides, while an error above them stays on one, so the verifier's output is audited on its own, below.
+
+\paragraph{Strict and lenient.}
+A predicate the reader extracts can be false of the target itself.
+The \emph{strict} score intersects it like any other, and the sentence fails; the \emph{lenient} score skips it.
+The two differ in this rule and nothing else.
+A skipped predicate may be the writer's mistake, the reader's over-translation (\emph{along the wall} read as \emph{against the wall}) or the verifier's rigidity (a wall test in a room that is not a rectangle).
+We cannot yet separate the three, so we report both and take the strict score as the measurement.
+
+\paragraph{A lower bound.}
+Write $E_k$ for the candidates that truly satisfy $p_k$.
+
+\noindent\textbf{Proposition 1.} \emph{Suppose that for every $k$ the verifier has no false positive on a target, $\hat{E}_k \cap T \subseteq E_k$, and no false negative on a distractor, $E_k \cap D \subseteq \hat{E}_k$. Then $\bigcap_k \hat{E}_k = T$ implies $\bigcap_k E_k = T$.}
+
+\noindent Under these assumptions every strictly certified sentence is truly exact, and the certified rate bounds the true rate from below (proof and sensitivity analysis in \supp{supp:proof}).
+The assumptions concern opposite errors on complementary sets, so no overall accuracy of the verifier implies either of them.
+They will not hold perfectly, and the proposition takes the predicates as given; it says nothing about what the reader failed to recover.
+We therefore also measure the scorer against people.
+
+\paragraph{Against people.}
+Annotators saw a scene as an interactive point cloud with the candidates lettered at random, and one sentence, without knowing whether it was an original or a rewrite; they selected every object the sentence fits (\cref{tab:human}).
+Three things follow.
+The scorer is conservative: people resolve \TODO{47}\% of the originals and \TODO{70}\% of the rewrites, where the scorer certifies \TODO{12}\% and \TODO{51}\% of the same items.
+A sentence it does not certify is one whose uniqueness cannot be established from its spatial relations; a person may still find the object by its colour or by common sense, which the verifier does not see.
+A certificate is worth about a second opinion: annotators resolve \TODO{75}\% of certified sentences, and when one annotator resolves a sentence a second does so \TODO{79}\% of the time.
+And people and scorer order the sentences alike: human success falls as same-class objects multiply, and falls furthest for the originals.
+
+We also checked the verifier predicate by predicate, on the structures we define ourselves: rows, furniture faces and stacks.
+Annotators judged single statements with the objects marked, half of them made false by pointing at an object the verifier excludes.
+They agree with the verifier on \TODO{78}\% of the statements they could decide (\TODO{84}\% for plain adjacency, the control), and disagreement concentrates on near misses: \TODO{66}\% agreement there against \TODO{90}\% on clear cases.
+The verifier has been wrong before in exactly this way.
+Until a human reader caught it, it measured gaps between boxes instead of surfaces, which changed the winner in 9.5\% of \emph{closest} and \emph{farthest} claims; the certified rates in \cref{sec:data,sec:model} all follow the correction (\supp{supp:ruler}).
+
+A reading by a different machine agrees in order.
+On distractor-heavy targets, GPT-6 reads the rewrite with every object's label and position at hand and nothing from the scorer; it resolves 98\% of the strictly certified sentences, 96\% of those certified only leniently and 90\% of the rest (\cref{sec:model}).
+A rejection means \emph{not certifiable from the sentence}, not \emph{unsolvable}.
+\input{tab/human}

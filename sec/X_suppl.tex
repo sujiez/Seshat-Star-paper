@@ -1,11 +1,143 @@
 \clearpage
 \setcounter{page}{1}
 \maketitlesupplementary
+\appendix
 
+% Supplement skeleton (11-16).  Due 11-23 AoE; compiled into the draft only with \withsupptrue (preamble.tex).
+% Every label below is pointed at from the main text through \supp{...}; do not rename one without grepping sec/.
+%   supp:operators  <- sec/3 (rows)            supp:parts <- sec/4 (definition)      supp:vocab <- sec/4 (verifier)
+%   supp:proof      <- sec/4 (proposition)     supp:ruler <- sec/4 (surface gap)
+% Rules that still apply here (RED_FILE §1, §3): anonymous; no external links (the 3D viewer ships as a file in the zip); the
+% paper must not REQUIRE the reader to open this.
+%
 % --- To write (user, 11-16): be honest about the base model and about what failed ---
-% * The writer is a frontier model (GPT-5.5, high effort); its capability is part of the result. The intro says "not the base model's
-%   cleverness alone" -- that sentence was REMOVED 11-16 (old-vs-new geometry shows no difference, RESULTS §1.7). The control still missing is same writer WITHOUT computed relations.
-% * Early attempts that failed, if the main text has no room: the menu-of-relations pipeline with a smaller model to phrase them (little
-%   worth keeping), and whatever else PAPER_FRAMING / RESULTS record as abandoned. One short appendix section.
+% * The writer is a frontier model (GPT-5.5, high effort); its capability is part of the result.  Old-vs-new geometry shows no
+%   difference in certified rate (RESULTS §1.7).  The control still missing is the same writer WITHOUT computed relations.
+
 \section*{Summary of additional results}
 \TODO{One table, three lines: which architectures, how many seeds, whether the direction agrees. Written last.}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Operators}
+\label{supp:operators}
+% One paragraph per operator: what it computes, why it exists (the predicate names the writer used to invent before the operator
+% existed: corner_of, head_of_table, ends_of_row ...), one real fact block.  Level of detail: what is computed, no thresholds.
+% Source: CLAIMS §8 "算子选讲"; RESULTS §3.2 (rows: five revisions, each with its numbers; figure old vs new decomposition on
+% scene0095_00 / scene0249_00 / scene0030_00), §4.5 (stack criterion, above / below).
+\TODO{Neighbours, viewpoints, structure, rows (the five revisions, with a before/after figure), stacks, room; one real block each.}
+
+\section{Prompts and configuration}
+\label{supp:prompts}
+\TODO{Writer prompt (with and without an original sentence), reader prompt, model versions, reasoning effort, rendering set-up.}
+
+\section{What the writer does with evidence}
+\label{supp:writer}
+% RESULTS §3.1 (three arms, both tables, per-word survival), §3.3 (the unused "could not exclude" note: filled for 4% of 37
+% crowded targets where geometry found a miss in 49%; the judge's "unlabelled" verdict never used in 5,768 calls), §3.5.
+\TODO{Full three-arm tables behind the first three rows of the design table; the unused abstention outlets; side effects of prompt wording.}
+
+\section{Earlier attempts that failed}
+\label{supp:failed}
+% CLAIMS §3.3: relation menu + set cover + a small model to phrase the result (templated, relation-stuffed, little worth keeping);
+% the feedback loop (scorer verdict returned to the writer), abandoned for the reason given in the pipeline section; "rich" evidence
+% in uncrowded rooms (over-description) -> gating; two-pass writing.
+\TODO{The relation-menu system; verdict feedback; ungated evidence.}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Sentences with several targets}
+\label{supp:parts}
+% Source: spatial/compose.py verify_reader_parts (blind reader) / verify_parts (writer).
+A sentence about several objects often coordinates groups, each pinned by its own relations (\emph{the two at the head of the near bed and the one on the far bed}).
+The reader therefore returns \emph{common} predicates, which hold for the whole referent, and a list of \emph{parts}, each with its own predicates and, when the sentence states one, a count.
+Let $B$ be the candidates that satisfy every common predicate ($B = C$ if there is none), and $S_j$ the members of $B$ that satisfy every predicate of part $j$.
+The referent is the union of the parts,
+\begin{equation}
+  R = \bigcup_j S_j ,
+  \label{eq:parts}
+\end{equation}
+or $R = B$ when the sentence has no parts, and the sentence is certified when at least one predicate was evaluated and $R = T$.
+Union, not intersection: the pillow on the left bed need not be on the right bed, so an object joins the referent by satisfying one part.
+Parts may overlap, and a part may cover fewer members than it seems to if another part makes up the difference.
+What no part may do is admit a distractor, since anything that survives one part survives in $R$.
+The strict score also requires every stated count to equal the size of the set it describes; the lenient score skips predicates that hold for no target and ignores counts.
+A single-target sentence is the special case of no parts and $|T| = 1$, which gives \cref{eq:exact}.
+
+\section{Predicate vocabulary}
+\label{supp:vocab}
+% RESULTS §7.5: four vocabularies (verifier 42 predicates, 57 names with aliases; writer prompt names 35; writer used 2,438 names);
+% the families beyond the vocabulary (faces / sides / ends of a structure 3.7% of rows, facing 2.4%, across from 1.5%).
+\TODO{Table of the 42 predicates by family, with arguments and one-line semantics; the alias list; relations beyond the vocabulary.}
+
+\section{Proof of Proposition 1 and sensitivity}
+\label{supp:proof}
+% Source: Seshat-Star/docs/VALIDATION_AND_EXPERIMENTS.md §1.2; RESULTS §4.1--4.2 (numbers after the 11-12 correction).
+Recall that $\hat{E}_k$ is the set of candidates the verifier returns for predicate $p_k$ and $E_k$ the set that truly satisfies it; $T$ is the target set and $D$ the distractors.
+Assume (A1) $\hat{E}_k \cap T \subseteq E_k$ and (A2) $E_k \cap D \subseteq \hat{E}_k$ for every $k$, and $\bigcap_k \hat{E}_k = T$.
+
+\emph{$T \subseteq \bigcap_k E_k$.}
+Take $t \in T$.
+Since $T = \bigcap_k \hat{E}_k$, $t \in \hat{E}_k$ for every $k$, hence $t \in \hat{E}_k \cap T \subseteq E_k$ by (A1).
+
+\emph{$\bigcap_k E_k \subseteq T$.}
+Take $x \in \bigcap_k E_k$ and suppose $x \notin T$, so $x \in D$.
+Then $x \in E_k \cap D \subseteq \hat{E}_k$ for every $k$ by (A2), hence $x \in \bigcap_k \hat{E}_k = T$, a contradiction. \hfill$\square$
+
+The converse fails: if a distractor truly satisfies every predicate and the verifier wrongly rejects it on one, the sentence is certified and is not exact.
+That is a violation of (A2), and it is the error to guard against.
+(A1) and (A2) restrict errors in opposite directions on complementary sets, so a bound on the verifier's overall error rate implies neither.
+The proposition takes the predicates as given and does not cover the reader.
+
+\paragraph{How fragile is a certificate?}
+For a certified sentence and a distractor $d$, let $m(d)$ be the number of predicates that exclude $d$.
+If the verifier wrongly excludes a distractor with probability at most $q$ per predicate, independently across predicates, the probability that the certificate is false is at most
+\begin{equation}
+  \sum_{d \in D} q^{\,m(d)} ,
+  \label{eq:margin}
+\end{equation}
+by a union bound over distractors.
+On the Multi3DRefer validation rewrites, 13.5\% of the distractors of certified sentences are excluded by a single predicate and 58.2\% by three or more; 17.0\% of certified sentences have a distractor that hangs on one predicate.
+\Cref{eq:margin}, averaged over these sentences, gives at most 3.5\%, 7.2\% and 14.5\% false certificates for $q = 0.05$, $0.10$ and $0.20$, most of it from the sentences with a single-predicate distractor.
+% NOTE: this analysis runs on the WRITER's own relations (sealed val, 3,626 certified), not on the blind reader's; say so if the
+% paragraph is kept, and connect q to the human predicate check (near misses) once that table is final.
+\TODO{State that the margin analysis uses the relations stored with each rewrite; relate $q$ to the human predicate check.}
+
+\section{Corrections to the verifier}
+\label{supp:ruler}
+% RESULTS §4.5: above / below with a same-class reference (405 stacked pairs returned the empty set); the stack criterion;
+% 11-12 surface gap (boxes vs points: scene0671 chair, 0.41 m by boxes, 1.04 m on the points; 9.5% of 444 closest / farthest claims
+% in 141 counterfactual pairs change winner; certified rate of sealed rewrites 72.9 -> 69.4 and 74.3 -> 71.3 on the writer's
+% relations; judge600 rewrites 57.3 -> 54.2 and 58.0 -> 54.8, originals within one point).  Training data were not regenerated.
+\TODO{The three corrections, each with the example a human reader caught and its effect on the reported rates.}
+
+\section{The reader}
+\label{supp:reader}
+% RESULTS §1.4 (blind vs aware, 200 pairs), §3.4 (wrong-target probe), §4.7 (what the reader recovers of the writer's relations,
+% by family: on 95%, corner 85%, proximity 76%, directions 44%, between 37%; reasons for unbound clauses), §1.6 (writer's own
+% relations vs the reader's in generation mode).
+\TODO{Blind against informed reader; what the reader recovers by relation family; reasons for unbound clauses.}
+
+\section{Human check}
+\label{supp:human}
+% docs/HUMAN_EVAL.md (protocol, as run 11-14): interactive point cloud, candidates lettered at random, arm hidden, multi-select plus
+% "none fits" / "cannot tell"; 200 items x 2 arms, strata by same-class count; predicate cards 350 (rows 100, faces 100, stacks 90,
+% adjacency control 60), half true, negatives split into near misses and clear cases; zero-target task (100 items).
+% Annotators were compensated per item (state it; no names, no institution).
+\TODO{Interface, sampling, compensation; full tables by stratum and by predicate family; agreement between annotators; the zero-target task.}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Data: further statistics}
+\label{supp:data}
+% Sampling and statistics conventions (paired McNemar counts discordant pairs only; Wilson intervals; a sentence with no evaluable
+% predicate stays in the denominator as not certified); confidence intervals for the main data table; multi-target detail by number
+% of targets; left / right language per corpus (RESULTS §7.2); corpus sizes; Sr3D originals; generation mode with intervals.
+\TODO{Conventions and intervals; multi-target detail; left/right statistics per corpus; corpus sizes; generation mode with intervals.}
+
+\section{Models: configurations and further results}
+\label{supp:models}
+\TODO{Training configurations; IoU histograms; paired examples; segmentation of the same sentence by the two 3D-LLaVA arms (large block, fixed sample list, selection rule stated, failures included).}
+
+\section{Our sentences next to other datasets'}
+\label{supp:qual}
+% Layout agreed 11-16: grid of scenes, one row per corpus; teaser colours; clauses the reader bound in colour, unbound in grey;
+% selection rule stated; include failures.
+\TODO{Qualitative grid: same targets described by each corpus and by our rewrite, coloured by what the reader could bind.}

@@ -43,6 +43,9 @@
 }
 
 % WARNING: do not forget to delete the supplementary pages from your submission
-% \input{sec/X_suppl}
+% The supplement is compiled in only when \withsupptrue is set in preamble.tex (draft builds); it is off for the submission.
+\ifwithsupp
+\input{sec/X_suppl}
+\fi
 
 \end{document}

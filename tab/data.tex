@@ -1,0 +1,33 @@
+% Source: /data/sujie/horus/_rerun/judge600_g/REPORT.md (blind reader + verifier, 11-12 ruler).  Paired; 200 items per tier.
+% Relations = predicates the reader bound and the verifier evaluated, per sentence ("谓词/条").
+% Multi-target row: the reader's parts protocol; the relation count there is not comparable (parts are counted differently:
+%   REPORT 0.3 -> 4.4, RESULTS §4.2 evaluable 0.2--0.45 -> 1.4--2.2), so it is left out of the table.
+\begin{table}[t]
+\centering
+\small
+\setlength{\tabcolsep}{4.5pt}
+\caption{\textbf{Original sentences against their rewrites}, same reader and verifier, paired. Certified exact (\%) under the strict and the lenient score, and checkable relations per sentence, by number of same-class distractors; 200 items per tier, so \emph{all} weights the tiers equally.}
+\label{tab:data}
+\begin{tabular}{@{}lcccccc@{}}
+\toprule
+ & \multicolumn{2}{c}{Original} & \multicolumn{2}{c}{Rewrite} & \multicolumn{2}{c}{Relations} \\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}\cmidrule(l){6-7}
+Distractors & strict & len. & strict & len. & orig. & rew. \\
+\midrule
+\multicolumn{7}{@{}l}{\emph{Multi3DRefer val, one target}} \\
+0     & 33.0 & 35.0 & 57.5 & 93.0 & 0.6 & 2.9 \\
+1--4  & 15.0 & 17.5 & 67.5 & 90.0 & 0.5 & 3.3 \\
+5+    &  9.0 & 10.0 & 37.5 & 61.5 & 0.7 & 3.4 \\
+all   & 19.0 & 20.8 & 54.2 & 81.5 & 0.6 & 3.2 \\
+\addlinespace
+\multicolumn{7}{@{}l}{\emph{ScanRefer val}} \\
+0     & 40.0 & 44.5 & 71.0 & 96.0 & 0.7 & 2.8 \\
+1--4  & 13.0 & 13.5 & 66.0 & 85.0 & 0.4 & 3.1 \\
+5+    &  4.0 &  5.0 & 27.5 & 50.0 & 0.5 & 3.0 \\
+all   & 19.0 & 21.0 & 54.8 & 77.0 & 0.5 & 3.0 \\
+\addlinespace
+\multicolumn{7}{@{}l}{\emph{Multi3DRefer val, several targets} ($n=300$)} \\
+all   &  6.7 &  7.0 & 22.0 & 39.0 & --  & --  \\
+\bottomrule
+\end{tabular}
+\end{table}

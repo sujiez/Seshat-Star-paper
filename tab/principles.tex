@@ -1,0 +1,24 @@
+% Source: Seshat-Star/RESULTS.md §3.1 (ANCHOR three-arm ablation, 114 word slots, 331 captions, same prompt in all arms with three
+% instructions to keep the annotator's words) and §3.2 (ROW block, 410 val samples).
+%   verdict arm keeps 22/114, hedged 108/114, silent 108/114; paired verdict vs silent 86 / 0, McNemar p = 2.6e-26.
+%   hedged vs silent: same count (108), 6 / 6 discordant slots -> say "108 either way", NOT "identical on every slot".
+%   verdict arm, words our lookup provably missed 6/29 = 20.7% kept; words it cannot explain 16/85 = 18.8% kept.
+\begin{table}[t]
+\centering
+\small
+\caption{\textbf{What the writer does with evidence}, and the rule each observation fixed. Rows 1--3: one word of the original sentence that our label lookup could not find, presented in three ways under an otherwise identical prompt.}
+\label{tab:principles}
+\begin{tabular}{@{}p{0.61\linewidth}p{0.33\linewidth}@{}}
+\toprule
+Observation & Rule \\
+\midrule
+Told that ``nothing in this scene answers to that word'', the writer keeps the annotator's word in 22 of 114 cases; told nothing, in 108. Three instructions to keep such words were in force. & Hand over evidence, never verdicts. \\
+\addlinespace
+The same message with a disclaimer attached: 108 of 114, as if nothing had been said. & Compute a fact properly or leave it out; hedging does nothing. \\
+\addlinespace
+Under the verdict, words the lookup provably missed and words that may really be absent are kept alike: 21\% and 19\%. & The writer does not check evidence against the image. \\
+\addlinespace
+The evidence says the target stands in no row: of 410 rewrites, none says otherwise. & The corpus is as correct as the operators. \\
+\bottomrule
+\end{tabular}
+\end{table}

@@ -1,0 +1,21 @@
+% Source: Seshat-Star/RESULTS.md §1.6 (E6; /data/sujie/horus/_rerun/gen/REPORT.md), blind-reader rows, strict score.
+% First row: judge600_g Multi3DRefer rewrites on the same tiers (tab:data).  Do NOT add an "all" column: generation mode has no
+% tier 0, so its overall 54.7 must not sit next to judge600's 54.2.
+\begin{table}[t]
+\centering
+\small
+\caption{\textbf{Writing without an original sentence.} Certified exact (\%, strict), by number of same-class distractors; targets with at least one. The reader and the verifier are those of \cref{tab:data}.}
+\label{tab:gen}
+\begin{tabular}{@{}lccc@{}}
+\toprule
+ & Targets & 1--4 & 5+ \\
+\midrule
+Rewrites of human sentences & 400 & 67.5 & 37.5 \\
+\addlinespace
+\multicolumn{4}{@{}l}{\emph{Scene and target only}} \\
+ScanNet val, 164 scenes      & 300 & 69.3 & 40.0 \\
+3RScan, 12 scans             & 305 & 74.0 & 43.2 \\
+Matterport3D, one house      & 59  & 65.9 & 53.3 \\
+\bottomrule
+\end{tabular}
+\end{table}

@@ -33,6 +33,15 @@
 % \renewcommand{\todo}[1]{#1}
 
 %%
+%% Pointers into the supplement.  The supplement is a separate file (due 11-23), so the main text cannot
+%% \cref into it.  \supp{label} prints "the supplement"; with \withsupptrue (flip it below, only for a draft
+%% that compiles sec/X_suppl in) it also prints the section, so that every pointer can be checked.
+%%
+\newif\ifwithsupp
+\withsuppfalse
+\newcommand{\supp}[1]{the supplement\ifwithsupp~(\cref{#1})\fi}
+
+%%
 %% Work harder in optimizing text layout. Typically shrinks text by 1/6 of page, enable
 %% it at the very end of the writing process, when you are just above the page limit.
 %%

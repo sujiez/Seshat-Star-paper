@@ -1,0 +1,28 @@
+% Source: /data/sujie/horus/_rerun/e7 (task A1), computed by Seshat-Star/analysis/_e7_snapshot.py.
+% SNAPSHOT 11-16 21:33 CST: 536 judgements, 4 annotators, 380 of 400 (item, arm) units; annotation still running.
+%   all:           orig 127/271 = 46.9   rewrite 185/265 = 69.8
+%   certified:     orig  22/32  = 68.8   rewrite 107/141 = 75.9   (both arms 129/173 = 74.6)
+%   not certified: orig 105/239 = 43.9   rewrite  78/124 = 62.9   (both arms 183/363 = 50.4)
+%   same-class objects <=2: 52/72, 64/68;  3-5: 43/70, 52/67;  6-9: 23/65, 38/69;  >=10: 9/64, 31/61
+% "cannot tell" / "none fits" count as a miss (user, 11-16).  Re-run the script and refresh when annotation closes.
+\begin{table}[t]
+\centering
+\small
+\caption{\textbf{People against the scorer.} Share of judgements (\%) in which an annotator selects exactly the target set, on 200 validation items shown as the original or as the rewrite; ``cannot tell'' counts as a miss. \emph{Certifies} is the strict score. \TODO{Snapshot: 536 judgements by four annotators; refresh when annotation closes.}}
+\label{tab:human}
+\begin{tabular}{@{}lcc@{}}
+\toprule
+Annotator resolves the sentence & Original & Rewrite \\
+\midrule
+All items & 47 & 70 \\
+\addlinespace
+Scorer certifies it & 69 & 76 \\
+Scorer does not & 44 & 63 \\
+\addlinespace
+Same-class objects: at most 2 & 72 & 94 \\
+\quad 3--5 & 61 & 78 \\
+\quad 6--9 & 35 & 55 \\
+\quad 10 or more & 14 & 51 \\
+\bottomrule
+\end{tabular}
+\end{table}
