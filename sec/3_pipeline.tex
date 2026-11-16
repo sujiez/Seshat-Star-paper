@@ -16,6 +16,8 @@
 % Still parked for the supplement: operator walk-throughs with a real block each; the five row revisions with numbers; the first
 % system (relation menu + small model to phrase it); operator-level contrasts with Disc3D / ViGiL3D++ / CLEVR-3D-DeRef
 % (parked/related_v1_full.tex); GR3D's identifier ablation.
+% v3 (11-16, user): order is now Writer -> the obedience finding -> Evidence, so that the finding motivates how the evidence was
+% built (finding, then design).  The method figure may still run evidence -> writer, left to right.
 \section{The Seshat-Star pipeline}
 \label{sec:pipeline}
 
@@ -28,26 +30,10 @@ For a target set $T$, the candidate set $C$ is every object whose class shares t
 A sentence has to separate $T$ from $D$ by spatial cues.
 Colour and material words stay as in the original sentence, unverified; this paper does not rely on them to separate the target from the distractors.
 
-\paragraph{Evidence.}
-Operators turn the instance table into a block of facts in plain text, indexed by object id, each covering something a rendering shows poorly:
-the nearest landmarks of the target and of each distractor, with surface gaps in metres;
-places to stand, given as ``at $A$, facing $B$'', with the left-to-right order of the candidates from there;
-which candidates form rows, and the target's row and seat counted from a named end;
-the face, end or corner of a large piece of furniture at which an object sits;
-what rests on what;
-the wall, corner or end of the room an object belongs to;
-and the distractors the sentence must exclude.
-The heavier facts, rows and furniture faces, are given only when the target has five or more distractors; in emptier rooms they made the writer over-describe.
-
-No operator was right the first time, and no metric could tell us so: the writer copies a wrong row faithfully, and the verifier, which shares the row decomposition, agrees with it.
-Each revision therefore went through a person: draw what the operator computed, let someone judge it against the point cloud; across the accepts and rejects, spot the shared mistake, change the operator, draw again.
-Across the project the authors read some 1,500 rewrites, over at least 245 scenes.
-For rows, what mattered was whether other objects of the class sat nearby, not how straight the row was: of twelve computed rows, the four a person rejected were among the straightest (\supp{supp:operators}).
-Where no reference says what a person would see, we found no way to close this loop without one.
-
 \paragraph{Writer.}
 The writer is GPT-5.5 at high reasoning effort.
-It receives renderings of the point cloud from several cameras with the objects marked by id, a top-down outline of the room, the instance table, the fact block and, when there is one, the original sentence.
+It receives renderings of the point cloud from several cameras with the objects marked by id, a top-down outline of the room, the instance table and, when there is one, the original sentence.
+It also receives its evidence: a block of facts computed by geometry, described below.
 Its prompt makes excluding every distractor a hard requirement and is given in \supp{supp:writer}.
 It returns a sentence and the list of relations that sentence uses, each written over object ids.
 The choices are the writer's: which of a few dozen facts to use, where to stand, in what order to speak, which of the annotator's words to keep.
@@ -62,7 +48,24 @@ We run the pipeline over ScanRefer, Multi3DRefer, Nr3D and Sr3D in full, except 
 Told that our label lookup found nothing in the scene for a word of the original sentence, the writer kept that word in 22 of 114 cases; told the same with the caveat that the lookup is incomplete, in 108; told nothing at all, again in 108.
 Three instructions to keep such words were in force throughout.
 When the evidence said the target stood in no row, none of 410 rewrites said otherwise (\supp{supp:writer}).
-An operator's mistake therefore enters the corpus at full strength, and nothing downstream corrects it---including the scorer: fed back, its verdict would be obeyed like any other assertion, and its score would cease to be independent evidence, since the sentences would be written to pass it.
+A mistake in the evidence therefore enters the corpus at full strength, and nothing downstream corrects it---including the scorer: fed back, its verdict would be obeyed like any other assertion, and its score would cease to be independent evidence, since the sentences would be written to pass it.
+
+\paragraph{Evidence.}
+The fact block is written by operators: they turn the instance table into plain text, indexed by object id, each fact covering something a rendering shows poorly:
+the nearest landmarks of the target and of each distractor, with surface gaps in metres;
+places to stand, given as ``at $A$, facing $B$'', with the left-to-right order of the candidates from there;
+which candidates form rows, and the target's row and seat counted from a named end;
+the face, end or corner of a large piece of furniture at which an object sits;
+what rests on what;
+the wall, corner or end of the room an object belongs to;
+and the distractors the sentence must exclude.
+The heavier facts, rows and furniture faces, are given only when the target has five or more distractors; in emptier rooms they made the writer over-describe.
+
+No operator was right the first time, and no metric could tell us so: the writer copies a wrong row, and the verifier, which shares the row decomposition, agrees with it.
+Each revision therefore went through a person: draw what the operator computed, let someone judge it against the point cloud; across the accepts and rejects, spot the shared mistake, change the operator, draw again.
+Across the project the authors read some 1,500 rewrites, over at least 245 scenes.
+For rows, what mattered was whether other objects of the class sat nearby, not how straight the row was: of twelve computed rows, the four a person rejected were among the straightest (\supp{supp:operators}).
+Where no reference says what a person would see, we found no way to close this loop without one.
 
 \paragraph{What is guaranteed and what is measured.}
 Of the four properties in our title, one holds by construction.

@@ -50,7 +50,7 @@
 - 图字号规则：teaser 排到 6.875 in 宽缩 0.49 倍，图内 ≥ 11 pt（成稿 ≥ 5.4 pt）。**注意这低于模板"与正文相当"的要求**（正文 10 pt、图题 9 pt），审稿人可能挑；能放大就放大，密度不够就删内容。
 - 措辞：尺子里 GPT 只是翻译器（句子 → 谓词），exact 由确定性求值器算，不写"再跑一遍尺子"；E5 里 GPT-6 是端到端答题者。
 - 信息密度递增：teaser caption 最简 → intro → related → method / experiment；凡图里能直接看出的，caption 不写。
-- **层级不复述**：上一层（摘要 → intro → related → method / 实验）说过的话，下一层不重说——原句不许，同义句也不许；一个小从句带过，然后给上一层没有的细节。唯一例外：重大数据结果可在 method / 实验节再出现，用来带出更细的数（总数 → 分层 / 拆分项）。
+- **层级不复述**：上一层（摘要 → intro → related → method / 实验）说过的话，下一层不重说——原句不许，同义句也不许；一个小从句带过，然后给上一层没有的细节。例外有两个：(1) 重大数据结果可在 method / 实验节再出现，用来带出更细的数（总数 → 分层 / 拆分项）；(2) 非常经典、能代表全篇的句子可以在下层再出现（用户 11-16；如拔河句 "pulled two ways by the same words"）——这类句子全篇只有几句，不是普通复述的口子。
 - 细微的措辞强弱不必逐条 surface（用户 11-16）；只报 §1 硬性项和本节纪律项。
 - **全篇英式拼写**（用户 11-16）：colour / centre / neighbour / metre / grey / labelled / judgement / learnt / towards，-ise 不用 -ize。例外只有两类原样保留：引用的数据原句（如 teaser 里模型写的 "neighboring"）和参考文献标题。
 - **语气也是英式**（用户 11-16）：克制、平实、干脆，少形容词和程度副词，让数字和事实自己说话；宁可说轻（understatement），不说满。不用 novel / significantly / dramatically / state-of-the-art / leverage / utilise 这类推销词。intro 和摘要那种短、直、硬的句子是标准，改稿不许把它磨软。
