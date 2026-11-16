@@ -19,11 +19,8 @@
 \section{The Seshat-Star pipeline}
 \label{sec:pipeline}
 
-The pipeline has four roles and no component holds two.
-Geometry computes what is true of the room.
-A writer model decides what to say.
-A reader model translates the finished sentence back into relations, and a verifier checks whether those relations leave only the target.
-This section describes the first two \TODO{(method figure)}; \cref{sec:scorer} describes the others.
+The pipeline keeps four roles in different components: geometry computes what is true of the room; a writer model decides what to say; a reader model translates the finished sentence back into relations; a verifier checks whether those relations leave only the target.
+This section covers the first two, \cref{sec:scorer} the last two; one figure shows all four together \TODO{(method figure)}.
 
 \paragraph{Scene and candidates.}
 The input is a scan with instance labels: for each object an id, a class name and its points.
