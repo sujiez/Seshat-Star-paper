@@ -49,8 +49,17 @@
 
 %%
 %% Fine-tune paragraph spacing.
+%% Default article \paragraph beforeskip is 3.25ex plus 1ex: the stretch makes gaps
+%% look uneven at column bottoms. Keep run-in/@startsection semantics; tighten and
+%% nearly fix the skip. (Do not use the kit's \vspace{.5em}\textbf{#1.} form: our
+%% titles already end with a period, so that would print two.)
 %%
-% \renewcommand{\paragraph}[1]{\vspace{.5em}\noindent\textbf{#1.}}
+\makeatletter
+\renewcommand{\paragraph}{\@startsection{paragraph}{4}{\z@}%
+  {0.55em \@plus 0.1em \@minus 0.05em}%
+  {-1em}%
+  {\normalfont\normalsize\bfseries}}
+\makeatother
 
 %%
 %% Globally adjusts space between figure and caption.
@@ -75,7 +84,3 @@
 %%
 % \usepackage{soul}
 % \setuldepth{foobar}
-
-%%
-%% Reconfigure paragraph (tweaks spacing)
-%%
