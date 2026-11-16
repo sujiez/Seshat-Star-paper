@@ -5,29 +5,29 @@
 \begin{table}[t]
 \centering
 \small
-\setlength{\tabcolsep}{4.5pt}
-\caption{\textbf{Original sentences against their rewrites}, same reader and verifier, paired. Certified exact (\%) under the strict and the lenient score, and checkable relations per sentence, by number of same-class distractors; 200 items per tier, so \emph{all} weights the tiers equally.}
+\setlength{\tabcolsep}{4pt}
+\caption{\textbf{Original sentences against their rewrites}, same reader and verifier, paired. Share certified exact under the strict and the lenient score, and checkable relations per sentence, each for the original (orig.) and the rewrite (rew.), by number of same-class distractors; 200 items per tier, so \emph{all} weights the tiers equally.}
 \label{tab:data}
 \begin{tabular}{@{}lcccccc@{}}
 \toprule
- & \multicolumn{2}{c}{Original} & \multicolumn{2}{c}{Rewrite} & \multicolumn{2}{c}{Relations} \\
+ & \multicolumn{2}{c}{Strict (\%)} & \multicolumn{2}{c}{Lenient (\%)} & \multicolumn{2}{c}{Relations} \\
 \cmidrule(lr){2-3}\cmidrule(lr){4-5}\cmidrule(l){6-7}
-Distractors & strict & len. & strict & len. & orig. & rew. \\
+Distractors & orig. & rew. & orig. & rew. & orig. & rew. \\
 \midrule
 \multicolumn{7}{@{}l}{\emph{Multi3DRefer val, one target}} \\
-0     & 33.0 & 35.0 & 57.5 & 93.0 & 0.6 & 2.9 \\
-1--4  & 15.0 & 17.5 & 67.5 & 90.0 & 0.5 & 3.3 \\
-5+    &  9.0 & 10.0 & 37.5 & 61.5 & 0.7 & 3.4 \\
-all   & 19.0 & 20.8 & 54.2 & 81.5 & 0.6 & 3.2 \\
+0     & 33.0 & \textbf{57.5} & 35.0 & \textbf{93.0} & 0.6 & \textbf{2.9} \\
+1--4  & 15.0 & \textbf{67.5} & 17.5 & \textbf{90.0} & 0.5 & \textbf{3.3} \\
+5+    &  9.0 & \textbf{37.5} & 10.0 & \textbf{61.5} & 0.7 & \textbf{3.4} \\
+all   & 19.0 & \textbf{54.2} & 20.8 & \textbf{81.5} & 0.6 & \textbf{3.2} \\
 \addlinespace
 \multicolumn{7}{@{}l}{\emph{ScanRefer val}} \\
-0     & 40.0 & 44.5 & 71.0 & 96.0 & 0.7 & 2.8 \\
-1--4  & 13.0 & 13.5 & 66.0 & 85.0 & 0.4 & 3.1 \\
-5+    &  4.0 &  5.0 & 27.5 & 50.0 & 0.5 & 3.0 \\
-all   & 19.0 & 21.0 & 54.8 & 77.0 & 0.5 & 3.0 \\
+0     & 40.0 & \textbf{71.0} & 44.5 & \textbf{96.0} & 0.7 & \textbf{2.8} \\
+1--4  & 13.0 & \textbf{66.0} & 13.5 & \textbf{85.0} & 0.4 & \textbf{3.1} \\
+5+    &  4.0 & \textbf{27.5} &  5.0 & \textbf{50.0} & 0.5 & \textbf{3.0} \\
+all   & 19.0 & \textbf{54.8} & 21.0 & \textbf{77.0} & 0.5 & \textbf{3.0} \\
 \addlinespace
 \multicolumn{7}{@{}l}{\emph{Multi3DRefer val, several targets} ($n=300$)} \\
-all   &  6.7 &  7.0 & 22.0 & 39.0 & --  & --  \\
+all   &  6.7 & \textbf{22.0} &  7.0 & \textbf{39.0} & -- & -- \\
 \bottomrule
 \end{tabular}
 \end{table}
