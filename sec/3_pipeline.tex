@@ -19,7 +19,7 @@
 \section{The Seshat-Star pipeline}
 \label{sec:pipeline}
 
-The pipeline keeps four roles in different components: geometry computes what is true of the room; a writer model decides what to say; a reader model translates the finished sentence back into relations; a verifier checks whether those relations leave only the target.
+Four roles, kept apart: geometry computes what is true of the room; a writer model decides what to say; a reader model translates the finished sentence back into relations; a verifier checks whether those relations leave only the target.
 This section covers the first two, \cref{sec:scorer} the last two; one figure shows all four together \TODO{(method figure)}.
 
 \paragraph{Scene and candidates.}
@@ -40,7 +40,7 @@ and the distractors the sentence must exclude.
 The heavier facts, rows and furniture faces, are given only when the target has five or more distractors; in emptier rooms they made the writer over-describe.
 
 No operator was right the first time, and no metric could tell us so: the writer copies a wrong row faithfully, and the verifier, which shares the row decomposition, agrees with it.
-Each revision therefore went through a person: draw what the operator computed, let someone judge it against the point cloud; across the accepts and rejects, find the pattern and the drawback it exposes, change the operator, draw again.
+Each revision therefore went through a person: draw what the operator computed, let someone judge it against the point cloud; across the accepts and rejects, spot the shared mistake, change the operator, draw again.
 Across the project the authors read some 1,500 rewrites, over at least 245 scenes.
 For rows, what mattered was whether other objects of the class sat nearby, not how straight the row was: of twelve computed rows, the four a person rejected were among the straightest (\supp{supp:operators}).
 Where no reference says what a person would see, we found no way to close this loop without one.
@@ -58,7 +58,7 @@ We run the pipeline over ScanRefer, Multi3DRefer, Nr3D and Sr3D in full, except 
 Told that our label lookup found nothing in the scene for a word of the original sentence, the writer kept that word in 22 of 114 cases; told nothing, in 108; told the same with a disclaimer attached, again in 108.
 Three instructions to keep such words were in force throughout.
 When the evidence said the target stood in no row, none of 410 rewrites said otherwise (\supp{supp:writer}).
-An operator's mistake therefore enters the corpus at full strength, and nothing downstream corrects it---including the scorer: its verdict, fed back, would be obeyed like any other assertion, and it would then be measuring sentences written to satisfy it.
+An operator's mistake therefore enters the corpus at full strength, and nothing downstream corrects it---including the scorer: fed back, its verdict would be obeyed like any other assertion, and it would then measure sentences written to satisfy it.
 
 \paragraph{What is guaranteed and what is measured.}
 Of the four properties in our title, one holds by construction.
