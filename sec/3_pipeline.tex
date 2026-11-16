@@ -23,10 +23,10 @@ The pipeline keeps four roles in different components: geometry computes what is
 This section covers the first two, \cref{sec:scorer} the last two; one figure shows all four together \TODO{(method figure)}.
 
 \paragraph{Scene and candidates.}
-The input is a scan with instance labels: for each object an id, a class name and its points.
-For a target set $T$, the \emph{candidates} $C$ are all objects whose class shares the target's head noun, so that \emph{office chair}, \emph{folding chair} and \emph{chair} compete; the \emph{distractors} are $D = C \setminus T$.
+The input is a point cloud with instance labels: for each object an id, a class name and its points.
+For a target set $T$, the candidate set $C$ is every object whose class shares the target's head noun, so that \emph{office chair}, \emph{folding chair} and \emph{chair} compete; the distractor set is $D = C \setminus T$.
 A sentence has to separate $T$ from $D$ by spatial cues.
-Attributes stay as the annotator wrote them, unverified, and by design carry none of the disambiguation.
+Colour and material words stay as in the original sentence, unverified; they are not what separates the target from the distractors.
 
 \paragraph{Evidence.}
 Operators turn the instance table into a block of facts in plain text, indexed by object id, each covering something a rendering shows poorly:
