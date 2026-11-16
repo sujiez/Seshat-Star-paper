@@ -26,7 +26,7 @@ This section covers the first two, \cref{sec:scorer} the last two; one figure sh
 The input is a point cloud with instance labels: for each object an id, a class name and its points.
 For a target set $T$, the candidate set $C$ is every object whose class shares the target's head noun, so that \emph{office chair}, \emph{folding chair} and \emph{chair} compete; the distractor set is $D = C \setminus T$.
 A sentence has to separate $T$ from $D$ by spatial cues.
-Colour and material words stay as in the original sentence, unverified; they are not what separates the target from the distractors.
+Colour and material words stay as in the original sentence, unverified; this paper does not rely on them to separate the target from the distractors.
 
 \paragraph{Evidence.}
 Operators turn the instance table into a block of facts in plain text, indexed by object id, each covering something a rendering shows poorly:
