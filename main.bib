@@ -146,14 +146,13 @@
   archivePrefix = {arXiv}
 }
 
-%% UNVERIFIED (11-16): not on arXiv; check the LREC 2026 proceedings / ACL Anthology for the exact title and author
-%% names, or drop the citation (RED_FILE §1).
+%% Verified 11-17 against the ACL Anthology (2026.lrec-1.745) and the LREC 2026 proceedings page, pp. 9490--9503.
 @inproceedings{clevr3dderef,
-  author    = {{Martin} and {Palmer} and {Pacheco}},
-  title     = {{CLEVR-3D-DeRef}: Geometrically Verified Referring Expressions for {3D} Scenes},
+  author    = {Mary Lynn Martin and Martha Palmer and Maria Leonor Pacheco},
+  title     = {{CLEVR-3D-DeRef}: A Benchmark for Robust {3D} Spatial Reasoning with De-Identified Referring Expressions},
   booktitle = LREC,
-  year      = {2026},
-  note      = {TODO verify first names, title}
+  pages     = {9490--9503},
+  year      = {2026}
 }
 
 @misc{vigil3d,
@@ -224,13 +223,13 @@
   year      = {2025}
 }
 
-%% UNVERIFIED (11-16): no arXiv hit for this title; RED_FILE §1 — verify (authors, title, venue, arXiv id) or drop the
-%% citation and the clause in sec/2_related.tex before the freeze.  A citation to a non-existent work is a desk-rejection reason.
+%% Verified 11-17 against the arXiv API (2506.01946v2).
 @misc{3drs,
-  author    = {{3DRS authors (TODO)}},
-  title     = {{3DRS}: Boosting Multimodal Large Language Models with {3D} Representation Supervision},
-  year      = {2025},
-  note      = {arXiv; TODO verify}
+  author        = {Xiaohu Huang and Jingjing Wu and Qunyi Xie and Kai Han},
+  title         = {{3DRS}: {MLLMs} Need {3D}-Aware Representation Supervision for Scene Understanding},
+  year          = {2025},
+  eprint        = {2506.01946},
+  archivePrefix = {arXiv}
 }
 
 @inproceedings{3dllava,
@@ -262,4 +261,76 @@
   title     = {Thinking in Space: How Multimodal Large Language Models See, Remember, and Recall Spaces},
   booktitle = CVPR,
   year      = {2025}
+}
+
+%% ---------------------------------------------------------------------------
+%% Scans (all verified 11-17 against the arXiv API: 1702.04405, 1908.06109, 1709.06158)
+%% ---------------------------------------------------------------------------
+
+@inproceedings{scannet,
+  author    = {Angela Dai and Angel X. Chang and Manolis Savva and Maciej Halber and Thomas Funkhouser and Matthias Nie{\ss}ner},
+  title     = {{ScanNet}: Richly-annotated {3D} Reconstructions of Indoor Scenes},
+  booktitle = CVPR,
+  year      = {2017}
+}
+
+%% 3RScan is the dataset introduced by this paper.
+@inproceedings{3rscan,
+  author    = {Johanna Wald and Armen Avetisyan and Nassir Navab and Federico Tombari and Matthias Nie{\ss}ner},
+  title     = {{RIO}: {3D} Object Instance Re-Localization in Changing Indoor Environments},
+  booktitle = ICCV,
+  year      = {2019}
+}
+
+@inproceedings{matterport3d,
+  author    = {Angel Chang and Angela Dai and Thomas Funkhouser and Maciej Halber and Matthias Nie{\ss}ner and Manolis Savva and Shuran Song and Andy Zeng and Yinda Zhang},
+  title     = {{Matterport3D}: Learning from {RGB-D} Data in Indoor Environments},
+  booktitle = THREEDV,
+  year      = {2017}
+}
+
+%% ---------------------------------------------------------------------------
+%% Grounding by executing a program or constraints (verified 11-17, arXiv API: 2303.13483 "In CVPR 2023",
+%% 2311.15383 "Accepted by CVPR 2024", 2411.14594)
+%% ---------------------------------------------------------------------------
+
+@inproceedings{ns3d,
+  author    = {Joy Hsu and Jiayuan Mao and Jiajun Wu},
+  title     = {{NS3D}: Neuro-Symbolic Grounding of {3D} Objects and Relations},
+  booktitle = CVPR,
+  year      = {2023}
+}
+
+@inproceedings{zsvg3d,
+  author    = {Zhihao Yuan and Jinke Ren and Chun-Mei Feng and Hengshuang Zhao and Shuguang Cui and Zhen Li},
+  title     = {Visual Programming for Zero-shot Open-Vocabulary {3D} Visual Grounding},
+  booktitle = CVPR,
+  year      = {2024}
+}
+
+@misc{csvg,
+  author        = {Qihao Yuan and Kailai Li and Jiaming Zhang},
+  title         = {Solving Zero-Shot {3D} Visual Grounding as Constraint Satisfaction Problems},
+  year          = {2024},
+  eprint        = {2411.14594},
+  archivePrefix = {arXiv}
+}
+
+%% ---------------------------------------------------------------------------
+%% Benchmark audits (verified 11-17, arXiv API: 2103.14749 "NeurIPS 2021 Track on Datasets and Benchmarks", 2006.07159)
+%% ---------------------------------------------------------------------------
+
+@inproceedings{northcutt2021pervasive,
+  author    = {Curtis G. Northcutt and Anish Athalye and Jonas Mueller},
+  title     = {Pervasive Label Errors in Test Sets Destabilize Machine Learning Benchmarks},
+  booktitle = {NeurIPS Datasets and Benchmarks Track},
+  year      = {2021}
+}
+
+@misc{beyer2020imagenet,
+  author        = {Lucas Beyer and Olivier J. H{\'e}naff and Alexander Kolesnikov and Xiaohua Zhai and A{\"a}ron van den Oord},
+  title         = {Are we done with {ImageNet}?},
+  year          = {2020},
+  eprint        = {2006.07159},
+  archivePrefix = {arXiv}
 }

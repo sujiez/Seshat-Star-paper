@@ -18,7 +18,7 @@
 | 1.3 | **模板不得改**：不改边距、字体、字号；review 模式开 ruler + 行号（`\usepackage[review]{cvpr}`）；不要在段间加空行。 | AG §2；模板 §2 | `cvpr.sty` 与官方 kit 逐字一致 ✓ |
 | 1.4 | **匿名**：无作者名、机构、致谢、基金号；不链接可识别身份的网站；引自己的工作用第三人称（"Smith et al. show"），不写 "our previous work"；**不能引用自己的公开代码库**，只能说 "code will be made publicly available"；补充材料（视频、附带论文）同样匿名。 | AG §2 Double-blind；模板 1.6 | 当前无违规 ✓；kit 已删 Paper ID 行，`main.tex` 已同步 |
 | 1.5 | **外链**：正文、补充、rebuttal 都不得放"扩展内容"或"可追踪"的链接（视频页、项目页、tracker）。arXiv / 公开数据集 / 公开仓库的链接虽允许，官方建议**连参考文献里的 URL 也去掉**。→ **交互式 3D viewer 不能放外链**，只能作为补充文件打包；正文只能写 "provided as supplementary material"。 | AG §1 External links；FAQ | 当前无 URL ✓；viewer 方案改为随补充材料打包 |
-| 1.6 | **引用真实性**：引用不存在的文献 / 明显事实捏造 → 拒稿，可不审。"An LLM did it" 不是辩护。占位作者（"X authors (TODO)"）提交前必须核实或删掉。 | AG §2 LLM Policy；Desk Rejection C | 11-16 核实 5 条（Disc3D、ViGiL3D++、Nanri、QuatRoPE、TDVR，标题 / 作者都有错，已改）；**3DRS、CLEVR-3D-DeRef 仍未核实** → 冻结前核实或删 |
+| 1.6 | **引用真实性**：引用不存在的文献 / 明显事实捏造 → 拒稿，可不审。"An LLM did it" 不是辩护。占位作者（"X authors (TODO)"）提交前必须核实或删掉。 | AG §2 LLM Policy；Desk Rejection C | 11-16 核实 5 条（Disc3D、ViGiL3D++、Nanri、QuatRoPE、TDVR，标题 / 作者都有错，已改）；11-17 核实 3DRS（arXiv 2506.01946）与 CLEVR-3D-DeRef（ACL Anthology 2026.lrec-1.745），两条原标题都错，已改；同日新增 8 条（ScanNet、3RScan、Matterport3D、NS3D、ZSVG3D、CSVG、Northcutt、Beyer）均经 arXiv API 核实 ✓ |
 | 1.7 | **双投**：审稿期内不得向任何会议 / 期刊 / 研讨会提交重叠 ≥ 20% 的稿件；arXiv 预印本不算发表，可以挂。 | AG §2 Dual submissions | 无 |
 | 1.8 | **同期工作**：2026-09-15 之后公开的算 contemporaneous——须引用、讨论，可不比；**影响过我们的一律算 prior work**，无论何时公开。 | AG §1、§2 | TDVR (08-04)、GR3D (03-09) 都是 prior work，已引 |
 | 1.9 | **数据集作为贡献**：若把数据集列为贡献，camera-ready 时必须可用；不确定就**不要**列为主要科学贡献（可以说 will be released）。 | AG FAQ Datasets | 我们是改写四个公开基准 → 要么确认能发（含 ScanNet / ReferIt3D 许可），要么贡献写成"方法 + 测量"，数据写 will be released |
@@ -60,7 +60,7 @@
 | 项 | 结果 | 处置 |
 |----|------|------|
 | LLM Usage Statement | **缺失** | 已加 `sec/8_llm_statement.tex`，`main.tex` 已挂；模型名待确认 |
-| 参考文献占位作者 | 7 条含 TODO | 5 条已核实改正；3DRS、CLEVR-3D-DeRef 未核实 → 冻结前处理 |
+| 参考文献占位作者 | 7 条含 TODO | 7 条全部核实改正（11-17：3DRS、CLEVR-3D-DeRef）；bib 内已无 TODO |
 | Paper ID 行 | kit 已删 | `main.tex` 已删 |
 | 节标题大小写 | 6 处 Title Case | 已改首词大写 |
 | URL / 外链 | 无 | ✓（viewer 方案见 1.5） |
