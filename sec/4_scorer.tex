@@ -48,7 +48,8 @@ Write $E_k$ for the candidates that truly satisfy $p_k$.
 \noindent\textbf{Proposition 1.} \emph{Suppose that for every $k$ the verifier has no false positive on a target, $\hat{E}_k \cap T \subseteq E_k$, and no false negative on a distractor, $E_k \cap D \subseteq \hat{E}_k$. Then $\bigcap_k \hat{E}_k = T$ implies $\bigcap_k E_k = T$.}
 
 \noindent Under these assumptions every strictly certified sentence is truly exact, and the certified rate bounds the true rate from below (proof and sensitivity in \supp{supp:proof}).
-The assumptions concern opposite errors on complementary sets, so no overall accuracy of the verifier implies either, and the proposition says nothing about what the reader failed to recover.
+Each assumption forbids one kind of error on one set of objects---false positives on targets, false negatives on distractors---so a high overall accuracy for the verifier establishes neither.
+Nor does the proposition say anything about what the reader failed to recover.
 We therefore also measure the scorer against people.
 
 \paragraph{Against people.}
