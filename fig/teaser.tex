@@ -1,9 +1,10 @@
 % Spacing knobs (tune on Overleaf): \stripsep = gap above/below the strip (cuted default 12pt);
 % the \vspace at the top pulls the figure towards the author block; skip= is the figure-to-caption gap.
-% 11-16: bottom gap was too tight at stripsep 3pt + (-8pt); now stripsep 6pt and no negative space below.
-\setlength{\stripsep}{6pt plus 2pt minus 2pt}
+% 11-16: bottom gap was too tight at stripsep 3pt + (-8pt); then 6pt; now 12pt (user: wider between caption and Abstract).
+% stripsep also adds above the strip, so the top \vspace went from -17pt to -23pt to leave the top where it was.
+\setlength{\stripsep}{12pt plus 2pt minus 2pt}
 \begin{strip}
-\vspace{-17pt}
+\vspace{-23pt}
 \centering
 \includegraphics[width=\linewidth]{fig/teaser.pdf}
 \captionsetup{hypcap=false,skip=4pt}
