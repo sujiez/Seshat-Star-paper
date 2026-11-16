@@ -50,7 +50,7 @@ A sentence that walks through its members one by one states almost eight clauses
 
 \paragraph{No original needed.}
 Given only a scene and a target with distractors, the pipeline is certified 69\% of the time at one to four distractors and 40\% at five or more on ScanNet, against 68\% and 38\% when it starts from a human sentence.
-Scans from 3RScan and Matterport3D go through the unchanged pipeline once their native instance labels are converted, and score in the same range (74\% and 43\% on twelve 3RScan scans; \supp{supp:data}).
+A new scan corpus costs a label conversion and nothing else: scans from 3RScan and Matterport3D then go through the unchanged pipeline and score in the same range (74\% and 43\% on twelve 3RScan scans; \supp{supp:data}).
 These runs also show what the reader costs: on ScanNet the writer's own relations certify 80\% of the sentences, the blind reader's 55\%.
 Part of what a sentence says is lost in the reading, one more reason the certified rate is a floor.
 \input{tab/data}
