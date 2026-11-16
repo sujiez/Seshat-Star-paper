@@ -48,21 +48,18 @@
 % \usepackage{microtype}
 
 %%
-%% Fine-tune run-in \paragraph and (slightly) \section spacing.
-%% Default article \paragraph beforeskip is 3.25ex plus 1ex: the stretch makes gaps
-%% look uneven at column bottoms. Keep run-in/@startsection semantics; nearly fix the
-%% skip. (Do not use the kit's \vspace{.5em}\textbf{#1.} form: our titles already end
-%% with a period, so that would print two.)
-%% Section: cvpr.sty uses -10pt / 7pt; nudge only, via preamble — do not edit cvpr.sty
-%% (RED_FILE §1.3: margins / fonts / sizes stay).
+%% Uniform run-in \paragraph gaps.
+%% Default article beforeskip is 3.25ex plus 1ex — the stretch made "Models, ..." look
+%% ~2.5 lines while a later "Writer." looked ~1 line. Target: the midpoint, rigid
+%% (no plus/minus) so every \paragraph matches. Keep @startsection run-in semantics.
+%% (Do not use the kit's \vspace{.5em}\textbf{#1.} form: our titles already end with
+%% a period.) Do not edit cvpr.sty (RED_FILE §1.3).
 %%
 \makeatletter
 \renewcommand{\paragraph}{\@startsection{paragraph}{4}{\z@}%
-  {0.7em \@plus 0.1em \@minus 0.05em}%
+  {1.15em}%
   {-1em}%
   {\normalfont\normalsize\bfseries}}
-\def\cvprsection{\@startsection {section}{1}{\z@}%
-  {-12pt plus -2pt minus -2pt}{8.5pt} {\large\bf}}
 \makeatother
 
 %%
