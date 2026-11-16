@@ -52,6 +52,7 @@
 - 信息密度递增：teaser caption 最简 → intro → related → method / experiment；凡图里能直接看出的，caption 不写。
 - **层级不复述**：上一层（摘要 → intro → related → method / 实验）说过的话，下一层不重说——原句不许，同义句也不许；一个小从句带过，然后给上一层没有的细节。唯一例外：重大数据结果可在 method / 实验节再出现，用来带出更细的数（总数 → 分层 / 拆分项）。
 - 细微的措辞强弱不必逐条 surface（用户 11-16）；只报 §1 硬性项和本节纪律项。
+- **全篇英式拼写**（用户 11-16）：colour / centre / neighbour / metre / grey / labelled / judgement / learnt / towards，-ise 不用 -ize。例外只有两类原样保留：引用的数据原句（如 teaser 里模型写的 "neighboring"）和参考文献标题。
 
 ## §5 当前稿件检查结果（11-16，按 §1–§2 扫）
 
@@ -77,4 +78,5 @@ rg -n -i 'LLM Usage Statement' sec main.tex                                     
 rg -n -i 'TODO' main.bib; rg -c 'TODO' sec/*.tex fig/*.tex                       # 占位 / 待核
 rg -n '\\(sub)*section\{[a-z]*[ -][A-Z]' sec                                    # 节标题多余大写
 rg -n 'e\.g\.|i\.e\.|et al\.' sec                                                # 应改用 \eg \ie \etal
+rg -n -i -w 'colou?r(s|ed)?|centers?|neighbors?|neighboring|meters?|gray|labeled|judgments?|learned|toward|analyze[sd]?|behaviors?|[a-z]+(ize[sd]?|izing|ization)' sec fig/*.tex tab | rg -v 'colour' | rg -v ':[0-9]+:%'   # 美式拼写（全篇英式）
 ```
