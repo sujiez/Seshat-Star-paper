@@ -86,6 +86,10 @@ A single-target sentence is the special case of no parts and $|T| = 1$, which gi
 \label{supp:vocab}
 % RESULTS §7.5: four vocabularies (verifier 42 predicates, 57 names with aliases; writer prompt names 35; writer used 2,438 names);
 % the families beyond the vocabulary (faces / sides / ends of a structure 3.7% of rows, facing 2.4%, across from 1.5%).
+% Determinism: RESULTS §4.3 (analysis/_geom_repro.py): 9,719 / 9,738 records identical, the other 19 differ only in the count of
+% evaluated predicates; no verdict flipped.  The only random draw in spatial/compose.py has a fixed seed.
+The verifier is plain code, and its one random draw has a fixed seed.
+Recomputed offline from the predicates stored with 9,738 rewrites, no verdict changed.
 \TODO{Table of the 42 predicates by family, with arguments and one-line semantics; the alias list; relations beyond the vocabulary.}
 
 \section{Proof of Proposition 1 and sensitivity}
