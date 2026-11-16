@@ -37,10 +37,11 @@ It also receives its evidence: a block of facts computed by geometry, described 
 Its prompt makes excluding every distractor a hard requirement and is given in \supp{supp:writer}.
 It returns a sentence and the list of relations that sentence uses, each written over object ids.
 The choices are the writer's: which of a few dozen facts to use, where to stand, in what order to speak, which of the annotator's words to keep.
-% Example parked 11-16 (user: no example without a picture of it): "hanging on the rod", ScanRefer val rewrite
-% scene0207_00_ann0_obj63 (/data/sujie/horus/_rerun/srval/m3d_rewrite.jsonl).  That target has NO same-class distractor, so the
-% scene cannot carry the method figure.  If the method figure's scene has a free relation in its rewrite, point to it here.
-It may add what it sees and we did not compute \TODO{(example: a free relation from the method figure's scene, drawn in grey there)}; such relations stay in the free text and are not scored.
+% Method figure scene (decided 11-17, user): scene0406_00, ScanRefer val item scene0406_00_ann1_obj21 (towel #21 among 8 towels).
+% Original: reader binds on(bathtub) -> {21, 26, 29}; "to the left of the shower curtain" unbound (no viewpoint).  Rewrite: 5 predicates,
+% survivors 1 / 3 / 1 / 3 / 5, intersection {21}, strict.  All five clauses bound, so the figure shows no free relation; free-relation
+% examples go to the supplement (user).  Parked example "hanging on the rod": scene0207_00_ann0_obj63, no same-class distractor.
+It may add what it sees and we did not compute; such relations stay in the free text and are not scored.
 Without an original sentence the same prompt runs without the paragraphs that mention one.
 We run the pipeline over ScanRefer, Multi3DRefer, Nr3D and Sr3D in full, except Multi3DRefer's zero-target entries.
 
