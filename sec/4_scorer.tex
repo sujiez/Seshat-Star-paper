@@ -61,7 +61,7 @@ A certificate is worth about a second opinion: annotators resolve \TODO{75}\% of
 And people and scorer order the sentences alike: human success falls as same-class objects multiply, and falls furthest for the originals.
 
 Checked predicate by predicate on the structures we define ourselves (rows, furniture faces, stacks), annotators agree with the verifier on \TODO{78}\% of the statements they could decide: \TODO{87}\% when a false statement is clearly false, \TODO{68}\% when it is a near miss, such as a seat off by one in a row (\supp{supp:human}).
-The verifier is more rigid than the eye at the boundary; one such disagreement led us to correct its distance measure (\supp{supp:ruler}).
+The verifier is more rigid than the eye at the boundary, which is the conservative direction for a lower bound; one such disagreement led us to correct its distance measure (\supp{supp:ruler}).
 A different machine agrees in order: on distractor-heavy targets, GPT-6, reading the rewrite with every object's label and position at hand and nothing from the scorer, resolves 98\% of the strictly certified sentences, 96\% of those certified only leniently and 90\% of the rest (\cref{sec:model}).
 A rejection means \emph{not certifiable from the sentence}, not \emph{unsolvable}.
 \input{tab/human}
