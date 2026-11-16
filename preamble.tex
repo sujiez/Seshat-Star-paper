@@ -48,9 +48,10 @@
 % \usepackage{microtype}
 
 %%
-%% Heading gaps, rigid (no plus/minus): sections 1.5 × the template default, paragraphs 1.125 × (1.5 × less 25%, user 11-16).
+%% Heading gaps, rigid (no plus/minus): sections 1.5 × the template default; paragraphs 3.11ex (1.5 × less 25%, less 15%; user 11-16).
+%% 3.11ex is 0.96 × the article default's natural size and inside its own shrink range (3.25ex minus .2ex = 3.05ex): do NOT go below 3.05ex.
 %%   \section   cvpr.sty: -10pt / 7pt     → -15pt / 10.5pt
-%%   \paragraph article:  3.25ex (+stretch) → 3.66ex fixed
+%%   \paragraph article:  3.25ex plus 1ex minus .2ex → 3.11ex fixed
 %% \parskip kept at 0pt so twocolumn \flushbottom cannot re-stretch gaps apart.
 %% Run-in/@startsection kept; do not edit cvpr.sty (RED_FILE §1.3).
 %%
@@ -59,7 +60,7 @@
 \def\cvprsection{\@startsection {section}{1}{\z@}%
   {-15pt}{10.5pt} {\large\bf}}
 \renewcommand{\paragraph}{\@startsection{paragraph}{4}{\z@}%
-  {3.66ex}%
+  {3.11ex}%
   {-1em}%
   {\normalfont\normalsize\bfseries}}
 \makeatother
