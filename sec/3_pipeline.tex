@@ -48,6 +48,7 @@ Where no reference says what a person would see, we found no way to close this l
 \paragraph{Writer.}
 The writer is GPT-5.5 at high reasoning effort.
 It receives renderings of the point cloud from several cameras with the objects marked by id, a top-down outline of the room, the instance table, the fact block and, when there is one, the original sentence.
+Its prompt makes excluding every distractor a hard requirement and is given in \supp{supp:writer}.
 It returns a sentence and the list of relations that sentence uses, each written over object ids.
 The sentence is its own: which of a few dozen facts to use, where to stand, in what order to speak, which of the annotator's words to keep.
 It may add what it sees and we did not compute (\emph{hanging on the rod}); such relations stay in the free text and are not scored.
