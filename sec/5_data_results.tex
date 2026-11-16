@@ -16,6 +16,12 @@
 % * 3RScan (12 scans, native instance labels) n=305: 60.7; 74.0 / 43.2.  Matterport3D (one house, 10 regions) n=59: 62.7 -- existence proof only.
 %   Pipeline unchanged for both; they are MMScan's non-ScanNet scene sources.
 % * Writer's own predicates pass 15--25 points more often than the blind reader's (text-channel loss; scorer section). 664 items, 0 errors.
+% --- To write here (user, 11-16): what the rewrites do to Multi3DRefer's multi-target sentences ---
+% * Related work only says "our rewrites remove the choice by saying how many objects they mean". The detail belongs here:
+%   89% of original multi-target descriptions contain no number or plural word (mean 12.2 words; "a pillow is resting on the couch" labelled
+%   with two pillows); 99% of the rewrites state the quantity (CLAIMS, D5). The consequence for models (rewrite arm -16 F1@0.5 on the ORIGINAL
+%   multi-target cell: it has unlearned the convention) is told openly in the model section.
+% * Appendix: how parts are handled, and the set definitions (intersection / union of predicate survivors for multi-target exactness).
 \section{What the rewrites contain}
 \label{sec:data}
 
