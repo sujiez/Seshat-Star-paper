@@ -1,20 +1,20 @@
 % Claims and numbers for this section: Seshat-Star/docs/CLAIMS.md §5; RESULTS.md §1, §1.6, §7; narrative: docs/PAPER_FRAMING.md
-% v1 drafted 11-16.  Number provenance (check before freeze):
+% v2 (11-16): cut for length.  Moved to the supplement: the generation-mode table (tab/gen.tex -> supp:data; user: a table if
+% there is room, a few lines if not), the split of the 13% and the label-set numbers in full (supp:data).
+% Number provenance (check before freeze):
 % * tab:data and the McNemar counts: /data/sujie/horus/_rerun/judge600_g/REPORT.md (11-12 ruler).  M3D strict 36 / 247 (p = 7.3e-40),
 %   lenient 2 / 366; SR strict 33 / 248, lenient 2 / 338.  Strict "exclusion / recall" for rewrites: M3D 0.95 / 0.64, SR 0.91 / 0.67
 %   => a rewrite's own predicates keep the target in about two thirds of cases and remove 91--95% of distractors.
 % * Words 15.5 / 17.6 -> 38.7 / 38.6; clauses stated 1.96 / 2.18 -> 5.18 / 5.08; bound 0.58 / 0.53 -> 3.20 / 2.96; left / right clauses
 %   602 (596 without a viewpoint) vs 293 (16 without): Seshat-Star/analysis/_judge600_viewpoint.py on the judge600_g reader output.
-%   Relations per tier (orig 0.55 / 0.52 / 0.64 and 0.65 / 0.42 / 0.51; rewrites 2.91 / 3.26 / 3.33 and 2.75 / 3.00 / 3.00): RESULTS §4.2.
 % * 2,438 names vs 42; 13.1% = 6.2% attributes and comparisons + 6.9% free spatial; 56.1% vs 57.6%: RESULTS §7.5 (10-24, full val of
 %   both corpora, 68,177 writer predicates; exact there = the writer's own relations verified).
 % * Objects outside the label set 16.3 / 18.2 (orig) vs 15.2 / 17.0 (rewrite); new object words <= 4.6 / 4.7%: RESULTS §7.3.
 % * Multi-target: 89% without number or plural, 99% of rewrites state the quantity: CLAIMS §6 (PAPER_CLAIMS D5); 7.7 clauses stated,
 %   1.8 bound: EXPERIMENTS_TODO E12 note (judge600_g).  The consequence for models (-16 F1@0.5 on the original multi-target cell) is
 %   told in sec/6, not here.
-% * tab:gen and 80.0 vs 54.7 (writer's own relations vs blind reader, ScanNet): RESULTS §1.6.
-% Parked for the supplement: zero-target screening; per-corpus left / right statistics; corpus sizes; the anchor statistics
-% (43--46% of anchors in originals are not unique by class); Sr3D originals (one templated relation per sentence).
+% * Generation mode (RESULTS §1.6, blind reader, strict): ScanNet val 69.3 / 40.0 (n = 150 / 150); 3RScan 74.0 / 43.2 (173 / 132);
+%   Matterport3D 65.9 / 53.3 (44 / 15); rewrites on the same tiers 67.5 / 37.5.  Never quote its overall 54.7 next to judge600's 54.2.
 % From related v1, still unused: finished-sentence quality elsewhere (ViGiL3D++ 43.1% valid although each relation is 89.7% accurate;
 % 3D-GRAND 91.8% vs 38.3%) -- only with each paper's own protocol named, never next to tab:data.
 \section{What the rewrites contain}
@@ -24,27 +24,24 @@ We score 600 single-target expressions from each of the Multi3DRefer and ScanRef
 An original and its rewrite pass through the same reader and the same verifier, so every comparison is paired (\cref{tab:data}).
 
 \paragraph{Exactness.}
-With no distractor the class name already identifies the target, and the score only asks whether the sentence adds one relation that can be checked: 33\% and 40\% of the originals do, on the two corpora.
+With no distractor the score only asks whether the sentence adds one relation that can be checked: 33\% and 40\% of the originals do, on the two corpora.
 With distractors the words must do the work.
 At one to four distractors the originals are certified 15\% and 13\% of the time, at five or more 9\% and 4\%; the rewrites 68\% and 66\%, then 38\% and 28\%.
 Crowded rooms remain the hard case for us too.
-On Multi3DRefer, 247 items are certified only as rewrites and 36 only as originals; under the lenient score the split is 366 to 2.
-The difference between the two scores is informative.
-A rewrite's predicates remove 95\% of the distractors on average, but in a third of the rewrites one predicate, as read and verified, is false of the target; a sentence that says five things has more ways to fail the strict score than a sentence that says two.
+The gap between the two scores is informative: a rewrite's predicates remove 95\% of the distractors on average, but in a third of the rewrites one predicate, as read and verified, is false of the target.
+A sentence that says five things has more ways to fail the strict score than a sentence that says two.
 
 \paragraph{Richness.}
 A rewrite runs to 39 words against 16 to 18 and states 5.2 spatial clauses against about two.
 What counts is how many of them the reader can bind to objects and the verifier can check: 3.2 and 3.0 per rewrite, 0.6 and 0.5 per original.
-An original says no more when the room is crowded; a rewrite does (on Multi3DRefer, 2.9 relations with no distractor and 3.4 with five or more).
+An original says no more when the room is crowded; a rewrite does.
 The reason the reader most often gives for an unbound clause in the originals is a missing viewpoint: of their 602 \emph{left} and \emph{right} clauses, 596 do not say from where.
 The rewrites use \emph{left} and \emph{right} half as often, 293 clauses, and 277 of them name the standpoint.
 
 \paragraph{Variety and fidelity.}
 Over the two validation sets the writer names its relations in 2,438 ways; the verifier knows 42.
-The 13\% it does not know are about half attributes and comparisons, which we leave unscored on purpose, and half spatial relations beyond the vocabulary: the faces and ends of furniture, \emph{facing}, \emph{across from}.
-Sentences whose relations verify and sentences whose relations do not carry them equally often (56\% and 58\%): they are extra cues, not the deciding ones.
-Nor do the rewrites invent more than people do.
-They mention an object outside the label set in 15.2\% of Multi3DRefer and 17.0\% of ScanRefer sentences, the originals in 16.3\% and 18.2\%; at most 4.6\% and 4.7\% introduce an object word found neither in the original nor in the labels, usually a finer name for a labelled object.
+The 13\% it does not know are about half attributes, left unscored on purpose, and half spatial relations beyond the vocabulary, such as \emph{facing} and \emph{across from}; sentences whose relations verify and sentences whose relations do not carry them equally often.
+Nor do the rewrites invent more than people do: they mention an object outside the label set slightly less often than the originals (\supp{supp:data}).
 
 \paragraph{Several targets.}
 Of Multi3DRefer's multi-target descriptions, 89\% contain neither a number nor a plural; 99\% of their rewrites state how many objects are meant.
@@ -52,9 +49,8 @@ This is nevertheless our weakest cell: 22\% certified strictly and 39\% lenientl
 A sentence that walks through its members one by one states almost eight clauses, and the reader binds fewer than two.
 
 \paragraph{No original needed.}
-Given only a scene and a target, the pipeline is certified as often as when it starts from a human sentence (\cref{tab:gen}).
-Scans from 3RScan and Matterport3D go through the unchanged pipeline once their native instance labels are converted, and score in the same range; the Matterport3D sample is a single house and stands only as an existence proof.
+Given only a scene and a target with distractors, the pipeline is certified 69\% of the time at one to four distractors and 40\% at five or more on ScanNet, against 68\% and 38\% when it starts from a human sentence.
+Scans from 3RScan and Matterport3D go through the unchanged pipeline once their native instance labels are converted, and score in the same range (74\% and 43\% on twelve 3RScan scans; \supp{supp:data}).
 These runs also show what the reader costs: on ScanNet the writer's own relations certify 80\% of the sentences, the blind reader's 55\%.
 Part of what a sentence says is lost in the reading, one more reason the certified rate is a floor.
 \input{tab/data}
-\input{tab/gen}

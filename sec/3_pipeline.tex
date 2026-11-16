@@ -1,18 +1,18 @@
 % Claims and numbers for this section: Seshat-Star/docs/CLAIMS.md §3; RESULTS.md §3; narrative: docs/PAPER_FRAMING.md
-% v1 drafted 11-16.  Number provenance (check before freeze):
-% * Reading effort: about 30 batches, about 1.5k rewrites, at least 245 scenes -- CLAIMS §3.3 (10-29 count).
-% * Rows: 12 computed rows judged by eye, 8 accepted / 4 rejected, rejected bows 0.017--0.062 vs accepted up to 0.113 -- RESULTS §3.2 (2ae6de9).
+% v2 (11-16): cut for length after the first page count (user: just over six pages through sec/5).  Moved to the supplement, as
+% text: the design table (tab/principles.tex -> supp:writer), the twelve-rows story and the reading effort in batches
+% (supp:operators), the development set (supp:operators).
+% Number provenance (check before freeze):
+% * Reading effort: about 1.5k rewrites, at least 245 scenes -- CLAIMS §3.3 (10-29 count).
 % * Gating: rows / structure / per-distractor neighbours only with >= 5 same-class distractors -- CLAIMS §3.2 (all production corpora).
-% * Development set: 49 (scene, target set) units from Multi3DRefer train, used for design choices only -- CLAIMS §3.2.
-% * tab:principles: RESULTS §3.1, §3.2 (see tab/principles.tex).
+% * 22 of 114 vs 108 (twice), 410 rewrites: RESULTS §3.1, §3.2 (details in tab/principles.tex).
 % * Writer = GPT-5.5, reasoning effort high (RESULTS §3.1 header; §1.6).
 % Not said here on purpose:
 % * "the same writer, given better geometry, locks more often" -- does not replicate (RESULTS §1.7).
 % * Naturalness is NOT measured; the last paragraph says so.
-% Parked for the supplement (supp:operators, supp:writer, supp:failed): operator walk-throughs with a real block each; the five row
-% revisions with numbers; ANCHOR three-arm tables; the writer's unused "could not exclude" note (4% vs 49%, n = 37); the
-% "Open by naming the class" side effect (68% -> 41%); the first system (relation menu + small model to phrase it); operator-level
-% contrasts with Disc3D / ViGiL3D++ / CLEVR-3D-DeRef (parked/related_v1_full.tex); GR3D's identifier ablation.
+% Still parked for the supplement: operator walk-throughs with a real block each; the five row revisions with numbers; the first
+% system (relation menu + small model to phrase it); operator-level contrasts with Disc3D / ViGiL3D++ / CLEVR-3D-DeRef
+% (parked/related_v1_full.tex); GR3D's identifier ablation.
 \section{The Seshat-Star pipeline}
 \label{sec:pipeline}
 
@@ -29,24 +29,18 @@ A sentence has to separate $T$ from $D$ by spatial cues.
 Attributes stay as the annotator wrote them, unverified, and by design carry none of the disambiguation.
 
 \paragraph{Evidence.}
-Operators turn the instance table into a block of facts in plain text, indexed by object id.
-Each covers something a rendering shows poorly.
-\emph{Neighbours}: for the target and for each distractor, the nearest landmarks with surface-to-surface gaps in metres; we give the number and leave words such as \emph{near} to the model, which sees the whole room.
-\emph{Viewpoints}: places to stand, each given as ``at $A$, facing $B$'', with the left-to-right order of the candidates from there and a note on how clearly they separate.
-\emph{Rows}: which candidates form rows, which row holds the target and which seat, counted from a named end.
-\emph{Structure}: the face, end or corner of a large piece of furniture at which an object sits, the face named by its nearest landmark so that no viewpoint is needed.
-\emph{Stacks}: what rests on what.
-\emph{Room}: the wall, corner or end of the room an object belongs to.
+Operators turn the instance table into a block of facts in plain text, indexed by object id, each covering something a rendering shows poorly:
+the nearest landmarks of the target and of each distractor, with surface gaps in metres;
+places to stand, given as ``at $A$, facing $B$'', with the left-to-right order of the candidates from there;
+which candidates form rows, and the target's row and seat counted from a named end;
+the face, end or corner of a large piece of furniture at which an object sits;
+what rests on what;
+and the wall, corner or end of the room an object belongs to.
 The block closes with the distractors the sentence must exclude.
-Rows, structure and per-distractor neighbours are included only when the target has five or more distractors; in emptier rooms they made the writer over-describe.
-
+The heavier facts, rows and furniture faces, are given only when the target has five or more distractors; in emptier rooms they made the writer over-describe.
 No operator was right the first time.
-Each revision began with a failure found by reading: the authors read some 1,500 rewrites in about 30 batches, over at least 245 scenes, next to the point cloud.
-Rows show what this buys.
-We first required a row to be straight.
-Shown twelve computed rows, a human reader accepted eight and rejected four, and the rejected ones were among the straightest.
-What separates a row a person sees from a row only the algorithm sees is how isolated it is from other objects of its class, and the operator now tests that (\supp{supp:operators}).
-A development set of 49 scene--target units served these choices and enters no number we report.
+Each revision began with a failure the authors found by reading rewrites next to the point cloud, some 1,500 of them over at least 245 scenes.
+Rows are the clearest case: what separates a row a person sees from a row only the algorithm sees turned out to be its isolation from other objects of the class, not its straightness (\supp{supp:operators}).
 
 \paragraph{Writer.}
 The writer is GPT-5.5 at high reasoning effort.
@@ -54,12 +48,13 @@ It receives renderings of the point cloud from several cameras with the objects 
 It returns a sentence and the list of relations that sentence uses, each written over object ids.
 The sentence is its own: which of a few dozen facts to use, where to stand, in what order to speak, which of the annotator's words to keep.
 It may add what it sees and we did not compute (\emph{hanging on the rod}); such relations stay in the free text and are not scored.
-Without an original sentence the same prompt runs minus the paragraphs that mention one, and colour and material words are disallowed, since no annotator vouches for them.
-We run the pipeline over ScanRefer, Multi3DRefer, Nr3D and Sr3D in full, except Multi3DRefer's zero-target entries, which leave nothing to describe.
+Without an original sentence the same prompt runs minus the paragraphs that mention one.
+We run the pipeline over ScanRefer, Multi3DRefer, Nr3D and Sr3D in full, except Multi3DRefer's zero-target entries.
 
 \paragraph{The writer obeys evidence; it does not weigh it.}
-\Cref{tab:principles} gives the observations behind this design.
-Whatever we assert, the writer treats as an instruction, whether or not the assertion is right and however we hedge it; three instructions to the contrary changed nothing.
+Told that our label lookup found nothing in the scene for a word of the original sentence, the writer kept that word in 22 of 114 cases; told nothing, in 108; told the same with a disclaimer attached, again in 108.
+Three instructions to keep such words were in force throughout.
+When the evidence said the target stood in no row, none of 410 rewrites said otherwise (\supp{supp:writer}).
 An operator's mistake therefore enters the corpus at full strength, and nothing downstream corrects it.
 The same holds for the scorer's verdict on a rewrite: fed back, it would be obeyed like any other assertion, and the scorer would then be measuring sentences written to satisfy it.
 
@@ -70,4 +65,3 @@ The relations the writer names freely are outside this guarantee.
 \emph{Unambiguous} and \emph{rich} are measured, sentence by sentence, by the scorer and by people (\cref{sec:scorer,sec:data}); they cannot be guaranteed, since no verdict returns to the writer.
 That the sentences read as \emph{natural language} is a design intent, served by free text and by keeping the annotator's words.
 We do not measure it.
-\input{tab/principles}
