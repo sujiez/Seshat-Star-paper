@@ -4,9 +4,11 @@
 % * Operators: six families, 42 predicates; each revised against human inspection of real rooms until what it reported matched what a person sees.
 % * The model keeps the annotator's own attributes and landmarks (also cut from the abstract).
 % * The writer names relations in some 2,400 ways, the verifier needs to recognise 42; sentences read as descriptions, not filled templates.
-% * An earlier version (a menu of relations + a smaller model to phrase them) produced little worth keeping; the same frontier writer given
-%   better geometry locks its target more often (19 -> 26 of 40, pilot; number still to be confirmed).
-% * Runs on any real scene with instance masks, with or without an original sentence (was contribution (iii); generation-mode number pending).
+% * An earlier version (a menu of relations + a smaller model to phrase them) produced little worth keeping -- true, but that was a different
+%   system, not a same-writer control. The pilot's "better geometry locks more often" (19 -> 26 of 40) DOES NOT REPLICATE (RESULTS §1.7:
+%   old vs new fact block on judge600, strict 56.0 vs 54.2, n.s.). What can be said: with either version of the facts the same writer lifts
+%   originals from 19% to 54--56% strict, 21% to 81% lenient -- the gain is robust to the wording of the evidence.
+% * Runs on any real scene with instance labels, with or without an original sentence: generation mode done (RESULTS §1.6), see sec/5 notes.
 % --- Parked from related v1 (11-16; full text in parked/related_v1_full.tex) ---
 % * Operator-level contrasts: Disc3D's graph keeps vertical adjacency and horizontal contact and discards relative directions, forbids
 %   viewpoint words, asks its vision model one yes/no on a rule-given relation; ViGiL3D++ samples the standpoint at random and its ordinals

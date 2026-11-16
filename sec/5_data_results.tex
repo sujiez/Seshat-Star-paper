@@ -10,6 +10,12 @@
 %   by Multi3DRefer's annotators to fit at least two objects.
 % * Finished-sentence quality elsewhere: ViGiL3D++ single-target with distractors valid 43.1% although each relation is 89.7% accurate;
 %   3D-GRAND 91.8% grounding correctness vs 38.3% once "and nothing else fits" is added; Disc3D's revision left spatially anchored sentences unchecked.
+% --- New 11-16: generation mode (E6, RESULTS §1.6; blind reader, same ruler, strict; targets with >= 2 same-class objects, no tier 0) ---
+% * ScanNet val n=300: all 54.7 [49.0, 60.2]; 1--4 distractors 69.3; 5+ 40.0. Rewrites with the original on the same tiers: 67.5 / 37.5;
+%   originals 15.0 / 9.0. => without the original sentence, as exact as the rewrites. Do NOT put 54.7 next to judge600's 54.2 (strata differ).
+% * 3RScan (12 scans, native instance labels) n=305: 60.7; 74.0 / 43.2.  Matterport3D (one house, 10 regions) n=59: 62.7 -- existence proof only.
+%   Pipeline unchanged for both; they are MMScan's non-ScanNet scene sources.
+% * Writer's own predicates pass 15--25 points more often than the blind reader's (text-channel loss; scorer section). 664 items, 0 errors.
 \section{What the rewrites contain}
 \label{sec:data}
 
