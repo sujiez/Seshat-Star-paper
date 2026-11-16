@@ -48,16 +48,17 @@
 % \usepackage{microtype}
 
 %%
-%% Uniform run-in \paragraph gaps.
-%% Default article beforeskip is 3.25ex plus 1ex — the stretch made "Models, ..." look
-%% ~2.5 lines while a later "Writer." looked ~1 line. Target: the midpoint, rigid
-%% (no plus/minus) so every \paragraph matches. Keep @startsection run-in semantics.
-%% (Do not use the kit's \vspace{.5em}\textbf{#1.} form: our titles already end with
-%% a period.) Do not edit cvpr.sty (RED_FILE §1.3).
+%% Uniform run-in \paragraph gaps (match "Strict and lenient." / "Evidence.").
+%% Default article beforeskip is 3.25ex plus 1ex, and \parskip is 0pt plus 1pt;
+%% under twocolumn \flushbottom that stretch made "Models, ..." / "The corpora."
+%% look much wider than mid-column heads. Rigid skip + rigid \parskip. Keep
+%% @startsection run-in semantics. (Not the kit's \textbf{#1.} form: titles
+%% already end with a period.) Do not edit cvpr.sty (RED_FILE §1.3).
 %%
+\setlength{\parskip}{0pt}
 \makeatletter
 \renewcommand{\paragraph}{\@startsection{paragraph}{4}{\z@}%
-  {1.15em}%
+  {0.5em}%
   {-1em}%
   {\normalfont\normalsize\bfseries}}
 \makeatother
