@@ -4,6 +4,9 @@
 % (supp:operators), the development set (supp:operators).
 % Number provenance (check before freeze):
 % * Reading effort: about 1.5k rewrites, at least 245 scenes -- CLAIMS §3.3 (10-29 count).
+% * Twelve rows, 8 accepted / 4 rejected, rejected bows 0.017--0.062 vs accepted up to 0.113 -- RESULTS §3.2 (2ae6de9).
+% * "the verifier shares the row decomposition": _row_decomposition is one of the shared primitives (RESULTS §10 closure table).
+% * Human-in-the-loop sentence (user, 11-16): scoped to OUR loop ("we found no way"); no general claim about LLMs or RL.
 % * Gating: rows / structure / per-distractor neighbours only with >= 5 same-class distractors -- CLAIMS §3.2 (all production corpora).
 % * 22 of 114 vs 108 (twice), 410 rewrites: RESULTS §3.1, §3.2 (details in tab/principles.tex).
 % * Writer = GPT-5.5, reasoning effort high (RESULTS §3.1 header; §1.6).
@@ -38,9 +41,12 @@ what rests on what;
 and the wall, corner or end of the room an object belongs to.
 The block closes with the distractors the sentence must exclude.
 The heavier facts, rows and furniture faces, are given only when the target has five or more distractors; in emptier rooms they made the writer over-describe.
-No operator was right the first time.
-Each revision began with a failure the authors found by reading rewrites next to the point cloud, some 1,500 of them over at least 245 scenes.
-Rows are the clearest case: what separates a row a person sees from a row only the algorithm sees turned out to be its isolation from other objects of the class, not its straightness (\supp{supp:operators}).
+
+No operator was right the first time, and no metric could tell us so: the writer copies a wrong row faithfully, and the verifier, which shares the row decomposition, agrees with it.
+Each revision therefore went through a person: draw what the operator computed, let a reader judge it against the point cloud, find the quantity that separates what they accept from what they reject, change the operator, draw again.
+Across the project the authors read some 1,500 rewrites, over at least 245 scenes.
+For rows the quantity turned out to be isolation from other objects of the class, not straightness: of twelve computed rows, the four a reader rejected were among the straightest (\supp{supp:operators}).
+Where no reference says what a person would see, we found no way to close this loop without one.
 
 \paragraph{Writer.}
 The writer is GPT-5.5 at high reasoning effort.

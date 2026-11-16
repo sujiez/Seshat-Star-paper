@@ -6,8 +6,9 @@
 % * "about one point": blind vs informed reader 16.5 -> 17.5 on originals, n = 200 pairs, RESULTS §1.4 (10-21 run, older verifier).
 % * Human check (tab:human, and 75 / 79 / 12 / 51 in the text): E7-A1 SNAPSHOT, Seshat-Star/analysis/_e7_snapshot.py.  12% / 51% =
 %   scorer certifies 23 / 101 of the 200 A1 items (a1_items.jsonl, field `ours`).  79% = P(second annotator resolves | first resolves) = 146/186.
-% * Predicate cards (E7-B SNAPSHOT, 218 judgements): three self-defined families 114/146 = 78%; near misses 35/53 = 66%; clear
-%   negatives 36/40 = 90%.  (stacks 53/61, rows 26/35, faces 35/50, control next_to 37/44 -> supplement.)
+% * Predicate cards (E7-B SNAPSHOT, 218 judgements), three self-defined families only: all 114/146 = 78%; true statements 60/75;
+%   clear negatives 26/30 = 87%; near misses 28/41 = 68%.  (All four families pooled: 35/53 = 66% and 36/40 = 90%; stacks 53/61,
+%   rows 26/35, faces 35/50, control next_to 37/44 -> supplement.)  Shared primitives: 4 measures + a surface cache (RESULTS §10).
 % * GPT-6 98 / 96 / 90 (n = 536 / 248 / 349): CLAIMS §4 "E5-fail", hard/e5_fail/REPORT.md.  T2 = labels + positions (oracle perception).
 % Tier 0 and K >= 1 (user, 11-16): keep.  A target that is alone in its class is still an object in the room to be found, the
 % sentence is what the model reads, and an original that says nothing checkable about space is itself the finding.
@@ -34,6 +35,7 @@ It is blind because a reader that knows the answer reads toward it; blindness co
 The verifier contains no model.
 It evaluates 42 predicates on the instance table and the points: proximity, support and vertical order, places in the room, directions from a stated standpoint, rows and positions in them, and the faces and ends of large furniture (\supp{supp:vocab}).
 The same input always gives the same verdict.
+It shares four measuring primitives with the evidence operators---surface gap, support, collinearity and row decomposition---and nothing above them (\supp{supp:operators}).
 
 \paragraph{Strict and lenient.}
 A predicate the reader extracts can be false of the target itself.
@@ -58,7 +60,8 @@ A sentence it does not certify is one whose uniqueness cannot be established fro
 A certificate is worth about a second opinion: annotators resolve \TODO{75}\% of certified sentences, and when one annotator resolves a sentence a second does so \TODO{79}\% of the time.
 And people and scorer order the sentences alike: human success falls as same-class objects multiply, and falls furthest for the originals.
 
-Checked predicate by predicate on the structures we define ourselves (rows, furniture faces, stacks), annotators agree with the verifier on \TODO{78}\% of the statements they could decide, and disagree mostly on near misses (\supp{supp:human}); one such reading led us to correct the verifier's distance measure (\supp{supp:ruler}).
+Checked predicate by predicate on the structures we define ourselves (rows, furniture faces, stacks), annotators agree with the verifier on \TODO{78}\% of the statements they could decide: \TODO{87}\% when a false statement is clearly false, \TODO{68}\% when it is a near miss, such as a seat off by one in a row (\supp{supp:human}).
+The verifier is more rigid than the eye at the boundary; one such disagreement led us to correct its distance measure (\supp{supp:ruler}).
 A different machine agrees in order: on distractor-heavy targets, GPT-6, reading the rewrite with every object's label and position at hand and nothing from the scorer, resolves 98\% of the strictly certified sentences, 96\% of those certified only leniently and 90\% of the rest (\cref{sec:model}).
 A rejection means \emph{not certifiable from the sentence}, not \emph{unsolvable}.
 \input{tab/human}

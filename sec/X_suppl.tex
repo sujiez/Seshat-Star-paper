@@ -5,7 +5,8 @@
 
 % Supplement skeleton (11-16).  Due 11-23 AoE; compiled into the draft only with \withsupptrue (preamble.tex).
 % Every label below is pointed at from the main text through \supp{...}; do not rename one without grepping sec/.
-%   supp:operators  <- sec/3 (rows)            supp:parts <- sec/4 (definition)      supp:vocab <- sec/4 (verifier)
+%   supp:operators  <- sec/3 (rows), sec/4 (shared primitives)   supp:parts <- sec/4   supp:vocab <- sec/4 (verifier)
+%   supp:writer <- sec/3   supp:reader <- sec/4   supp:human <- sec/4   supp:data <- sec/5 (twice)
 %   supp:proof      <- sec/4 (proposition)     supp:ruler <- sec/4 (surface gap)
 % Rules that still apply here (RED_FILE §1, §3): anonymous; no external links (the 3D viewer ships as a file in the zip); the
 % paper must not REQUIRE the reader to open this.
@@ -32,6 +33,11 @@ Shown twelve computed rows, a human reader accepted eight and rejected four, and
 What separates a row a person sees from a row only the algorithm sees is how isolated it is from other objects of its class, and the operator now tests that.
 Rows, furniture faces and per-distractor neighbours are given to the writer only when the target has five or more distractors.
 A development set of 49 scene--target units from the Multi3DRefer training split served these choices and enters no number we report.
+
+\paragraph{What the verifier shares with the operators.}
+The verifier and the operators that produce the writer's evidence share four measuring primitives---surface gap, support, collinearity and row decomposition---and a cache of surface samples; above these, neither calls the other.
+An error in a primitive therefore shows on both sides, while an error above them stays on one, which is why the human check audits the verifier's output on its own.
+Three of the four are textbook geometry; only the row decomposition involves judgement, which is why rows are the structure we test hardest.
 
 \TODO{Neighbours, viewpoints, structure, rows (the five revisions, with a before/after figure), stacks, room; one real block each.}
 
@@ -80,9 +86,6 @@ A single-target sentence is the special case of no parts and $|T| = 1$, which gi
 \label{supp:vocab}
 % RESULTS §7.5: four vocabularies (verifier 42 predicates, 57 names with aliases; writer prompt names 35; writer used 2,438 names);
 % the families beyond the vocabulary (faces / sides / ends of a structure 3.7% of rows, facing 2.4%, across from 1.5%).
-With the operators that produce the writer's evidence the verifier shares only a few measuring primitives---surface gap, support, collinearity, row decomposition; above these, neither calls the other.
-An error in a primitive therefore shows on both sides, while an error above them stays on one, which is why the human check audits the verifier's output on its own.
-
 \TODO{Table of the 42 predicates by family, with arguments and one-line semantics; the alias list; relations beyond the vocabulary.}
 
 \section{Proof of Proposition 1 and sensitivity}
@@ -152,7 +155,7 @@ For every clause it cannot bind to object ids the reader gives one of four reaso
 We also checked the verifier on the structures we define ourselves: rows, furniture faces and stacks, with plain adjacency as a control.
 Annotators judged single statements with the objects marked.
 Half of the statements were made false by pointing at an object the verifier excludes, and half of those were near misses: a seat off by one, an object at the corner of the furniture, a gap just over the adjacency threshold.
-Annotators agree with the verifier on \TODO{78}\% of the statements they could decide for the three structures and on \TODO{84}\% for the control; on near misses agreement is \TODO{66}\%, on clear negatives \TODO{90}\%.
+Annotators agree with the verifier on \TODO{78}\% of the statements they could decide for the three structures and on \TODO{84}\% for the control; for the three structures, agreement is \TODO{87}\% on clearly false statements and \TODO{68}\% on near misses.
 The strict and the lenient score differ where a predicate is false of the target; such a predicate may be the writer's mistake, the reader's over-translation (\emph{along the wall} read as \emph{against the wall}) or the verifier's rigidity (a wall test in a room that is not a rectangle).
 
 \TODO{Interface, sampling, compensation; full tables by stratum and by predicate family; agreement between annotators; the zero-target task.}
