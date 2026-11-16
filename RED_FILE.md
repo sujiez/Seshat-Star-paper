@@ -78,5 +78,5 @@ rg -n -i 'LLM Usage Statement' sec main.tex                                     
 rg -n -i 'TODO' main.bib; rg -c 'TODO' sec/*.tex fig/*.tex                       # 占位 / 待核
 rg -n '\\(sub)*section\{[a-z]*[ -][A-Z]' sec                                    # 节标题多余大写
 rg -n 'e\.g\.|i\.e\.|et al\.' sec                                                # 应改用 \eg \ie \etal
-rg -n -i -w 'colou?r(s|ed)?|centers?|neighbors?|neighboring|meters?|gray|labeled|judgments?|learned|toward|analyze[sd]?|behaviors?|[a-z]+(ize[sd]?|izing|ization)' sec fig/*.tex tab | rg -v 'colour' | rg -v ':[0-9]+:%'   # 美式拼写（全篇英式）
+rg -n -i -w 'colors?|colored|centers?|neighbors?|neighboring|meters?|gray|labeled|judgments?|learned|toward|analyze[sd]?|behaviors?|[a-z]{3,}(ize[sd]?|izing|ization)' sec fig/*.tex tab | rg -v ':[0-9]+:%'   # 美式拼写（全篇英式；有输出即异常）
 ```
