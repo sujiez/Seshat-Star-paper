@@ -38,6 +38,14 @@
 %     0.25--0.5 19.4 -> 11.9, >= 0.5 35.2 -> 42.4);
 %   * GPT-6: Seshat-Star/RESULTS.md §1.5 (E5).  Benchmark: 546 single + 75 multi-target = 256 ScanRefer + 365 Multi3DRefer items;
 %     entry gate = stripped rewrite strictly certified (EXPERIMENTS_TODO E8).
+% PAIRED bands on the original ScanRefer sentences with distractors (n = 7,749; rows = original arm, columns = rewrite arm; % of all):
+%            miss   half   hit        miss = IoU < 0.25, half = 0.25--0.5, hit = >= 0.5
+%   miss     34.3    4.8   6.3
+%   half      6.9    5.6   6.9        -> of the half band: 35.7% become hits, 35.7% misses, 28.6% stay
+%   hit       4.5    1.5  29.2
+%   Net hit gain 7.2 = (6.9 + 6.3) - (4.5 + 1.5).  So the half band does NOT simply move up: it splits evenly, and the earlier
+%   wording ("the masks that overlapped ... now overlap it by more than half") was wrong as a paired statement; corrected 11-17.
+%   Multi3DRefer several targets (n = 2,757): hit row 49.9% stay, 31.9% -> half, 18.2% -> miss.
 % Decisions (user, 11-17): keep "sharper" (mask model: same hit rate, tighter mask); report QuatRoPE on the originals as it is
 % and give our reading; the diagonal is quoted next to both off-diagonal cells (RED_FILE §3); the style advantage on the benchmark
 % gets one clause; the tug-of-war line opens the analysis.  The 81% of the abstract is stated here once, as counts.
@@ -65,8 +73,9 @@ Of the 2,757 multi-target descriptions in Multi3DRefer's validation set, 2,235 a
 A model trained on both is pulled two ways by the same words, and a mask can hedge: cover the target and its neighbour, and each label is half satisfied.
 Trained on the rewrites, which say how many objects are meant, 3D-LLaVA stops hedging.
 On the original ScanRefer sentences it finds the target as often as before (Acc@0.25 61.5 against 61.0), yet Acc@0.5 rises from 44.6 to 50.7, almost all of it on targets with distractors.
-The masks that overlapped the target by a quarter to a half now overlap it by more than half; the share that miss it does not move (\cref{fig:iou_hist}a,\,b).
-The original sentences give a model little to choose by (\cref{sec:data}), and it chooses as well as before; what it has learnt is to commit to one object.
+The band of masks that overlap the target by a quarter to a half thins from 19.4\% to 11.9\% (\cref{fig:iou_hist}a,\,b); sentence by sentence, of the masks that were in it a little over a third now cover the target, as many miss it, and the rest remain.
+A hedge earns nothing at Acc@0.5; a commitment is right about half the time.
+The original sentences give a model little to choose by (\cref{sec:data}); what it has learnt from the rewrites is to commit to one object.
 The price is paid where the label wants several: on Multi3DRefer's multi-target originals it falls from 43.6 to 27.6 (\cref{fig:iou_hist}c), and on their rewrites, which say how many, it reaches 56.4.
 \input{fig/iou_hist}
 
