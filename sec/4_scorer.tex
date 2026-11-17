@@ -4,6 +4,8 @@
 % the per-family predicate check (supp:human), the surface-gap correction (supp:ruler).
 % Number provenance (check before freeze):
 % * "about one point": blind vs informed reader 16.5 -> 17.5 on originals, n = 200 pairs, RESULTS §1.4 (10-21 run, older verifier).
+% * 11-17 freeze: annotation closed where the snapshot stood (536 judgements, 4 annotators, 380 of 400 units); numbers re-run and unwrapped.
+%   On the 380 judged units the scorer certifies 22/191 and 97/189 (11.5%, 51.3%), the same 12 / 51 as on all 200 items.
 % * Human check (tab:human, and 75 / 79 / 12 / 51 in the text): E7-A1 SNAPSHOT, Seshat-Star/analysis/_e7_snapshot.py.  12% / 51% =
 %   scorer certifies 23 / 101 of the 200 A1 items (a1_items.jsonl, field `ours`).  79% = P(second annotator resolves | first resolves) = 146/186.
 % * Predicate cards (E7-B SNAPSHOT, 218 judgements), three self-defined families only: all 114/146 = 78%; true statements 60/75;
@@ -56,12 +58,12 @@ We therefore measure the scorer against people.
 \paragraph{Against people.}
 Annotators saw a scene as an interactive point cloud with the candidates lettered at random, and one sentence, without knowing whether it was an original or a rewrite; they selected every object the sentence fits (\cref{tab:human}).
 Three things follow.
-The scorer is conservative: people resolve \TODO{47}\% of the originals and \TODO{70}\% of the rewrites, where the scorer certifies \TODO{12}\% and \TODO{51}\% of the same items.
+The scorer is conservative: people resolve 47\% of the originals and 70\% of the rewrites, where the scorer certifies 12\% and 51\% of the same items.
 A sentence it does not certify is one whose uniqueness cannot be established from its spatial relations; a person may still find the object by its colour or by common sense, which the verifier does not see.
-Annotators resolve \TODO{75}\% of certified sentences, and when one annotator resolves a sentence a second does so \TODO{79}\% of the time.
+Annotators resolve 75\% of certified sentences, and when one annotator resolves a sentence a second does so 79\% of the time.
 People and scorer also order the sentences alike: the more objects of the target's class a room holds, the fewer sentences people resolve, and the originals lose most.
 
-Checked predicate by predicate on the structures we define ourselves (rows, furniture faces, stacks), annotators agree with the verifier on \TODO{78}\% of the statements they could decide: \TODO{87}\% when a false statement is clearly false, \TODO{68}\% when it is a near miss, such as a seat off by one in a row (\supp{supp:human}).
+Checked predicate by predicate on the structures we define ourselves (rows, furniture faces, stacks), annotators agree with the verifier on 78\% of the statements they could decide: 87\% when a false statement is clearly false, 68\% when it is a near miss, such as a seat off by one in a row (\supp{supp:human}).
 The verifier is more rigid than the eye at the boundary---false rejects over false accepts, which a lower bound wants.
 A different machine agrees in order: on distractor-heavy targets, GPT-6, reading the rewrite with every object's label and position to hand and nothing from the scorer, resolves 98\% of the strictly certified sentences, 96\% of those certified only leniently and 90\% of the rest (\cref{sec:model}).
 A rejection means \emph{not certifiable from the sentence}, not \emph{unsolvable}.
