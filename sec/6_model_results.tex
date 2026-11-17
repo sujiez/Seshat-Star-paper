@@ -74,7 +74,7 @@
 We train three grounding models twice, once on the original referring sentences and once on their rewrites, changing nothing else between the two runs.
 They take in the scene in three forms and answer in two: 3D-LLaVA~\cite{3dllava} reads a point cloud and outputs a mask; QuatRoPE~\cite{quatrope} reads object tokens and chooses among precomputed boxes; 3DRS~\cite{3drs} reads posed video frames and chooses among boxes likewise.
 Each keeps its own training recipe.
-The first two are tested on the original validation sentences, on their rewrites and on a distractor-heavy benchmark (\cref{tab:model}); 3DRS on a part of these, with its numbers in \supp{supp:models}.
+They are tested on the original validation sentences, on their rewrites and on a distractor-heavy benchmark (\cref{tab:model}); the rewrite-trained 3DRS on the benchmark only.
 % tab/model is read HERE so that it lands at the top of this column on p. 7; after the next paragraph it slips to p. 8 when a line is added.
 \input{tab/model}
 
@@ -86,6 +86,7 @@ On the original ScanRefer sentences it finds the target as often as before (Acc@
 The band of masks that overlap the target by a quarter to a half thins from 19.4\% to 11.9\% (\cref{fig:iou_hist}c); sentence by sentence, of the masks that were in it a little over a third now cover the target, as many miss it, and the rest remain.
 A hedge earns nothing at Acc@0.5; a commitment is right about half the time (\cref{fig:iou_hist}a,\,b).
 The original sentences give a model little to choose by (\cref{sec:data}); what it has learnt from the rewrites is to commit to one object.
+This is the first sense of \emph{sharper}: masks that stop blurring across look-alikes.
 The price is paid where the label wants several: on Multi3DRefer's original multi-target sentences the rewrite-trained model scores 27.6, the original-trained one 43.6.
 Told how many are meant, it grounds them: on the rewrites of the same items it reaches 56.4, above either model on the originals.
 
@@ -109,6 +110,6 @@ The same swap among the originals costs the original-trained models ten and twel
 \input{tab/gpt6}
 \paragraph{A reader we did not train.}
 GPT-6 answers the benchmark's single-target items under four levels of information (\cref{tab:gpt6}).
-From unlabelled renderings, where no label or relation of ours reaches the model, the rewrite is worth 18 points (57.8 to 75.6), close to the original read with ground-truth labels and positions (79.5).
+From unlabelled renderings, where no label or relation of ours reaches the model, the rewrite is worth 18 points (57.8 to 75.6), which brings it close to the original read with ground-truth labels and positions (79.5).
 With labels the rewrite reaches 98\%, an upper bound by construction, since the scorer certified every benchmark sentence; we draw no conclusion from the gap at those two levels.
 % 11-17 (review): dropped "18 to 19 points at every level ... the two effects add, and neither substitutes for the other": at the two labelled levels the rewrite's score is circular.

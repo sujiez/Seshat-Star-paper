@@ -65,6 +65,6 @@ People and scorer also order the sentences alike: the more objects of the target
 
 Checked predicate by predicate on the structures we define ourselves (rows, furniture faces, stacks), annotators agree with the verifier on 78\% of the statements they could decide: 87\% when a false statement is clearly false, 68\% when it is a near miss, such as a seat off by one in a row (\supp{supp:human}).
 The verifier is more rigid than the eye at the boundary---false rejects over false accepts, which a lower bound wants.
-A different machine agrees in order: on distractor-heavy targets, GPT-6, reading the rewrite with every object's label and position to hand and nothing from the scorer, resolves 98\% of the strictly certified sentences, 96\% of those certified only leniently and 90\% of the rest (\cref{sec:model}).
+A different machine agrees in order: on the candidates for the benchmark of \cref{sec:model}, GPT-6, reading the rewrite with every object's label and position to hand and nothing from the scorer, resolves 98\% of the strictly certified sentences, 96\% of those certified only leniently and 90\% of the rest (\supp{supp:models}).
 A rejection means \emph{not certifiable from the sentence}, not \emph{unsolvable}.
 \input{tab/human}

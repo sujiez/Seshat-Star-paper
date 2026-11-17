@@ -8,7 +8,7 @@
 \centering
 \small
 \setlength{\tabcolsep}{3.2pt}
-\caption{\textbf{Two models, each trained on the original sentences (orig.) or on the rewrites (rew.)}, tested on the original validation sets, on their rewrites and on the benchmark (\emph{hard}). ScanRefer: Acc@0.5. Multi3DRefer without zero-target items: mask Acc@0.5 for 3D-LLaVA, F1@0.5 for QuatRoPE; the two are not to be compared. The higher of each pair is bold.}
+\caption{\textbf{Models trained on the original sentences (orig.) or on the rewrites (rew.)}; \emph{hard} is the benchmark. ScanRefer: Acc@0.5. Multi3DRefer without zero-target items: mask Acc@0.5 for 3D-LLaVA, F1@0.5 for the other two; not comparable across models. Higher of each pair in bold; dash: not run.}
 \label{tab:model}
 \begin{tabular}{@{}lcccccc@{}}
 \toprule
@@ -29,6 +29,11 @@ ScanRefer              & \textbf{51.5} & 50.3 & 55.8 & \textbf{60.2} & 39.5 & \t
 Multi3DRefer           & \textbf{53.4} & 49.8 & 55.3 & \textbf{63.3} & 48.0 & \textbf{55.3} \\
 \quad one, distractors & \textbf{48.8} & 47.0 & 54.2 & \textbf{58.9} & --   & --   \\
 \quad several targets  & \textbf{43.1} & 34.1 & 37.8 & \textbf{57.4} & --   & --   \\
+\addlinespace
+% 3DRS: RESULTS_3drs_partial_a100.md (18:03): orig arm, full val; hard_strip both arms (rewrite arm = checkpoint-13000, see sec/6 header).
+\multicolumn{7}{@{}l}{\emph{3DRS (boxes chosen among proposals)}} \\
+ScanRefer              & 56.5 & --   & 63.8 & --   & 56.6 & \textbf{62.1} \\
+Multi3DRefer           & 53.7 & --   & 56.8 & --   & 53.3 & \textbf{60.5} \\
 \bottomrule
 \end{tabular}
 \end{table}
