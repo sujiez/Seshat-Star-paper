@@ -83,7 +83,7 @@
 | 外链 / 匿名 / PDF 元数据 | 无 URL；PDF 无 Author 字段；图 PDF 内无本机路径 ✓ |
 | 补充页 | `\withsuppfalse`，不随正文提交 ✓ |
 | 人核的 IRB / consent 说明 | 未写 → 补充材料补一句（见 1.12） |
-| 数据集作为贡献（1.9） | 贡献 (iii) 与 LLM 声明都承诺 release → camera-ready 时必须可用 |
+| 数据集作为贡献（1.9） | 11-17 用户定：不逐个列语料名，摘要只写 "The scorer, the benchmark and rewritten data will be released"；贡献 (iii) 与 LLM 声明同步改。camera-ready 时这三样必须可用 |
 
 ## §6 动笔后扫描命令（在 `Seshat-Paper/` 下）
 
