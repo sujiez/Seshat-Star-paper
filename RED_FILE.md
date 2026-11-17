@@ -24,7 +24,7 @@
 | 1.9 | **数据集作为贡献**：若把数据集列为贡献，camera-ready 时必须可用；不确定就**不要**列为主要科学贡献（可以说 will be released）。 | AG FAQ Datasets | 我们是改写四个公开基准 → 要么确认能发（含 ScanNet / ReferIt3D 许可），要么贡献写成"方法 + 测量"，数据写 will be released |
 | 1.10 | **无 prompt injection**（含白字、隐藏指令）。 | AG §2 | 无 |
 | 1.11 | **作者名单**：abstract deadline（11-10）后不可增删；paper deadline 后不可换序；每位作者 OpenReview profile 完整、冲突填全。 | AG §2 | 用户侧 |
-| 1.12 | **人类 / 个人数据**：用公开数据集时鼓励（非强制）说明采集 / 同意情况；无 IRB 需求。 | AG §2 | 可在补充材料一句话 |
+| 1.12 | **人类 / 个人数据**：AG §2 原文——报告 human subjects 研究的论文**必须**写明 IRB（或同等机构，给正式名称）批准 / 监督，或说明为何未做审查；并写明是否取得 consent。可放正文或补充材料（保持匿名）。用公开数据集时鼓励（非强制）说明采集 / 同意情况。 | AG §2 Personal and human subjects data；§4 IEEE | **11-17 重抓原文后更正**（此前写的“无 IRB 需求”不准确）。我们的人核（4 名标注者判断句子，不采集个人信息）→ 补充材料（11-23）加一句：标注者知情同意、不采集个人数据、为何未做 IRB 审查。待用户提供事实 |
 
 ## §2 模板格式明文（软性，但模板写明；审稿人会挑）
 
@@ -69,6 +69,21 @@
 | 图内字号 | teaser 最小 ≈ 5.4 pt 成稿 | 已知偏小，接受或再删内容 |
 | 页数 | 未量（正文未写完） | 排版后量；参考文献不计 |
 | 数据集贡献措辞 | intro 贡献项待定 | 见 1.9 |
+
+### 11-17 冻结前复核（重抓 Author Guidelines 全文 + 克隆 author-kit tag `CVPR2027-v1`）
+
+| 项 | 结果 |
+|----|------|
+| `cvpr.sty`、`ieeenat_fullname.bst` | 与 kit 逐字节一致 ✓ |
+| review 模式 / 行号 ruler | `\usepackage[review]{cvpr}` ✓；模板明文 "ruler should be present in the version submitted for review"，**提交版保留行号** |
+| `preamble.tex` 间距改动 | 节标题间距是加大（不省版面）；`\textfloatsep` 10pt 的覆盖**已撤回默认值**（模板 1.3："formatting … significantly altered" 也算超长）；teaser 的 `\vspace{-23pt}`（抵消 stripsep 后净 −11pt）保留，低风险 |
+| LLM Usage Statement | 节名、位置（正文后、参考文献前）✓；工具名、影响部分、程度已写；TODO 已清 |
+| 页数 | 本地（tectonic，OT1 Times）正文止于第 8 页；以 Overleaf 为准 |
+| `\TODO` | 正文、图、表、bib 均为 0 |
+| 外链 / 匿名 / PDF 元数据 | 无 URL；PDF 无 Author 字段；图 PDF 内无本机路径 ✓ |
+| 补充页 | `\withsuppfalse`，不随正文提交 ✓ |
+| 人核的 IRB / consent 说明 | 未写 → 补充材料补一句（见 1.12） |
+| 数据集作为贡献（1.9） | 贡献 (iii) 与 LLM 声明都承诺 release → camera-ready 时必须可用 |
 
 ## §6 动笔后扫描命令（在 `Seshat-Paper/` 下）
 
