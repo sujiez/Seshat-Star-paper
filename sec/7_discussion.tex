@@ -7,7 +7,7 @@
 The evidence has edges.
 Each model is trained once per arm, and we report no variance; 3DRS is evaluated on the benchmark alone, before its rewrite run had finished; three architectures are not all architectures.
 The benchmark is written in the rewrites' style and filtered by our own scorer, because too few original sentences pin down a target among distractors to build it from them.
-The scorer needs instance labels and a frontier model as its reader, so its verdicts are tied to a model we do not control; its certified rate is a floor, and what it leaves uncertified is not thereby wrong.
+The scorer needs instance labels and a frontier model as its reader, so its verdicts are tied to a model we do not control.
 We do not rewrite zero-target descriptions, and we have not touched question answering, where there is no target to pin down.
 
 The multi-target result deserves a second look.

@@ -21,8 +21,7 @@
 \label{sec:data}
 
 We score 600 single-target expressions from each of the Multi3DRefer and ScanRefer validation sets, 200 per tier of distractor count, and 300 multi-target expressions from Multi3DRefer.
-An original and its rewrite pass through the same reader and the same verifier, so every comparison is paired (\cref{tab:data}); \cref{fig:examples} shows three such pairs.
-\input{fig/examples}
+An original and its rewrite pass through the same reader and the same verifier, so every comparison is paired (\cref{tab:data}).
 
 \paragraph{Exactness.}
 With no distractor, the score only asks whether the sentence adds one relation that can be checked: 33\% and 40\% of the originals do, on the two corpora.
@@ -42,7 +41,7 @@ The rewrites use \emph{left} and \emph{right} half as often, 293 clauses, and 27
 \paragraph{Variety and fidelity.}
 Over the two validation sets the writer uses 2,438 relation names, all but 171 of them fewer than ten times.
 The verifier's 42 predicates cover 87\% of the relations written; the 13\% outside them---attribute words, and free names such as \emph{facing}---do not decide whether a sentence is exact.
-That slack is by design: we do not hold the writer to the verifier's vocabulary, so the writing stays free; it is also why the certified rate is a floor (\supp{supp:data}).
+That slack is by design: the writer is not held to the verifier's vocabulary, which keeps the writing free and makes the certified rate a floor (\supp{supp:data}).
 
 \paragraph{Several targets.}
 Of Multi3DRefer's multi-target descriptions, 89\% contain neither a number nor a plural; 99\% of their rewrites state how many objects are meant.
@@ -53,5 +52,4 @@ A sentence that walks through its members one by one states almost eight clauses
 Given only a scene and a target with distractors, the pipeline is certified 69\% of the time at one to four distractors and 40\% at five or more on ScanNet, against 68\% and 38\% when it starts from a human sentence.
 A new scan corpus costs a label conversion and nothing else: scans from 3RScan and Matterport3D then go through the unchanged pipeline and score in the same range (74\% and 43\% on twelve 3RScan scans; \supp{supp:data}).
 These runs also show what the reader costs: on ScanNet the writer's own relations certify 80\% of the sentences, the blind reader's 55\%.
-Part of what a sentence says is lost in the reading, one more reason the certified rate is a floor.
 \input{tab/data}
