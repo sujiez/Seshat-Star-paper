@@ -109,6 +109,6 @@ The same swap among the originals costs the original-trained models ten and twel
 \input{tab/gpt6}
 \paragraph{A reader we did not train.}
 GPT-6 answers the benchmark's single-target items under four levels of information (\cref{tab:gpt6}).
-Once it sees the scene, the rewrite is worth 18 to 19 points at every level, and better perception lifts both sentences by about 22: the two effects add, and neither substitutes for the other.
-From renderings alone the rewrite scores 75.6, close to the original with ground-truth labels and positions (79.5).
-The 98\% with labels is an upper bound by construction: the scorer certified every benchmark sentence.
+From unlabelled renderings, where no label or relation of ours reaches the model, the rewrite is worth 18 points (57.8 to 75.6), close to the original read with ground-truth labels and positions (79.5).
+With labels the rewrite reaches 98\%, an upper bound by construction, since the scorer certified every benchmark sentence; we draw no conclusion from the gap at those two levels.
+% 11-17 (review): dropped "18 to 19 points at every level ... the two effects add, and neither substitutes for the other": at the two labelled levels the rewrite's score is circular.

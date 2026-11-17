@@ -6,9 +6,9 @@
 % Single run per arm: RUN_INFO.txt of both 3D-LLaVA arms, SEED 42; no repeats exist.  Zero-target: sec/3_pipeline.tex.
 The evidence has edges.
 Each model is trained once per arm, and we report no variance; 3DRS is tested on fewer sets than the other two; three architectures are not all architectures.
-The benchmark is written in the rewrites' style and filtered by our own scorer, because too few original sentences pin down a target among distractors to build it from them.
-The scorer needs instance labels and a frontier model as its reader, so its verdicts are tied to a model we do not control.
-We do not rewrite zero-target descriptions or touch question answering, which has no target to pin down.
+The benchmark is written in the rewrites' style and filtered by our own scorer, because too few original sentences pin down a target among distractors to build it from them; whether the lead extends to human-written sentences that say where, we cannot tell.
+The scorer needs instance labels and a frontier model as its reader; writer, reader and GPT-6 are one model family, which we do not control, and only the annotators stand outside it.
+We do not rewrite zero-target descriptions or touch question answering.
 
 The multi-target result deserves a second look.
 A model that reads \emph{the chair} as one chair is marked wrong wherever the label holds four, and neither corpus lets it do what a person would: say that the sentence fits several, and ask.
