@@ -51,6 +51,10 @@
 % before the supplement is due.  The supplement must give the final numbers and say which checkpoint "5 and 7" came from if they differ.
 % 11-17: tab/gpt6 is back in the main text (user: it matters); room made in sec. 3 and sec. 5.  To fit 8 pages tab/model lost its
 % "no distractor" rows (3D-LLaVA 86.4 / 87.4 / 88.3 / 92.9; QuatRoPE 81.9 / 81.5 / 82.7 / 84.0), which the text never quoted.
+% 11-17 18:03 (RESULTS_3drs_partial_a100.md): 3DRS original-trained model, FULL ScanRefer val (9,508), Acc@0.5: 56.5 on the originals,
+%   63.8 on the rewrites (Acc@0.25 63.3 -> 71.5); Multi3DRefer F1@0.5 53.7 -> 56.8.  2k-subset 2x2 (rewrite arm = checkpoint-13000):
+%   orig x orig 56.5, orig x rw 64.2, rw x rw 68.2; rw x orig still running at the freeze -> supplement.  On multi-target rewrites the
+%   rewrite arm predicts 1.43 boxes on average (original arm 2.08, labels 3.29): the same commitment as 3D-LLaVA, for the supplement.
 % Decisions (user, 11-17): keep "sharper" (mask model: same hit rate, tighter mask); report QuatRoPE on the originals as it is
 % and give our reading; the diagonal is quoted next to both off-diagonal cells (RED_FILE §3); the style advantage on the benchmark
 % gets one clause; the tug-of-war line opens the analysis.  The 81% of the abstract is stated here once, as counts.
@@ -70,19 +74,20 @@
 We train three grounding models twice, once on the original referring sentences and once on their rewrites, changing nothing else between the two runs.
 They take in the scene in three forms and answer in two: 3D-LLaVA~\cite{3dllava} reads a point cloud and outputs a mask; QuatRoPE~\cite{quatrope} reads object tokens and chooses among precomputed boxes; 3DRS~\cite{3drs} reads posed video frames and chooses among boxes likewise.
 Each keeps its own training recipe.
-The first two are tested on the original validation sentences, on their rewrites and on a distractor-heavy benchmark (\cref{tab:model}); 3DRS on the benchmark, with its numbers in \supp{supp:models}.
+The first two are tested on the original validation sentences, on their rewrites and on a distractor-heavy benchmark (\cref{tab:model}); 3DRS on a part of these, with its numbers in \supp{supp:models}.
+% tab/model is read HERE so that it lands at the top of this column on p. 7; after the next paragraph it slips to p. 8 when a line is added.
+\input{tab/model}
 
 \paragraph{Pulled two ways.}
 Of the 2,757 multi-target descriptions in Multi3DRefer's validation set, 2,235 are ScanRefer sentences about one object of the same scene, reworded: \emph{the brown chair is to the right of the table} is one chair in ScanRefer and four in Multi3DRefer.
 A model trained on both is pulled two ways by the same words, and a mask can hedge: cover the target and its neighbour, and each label is half satisfied.
 Trained on the rewrites, which say how many objects are meant, 3D-LLaVA stops hedging.
 On the original ScanRefer sentences it finds the target as often as before (Acc@0.25 61.5 against 61.0), yet Acc@0.5 rises from 44.6 to 50.7, almost all of it on targets with distractors.
-The band of masks that overlap the target by a quarter to a half thins from 19.4\% to 11.9\% (\cref{fig:iou_hist}a,\,b); sentence by sentence, of the masks that were in it a little over a third now cover the target, as many miss it, and the rest remain.
-A hedge earns nothing at Acc@0.5; a commitment is right about half the time.
+The band of masks that overlap the target by a quarter to a half thins from 19.4\% to 11.9\% (\cref{fig:iou_hist}c); sentence by sentence, of the masks that were in it a little over a third now cover the target, as many miss it, and the rest remain.
+A hedge earns nothing at Acc@0.5; a commitment is right about half the time (\cref{fig:iou_hist}a,\,b).
 The original sentences give a model little to choose by (\cref{sec:data}); what it has learnt from the rewrites is to commit to one object.
-The price is paid where the label wants several: on Multi3DRefer's original multi-target sentences the rewrite-trained model scores 27.6, the original-trained one 43.6 (\cref{fig:iou_hist}c).
+The price is paid where the label wants several: on Multi3DRefer's original multi-target sentences the rewrite-trained model scores 27.6, the original-trained one 43.6.
 Told how many are meant, it grounds them: on the rewrites of the same items it reaches 56.4, above either model on the originals.
-\input{tab/model}
 
 \paragraph{A model that cannot hedge.}
 QuatRoPE's boxes are fixed before it reads the sentence: it can choose differently, but it has nothing to tighten.
@@ -91,19 +96,19 @@ On Multi3DRefer it loses 3.6 points, two thirds of them on the same multi-target
 We read the two models together: training on the rewrites changes not how often the right object is found from an original sentence, but what a model does when the sentence fits several.
 
 \paragraph{When the sentence says where.}
-Asked with the rewrites, the original-trained models answer better with no retraining: 44.6 to 49.9 and 51.5 to 55.8 on ScanRefer.
+Asked with the rewrites, the original-trained models answer better with no retraining: on ScanRefer, 44.6 to 49.9 (3D-LLaVA), 51.5 to 55.8 (QuatRoPE) and 56.5 to 63.8 (3DRS).
 Trained on them as well, 3D-LLaVA reaches 65.9 and QuatRoPE 60.2, and 67.0 and 63.3 on Multi3DRefer: 9 to 21 points above the same models trained and tested on the originals.
 The benchmark asks whether this is spatial reading: 621 validation items with same-class distractors, each described by a rewrite that the scorer certifies with the target's attribute words deleted, so that relations alone tell the target apart.
 All three rewrite-trained models lead: by 24 and 23 points (3D-LLaVA), by 10 and 7 (QuatRoPE) and by 5 and 7 (3DRS).
 Point cloud, object tokens or video, mask or box: the direction is the same.
-The lead holds at five or more distractors, where chance is 11\%: 3D-LLaVA goes from 25.3 to 46.2 on ScanRefer and from 17.8 to 57.4 on Multi3DRefer.
+It holds at five or more distractors, where chance is 11\%: 25.3 to 46.2 and 17.8 to 57.4 for 3D-LLaVA.
 These sentences are in the rewrites' style, which favours the models trained on it.
 But the models do read them: swap each rewrite for that of a same-class object in another scene, and on ScanRefer targets with distractors the rewrite-trained 3D-LLaVA falls from 59.8 to 27.6 and QuatRoPE from 54.7 to 31.6.
-The same swap among the originals costs the original-trained models ten and twelve points (35.2 to 25.4, 44.7 to 32.4).
+The same swap among the originals costs the original-trained models ten and twelve points.  % 35.2 to 25.4, 44.7 to 32.4 (cut 11-17 for space)
 
 \input{tab/gpt6}
 \paragraph{A reader we did not train.}
 GPT-6 answers the benchmark's single-target items under four levels of information (\cref{tab:gpt6}).
 Once it sees the scene, the rewrite is worth 18 to 19 points at every level, and better perception lifts both sentences by about 22: the two effects add, and neither substitutes for the other.
-From unlabelled renderings, where nothing of ours reaches the model but the sentence, the rewrite scores 75.6; the original with ground-truth labels and positions scores 79.5.
+% cut 11-17 for space (in tab/gpt6): From renderings alone the rewrite scores 75.6, close to the original with ground-truth labels and positions (79.5).
 The 98\% with labels is an upper bound by construction, since the scorer certified every sentence in the benchmark.

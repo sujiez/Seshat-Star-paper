@@ -2,10 +2,14 @@
 % sentences (paper_materials_1113/results/nozt_v2/3dllava/*/orig/*_merge.jsonl).  n = 7,749 / 5,358 / 2,757.
 % Share at IoU 0.25--0.5 and at >= 0.5, originals -> rewrites: (a) 19.4 -> 11.9, 35.2 -> 42.4; (b) 20.3 -> 11.7, 38.5 -> 47.4;
 % (c) 28.6 -> 32.1, 43.6 -> 27.6.  First bin (IoU < 0.05), clipped: 33 / 39, 27 / 35, 11 / 24 %.
+% 11-17 (user): demo + histogram.  Drawn by Seshat-Star/analysis/mask_fig.py from the masks exported on the 4090D
+% (_transfer/incoming/fig3_masks; request items #6 and #22, neither among the re-run items of NOTES.md).  The Multi3DRefer panels
+% of the earlier version (analysis/iou_hist_fig.py) go to the supplement; their numbers are in tab/model and in the text.
 \begin{figure*}[t]
 \centering
 \includegraphics[width=\linewidth]{fig/iou_hist.pdf}
-\caption{\textbf{3D-LLaVA on the original validation sentences}: IoU between its mask and the labelled target set.
-Numbers are the shares of sentences in the shaded band and above it, originals $\to$ rewrites; the first bin is clipped.}
+\caption{\textbf{3D-LLaVA on original ScanRefer sentences.}
+(a, b) Mask (orange) and target (outlined): trained on the originals it covers two look-alikes; on the rewrites, one, rightly in (a) and wrongly in (b).
+(c) IoU with the target; shares of sentences in the band and above it; first bin clipped.}
 \label{fig:\currfilebase}
 \end{figure*}
