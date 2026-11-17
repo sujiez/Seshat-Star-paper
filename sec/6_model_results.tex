@@ -47,12 +47,17 @@
 %   17.8 -> 57.4.  QuatRoPE ScanRefer 47.9 -> 54.5, 24.2 -> 39.6; Multi3DRefer 53.8 -> 53.4, 38.6 -> 55.4.  The gain is NOT uniformly larger
 %   at 5+ (3D-LLaVA ScanRefer: +26.0 at 2--4, +20.9 at 5+), so the text says "holds", not "grows".  Chance at 5+: 10.6 / 10.7.
 % 3DRS (RESULTS_3drs_partial_a100.md, 15:41 CST): hard_strip only, Acc@0.5 / F1@0.5 original arm (final weights) -> rewrite arm
-%   (checkpoint-13000, 80% of training): ScanRefer 56.6 -> 62.1, Multi3DRefer 53.3 -> 60.5.  Exception to disclose in the supplement:
+%   (checkpoint-13000, 80% of training): ScanRefer 56.6 -> 62.1 (145 -> 159 of 256 = +5.47), Multi3DRefer 53.3 -> 60.5 (+7.2).
+%   Hence "5 and 7" here and "5 to 24 points" in the abstract and the introduction (24.2 = 3D-LLaVA on ScanRefer).
+%   User, 11-17: the main text states the three-model pattern with confidence and defers the 3DRS detail to the supplement; the
+%   words "from a late checkpoint of its rewrite run" are the whole disclosure in the main text; sec. 7 repeats it as a limitation.  Exception to disclose in the supplement:
 %   3+ target tier (n = 22) 36.2 -> 23.6.  NO two-arm comparison on the full validation sets exists for 3DRS -- claim nothing there.
 % QuatRoPE original arm x swapped originals arrived 15:11 CST: with distractors 44.7 -> 32.4.
 % Benchmark size: 546 single-target + 75 multi-target items (256 ScanRefer + 365 Multi3DRefer); the split is in tab/gpt6.
-We train two grounding models twice, once on the original referring sentences and once on their rewrites, changing nothing else: 3D-LLaVA~\cite{3dllava}, which outputs a mask, and QuatRoPE~\cite{quatrope}, which chooses among precomputed boxes.
-Each is tested on the original validation sentences, on their rewrites, and on a distractor-heavy benchmark (\cref{tab:model}).
+We train three grounding models twice, once on the original referring sentences and once on their rewrites, changing nothing else.
+They take in the scene in three forms and answer in two: 3D-LLaVA~\cite{3dllava} reads a point cloud and outputs a mask; QuatRoPE~\cite{quatrope} reads object tokens and chooses among precomputed boxes; 3DRS~\cite{3drs} reads posed video frames and chooses among boxes likewise.
+Each keeps its own training recipe.
+The first two are tested on the original validation sentences, on their rewrites and on a distractor-heavy benchmark (\cref{tab:model}); 3DRS on the benchmark, from a late checkpoint of its rewrite run, with its numbers deferred to \supp{supp:models}.
 \input{tab/model}
 
 \paragraph{Pulled two ways.}
@@ -75,8 +80,9 @@ We read the two models together: training on the rewrites does not change how of
 Asked with the rewrites, the original-trained models answer better with no retraining: 44.6 to 49.9 and 51.5 to 55.8 on ScanRefer.
 Trained on them as well, 3D-LLaVA reaches 65.9 and QuatRoPE 60.2, and 67.0 and 63.3 on Multi3DRefer: 9 to 21 points above the same models trained and tested on the originals.
 The benchmark asks whether this is spatial reading: 621 validation items with same-class distractors, each described by a rewrite that the scorer certifies with the target's attribute words deleted, so that relations alone tell the target apart.
-The rewrite-trained models lead by 24 and 23 points (3D-LLaVA) and by 10 and 7 (QuatRoPE), and the lead holds at five or more distractors, where chance is 11\%: 3D-LLaVA goes from 25.3 to 46.2 on ScanRefer and from 17.8 to 57.4 on Multi3DRefer.
-A third model, 3DRS~\cite{3drs}, which reads posed video frames rather than a point cloud, shows the same lead (5.5 and 7.2 points) with its rewrite arm at 80\% of training (\supp{supp:models}).
+All three rewrite-trained models lead: by 24 and 23 points (3D-LLaVA), by 10 and 7 (QuatRoPE) and by 5 and 7 (3DRS).
+Point cloud, object tokens or video, mask or box: the direction is the same.
+The lead holds at five or more distractors, where chance is 11\%: 3D-LLaVA goes from 25.3 to 46.2 on ScanRefer and from 17.8 to 57.4 on Multi3DRefer.
 These sentences are in the rewrites' style, which favours the models trained on it.
 But the models do read them: swap each rewrite for that of a same-class object in another scene, and on ScanRefer targets with distractors the rewrite-trained 3D-LLaVA falls from 59.8 to 27.6 and QuatRoPE from 54.7 to 31.6.
 The same swap among the originals costs the original-trained models ten and twelve points (35.2 to 25.4, 44.7 to 32.4).
