@@ -1,0 +1,11 @@
+% Built by Seshat-Star/analysis/iou_hist_fig.py from the per-sample IoUs of the two 3D-LLaVA arms on the ORIGINAL validation
+% sentences (paper_materials_1113/results/nozt_v2/3dllava/*/orig/*_merge.jsonl).  n = 7,749 / 5,358 / 2,757.
+% Share at IoU 0.25--0.5 and at >= 0.5, originals -> rewrites: (a) 19.4 -> 11.9, 35.2 -> 42.4; (b) 20.3 -> 11.7, 38.5 -> 47.4;
+% (c) 28.6 -> 32.1, 43.6 -> 27.6.  First bin (IoU < 0.05), clipped: 33 / 39, 27 / 35, 11 / 24 %.
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\linewidth]{fig/iou_hist.pdf}
+\caption{\textbf{3D-LLaVA on the original validation sentences}: IoU between its mask and the labelled target set, trained on the originals (dashed) or on the rewrites (solid).
+Numbers give the share of sentences in the shaded band and above it, originals $\to$ rewrites; the first bin is clipped and its two values printed.}
+\label{fig:\currfilebase}
+\end{figure*}

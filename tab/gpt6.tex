@@ -1,0 +1,20 @@
+% Source: Seshat-Star/RESULTS.md §1.5 (E5, hard/e5/REPORT.md): GPT-6, effort high, no abstention; the 546 single-target items of the
+% distractor-heavy benchmark (the unlabelled-rendering row has n = 533: one scene's images were refused by the provider's filter).
+% Acc@0.5 of the answered instance's box against the target.  Chance = mean of 1 / (distractors + 1) = 21.6.
+% Rows = T4 / T3 / T2 / T1.  Labels in rows 3--4 come from GROUND-TRUTH instances (oracle perception) -- the caption says so.
+\begin{table}[t]
+\centering
+\small
+\caption{\textbf{GPT-6 on the distractor-heavy targets} (546 with one target; Acc@0.5, chance 21.6), reading the original sentence or the rewrite stripped of attribute words. Ids and positions are those of the ground-truth instances.}
+\label{tab:gpt6}
+\begin{tabular}{@{}lcc@{}}
+\toprule
+GPT-6 is given the sentence and & Original & Rewrite \\
+\midrule
+a list of object classes, no geometry   & 30.4 & \textbf{35.3} \\
+unlabelled renderings                   & 57.8 & \textbf{75.6} \\
+renderings with ids, and positions      & 79.5 & \textbf{98.2} \\
+\quad and relations computed from them  & 79.9 & \textbf{98.9} \\
+\bottomrule
+\end{tabular}
+\end{table}

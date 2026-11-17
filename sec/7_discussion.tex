@@ -2,4 +2,14 @@
 \section{Discussion and limitations}
 \label{sec:discussion}
 
-\TODO{to be drafted}
+% Drafted 11-17 from PAPER_CLAIMS_v1 §5 and D6.  Each limitation is a boundary we know of, not a restatement of §4--§6.
+% Single run per arm: RUN_INFO.txt of both 3D-LLaVA arms, SEED 42; no repeats exist.  Zero-target: sec/3_pipeline.tex.
+The evidence has edges.
+Each model is trained once per arm, and we report no variance; two architectures are not all architectures.
+The benchmark is written in the rewrites' style and filtered by our own scorer, because too few original sentences pin down a target among distractors to build it from them.
+The scorer needs instance labels and a frontier model as its reader, so its verdicts are tied to a model we do not control; its certified rate is a floor, and what it leaves uncertified is not thereby wrong.
+We do not rewrite zero-target descriptions, and we have not touched question answering, where there is no target to pin down.
+
+The multi-target result deserves a second look.
+A model that reads \emph{the chair} as one chair is marked wrong wherever the label holds four, and neither corpus lets it do what a person would: say that the sentence fits several, and ask.
+Whether training on originals and rewrites together teaches both conventions, and whether grounding should be allowed to abstain, we leave open.
