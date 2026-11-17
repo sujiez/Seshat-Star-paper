@@ -5,7 +5,7 @@
 % Drafted 11-17 from PAPER_CLAIMS_v1 §5 and D6.  Each limitation is a boundary we know of, not a restatement of §4--§6.
 % Single run per arm: RUN_INFO.txt of both 3D-LLaVA arms, SEED 42; no repeats exist.  Zero-target: sec/3_pipeline.tex.
 The evidence has edges.
-Each model is trained once per arm, and we report no variance; 3DRS is evaluated on the benchmark alone, before its rewrite run had finished; three architectures are not all architectures.
+Each model is trained once per arm, and we report no variance; 3DRS is evaluated on the benchmark alone; three architectures are not all architectures.
 The benchmark is written in the rewrites' style and filtered by our own scorer, because too few original sentences pin down a target among distractors to build it from them.
 The scorer needs instance labels and a frontier model as its reader, so its verdicts are tied to a model we do not control.
 We do not rewrite zero-target descriptions, and we have not touched question answering, where there is no target to pin down.

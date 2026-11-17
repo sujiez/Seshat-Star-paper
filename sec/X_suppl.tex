@@ -189,7 +189,11 @@ Without an original sentence the writer's prompt loses the paragraphs that menti
 \label{supp:models}
 % MUST contain (promised in sec. 6): the 3DRS table from RESULTS_3drs_partial_a100.md -- both arms on the benchmark by tier, the rewrite
 % arm stated as checkpoint-13000 of 16,266 steps, and the 3+ target tier (n = 22) where the rewrite arm is lower (36.2 -> 23.6).
-\input{tab/gpt6}
+% Moved here from the main text on 11-17 to make room for tab/gpt6 (say them here):
+%  * sec. 3: "Across the project the authors read some 1,500 rewrites, over at least 245 scenes."
+%  * sec. 3: "Without an original sentence the same prompt runs without the paragraphs that mention one."
+%  * sec. 5: "These runs also show what the reader costs: on ScanNet the writer's own relations certify 80\% of the sentences, the blind reader's 55\%."
+% 3DRS: the main text's "5 and 7" are checkpoint-13000 of 16,266; report the final run here and reconcile.
 \TODO{Training configurations; IoU histograms; paired examples; segmentation of the same sentence by the two 3D-LLaVA arms (large block, fixed sample list, selection rule stated, failures included).}
 
 \section{Our sentences next to other datasets'}
