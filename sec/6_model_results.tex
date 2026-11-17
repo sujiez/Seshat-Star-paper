@@ -99,16 +99,16 @@ We read the two models together: training on the rewrites changes not how often 
 Asked with the rewrites, the original-trained models answer better with no retraining: on ScanRefer, 44.6 to 49.9 (3D-LLaVA), 51.5 to 55.8 (QuatRoPE) and 56.5 to 63.8 (3DRS).
 Trained on them as well, 3D-LLaVA reaches 65.9 and QuatRoPE 60.2, and 67.0 and 63.3 on Multi3DRefer: 9 to 21 points above the same models trained and tested on the originals.
 The benchmark asks whether this is spatial reading: 621 validation items with same-class distractors, each described by a rewrite that the scorer certifies with the target's attribute words deleted, so that relations alone tell the target apart.
-All three rewrite-trained models lead: by 24 and 23 points (3D-LLaVA), by 10 and 7 (QuatRoPE) and by 5 and 7 (3DRS).
+All three rewrite-trained models lead: by 24 and 23 points (3D-LLaVA), 10 and 7 (QuatRoPE) and 5 and 7 (3DRS).
 Point cloud, object tokens or video, mask or box: the direction is the same.
-It holds at five or more distractors, where chance is 11\%: 25.3 to 46.2 and 17.8 to 57.4 for 3D-LLaVA.
+It holds at five or more distractors, where chance is 11\%: 3D-LLaVA goes from 25.3 to 46.2 on ScanRefer and from 17.8 to 57.4 on Multi3DRefer.
 These sentences are in the rewrites' style, which favours the models trained on it.
 But the models do read them: swap each rewrite for that of a same-class object in another scene, and on ScanRefer targets with distractors the rewrite-trained 3D-LLaVA falls from 59.8 to 27.6 and QuatRoPE from 54.7 to 31.6.
-The same swap among the originals costs the original-trained models ten and twelve points.  % 35.2 to 25.4, 44.7 to 32.4 (cut 11-17 for space)
+The same swap among the originals costs the original-trained models ten and twelve points (35.2 to 25.4, 44.7 to 32.4).
 
 \input{tab/gpt6}
 \paragraph{A reader we did not train.}
 GPT-6 answers the benchmark's single-target items under four levels of information (\cref{tab:gpt6}).
 Once it sees the scene, the rewrite is worth 18 to 19 points at every level, and better perception lifts both sentences by about 22: the two effects add, and neither substitutes for the other.
-% cut 11-17 for space (in tab/gpt6): From renderings alone the rewrite scores 75.6, close to the original with ground-truth labels and positions (79.5).
-The 98\% with labels is an upper bound by construction, since the scorer certified every sentence in the benchmark.
+From renderings alone the rewrite scores 75.6, close to the original with ground-truth labels and positions (79.5).
+The 98\% with labels is an upper bound by construction: the scorer certified every benchmark sentence.

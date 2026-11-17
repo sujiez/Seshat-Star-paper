@@ -8,7 +8,7 @@ The evidence has edges.
 Each model is trained once per arm, and we report no variance; 3DRS is tested on fewer sets than the other two; three architectures are not all architectures.
 The benchmark is written in the rewrites' style and filtered by our own scorer, because too few original sentences pin down a target among distractors to build it from them.
 The scorer needs instance labels and a frontier model as its reader, so its verdicts are tied to a model we do not control.
-We do not rewrite zero-target descriptions, and we have not touched question answering, where there is no target to pin down.
+We do not rewrite zero-target descriptions or touch question answering, which has no target to pin down.
 
 The multi-target result deserves a second look.
 A model that reads \emph{the chair} as one chair is marked wrong wherever the label holds four, and neither corpus lets it do what a person would: say that the sentence fits several, and ask.
