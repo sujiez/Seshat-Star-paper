@@ -46,8 +46,11 @@
 % Hard set by tier, Acc@0.5 / F1@0.5, orig. -> rew. arm: 3D-LLaVA ScanRefer 2--4 37.6 -> 63.6, 5+ 25.3 -> 46.2; Multi3DRefer 45.0 -> 61.9,
 %   17.8 -> 57.4.  QuatRoPE ScanRefer 47.9 -> 54.5, 24.2 -> 39.6; Multi3DRefer 53.8 -> 53.4, 38.6 -> 55.4.  The gain is NOT uniformly larger
 %   at 5+ (3D-LLaVA ScanRefer: +26.0 at 2--4, +20.9 at 5+), so the text says "holds", not "grows".  Chance at 5+: 10.6 / 10.7.
-% NOT written (no evidence in hand at drafting time): any sentence on 3DRS (only the original arm exists; the rewrite arm is a
-% checkpoint at 80% of training); QuatRoPE original arm on swapped ORIGINAL sentences (cell still running).
+% 3DRS (RESULTS_3drs_partial_a100.md, 15:41 CST): hard_strip only, Acc@0.5 / F1@0.5 original arm (final weights) -> rewrite arm
+%   (checkpoint-13000, 80% of training): ScanRefer 56.6 -> 62.1, Multi3DRefer 53.3 -> 60.5.  Exception to disclose in the supplement:
+%   3+ target tier (n = 22) 36.2 -> 23.6.  NO two-arm comparison on the full validation sets exists for 3DRS -- claim nothing there.
+% QuatRoPE original arm x swapped originals arrived 15:11 CST: with distractors 44.7 -> 32.4.
+% Benchmark size: 546 single-target + 75 multi-target items (256 ScanRefer + 365 Multi3DRefer); the split is in tab/gpt6.
 We train two grounding models twice, once on the original referring sentences and once on their rewrites, changing nothing else: 3D-LLaVA~\cite{3dllava}, which outputs a mask, and QuatRoPE~\cite{quatrope}, which chooses among precomputed boxes.
 Each is tested on the original validation sentences, on their rewrites, and on a distractor-heavy benchmark (\cref{tab:model}).
 \input{tab/model}
@@ -71,12 +74,12 @@ We read the two models together: training on the rewrites does not change how of
 \paragraph{When the sentence says where.}
 Asked with the rewrites, the original-trained models answer better with no retraining: 44.6 to 49.9 and 51.5 to 55.8 on ScanRefer.
 Trained on them as well, 3D-LLaVA reaches 65.9 and QuatRoPE 60.2, and 67.0 and 63.3 on Multi3DRefer: 9 to 21 points above the same models trained and tested on the originals.
-The benchmark asks whether this is spatial reading.
-It holds 621 validation items, 546 single targets with two or more same-class distractors and 75 target sets, each described by its rewrite with the target's attribute words deleted and kept only if the scorer still certifies it; relations alone tell the target apart.
+The benchmark asks whether this is spatial reading: 621 validation items with same-class distractors, each described by a rewrite that the scorer certifies with the target's attribute words deleted, so that relations alone tell the target apart.
 The rewrite-trained models lead by 24 and 23 points (3D-LLaVA) and by 10 and 7 (QuatRoPE), and the lead holds at five or more distractors, where chance is 11\%: 3D-LLaVA goes from 25.3 to 46.2 on ScanRefer and from 17.8 to 57.4 on Multi3DRefer.
+A third model, 3DRS~\cite{3drs}, which reads posed video frames rather than a point cloud, shows the same lead (5.5 and 7.2 points) with its rewrite arm at 80\% of training (\supp{supp:models}).
 These sentences are in the rewrites' style, which favours the models trained on it.
 But the models do read them: swap each rewrite for that of a same-class object in another scene, and on ScanRefer targets with distractors the rewrite-trained 3D-LLaVA falls from 59.8 to 27.6 and QuatRoPE from 54.7 to 31.6.
-The same swap among the originals costs the original-trained 3D-LLaVA ten points, 35.2 to 25.4.
+The same swap among the originals costs the original-trained models ten and twelve points (35.2 to 25.4, 44.7 to 32.4).
 \input{tab/gpt6}
 
 \paragraph{A reader we did not train.}
