@@ -53,7 +53,7 @@ Each is tested on the original validation sentences, on their rewrites, and on a
 \input{tab/model}
 
 \paragraph{Pulled two ways.}
-Of the 2,757 multi-target descriptions in Multi3DRefer's validation set, 2,235 are ScanRefer sentences about one object of the same scene, reworded: \emph{the chair to the right of the table} is one chair in ScanRefer and four in Multi3DRefer.
+Of the 2,757 multi-target descriptions in Multi3DRefer's validation set, 2,235 are ScanRefer sentences about one object of the same scene, reworded: \emph{the brown chair is to the right of the table} is one chair in ScanRefer and four in Multi3DRefer.
 A model trained on both is pulled two ways by the same words, and a mask can hedge: cover the target and its neighbour, and each label is half satisfied.
 Trained on the rewrites, which say how many objects are meant, 3D-LLaVA stops hedging.
 On the original ScanRefer sentences it finds the target as often as before (Acc@0.25 61.5 against 61.0), yet Acc@0.5 rises from 44.6 to 50.7, almost all of it on targets with distractors.
