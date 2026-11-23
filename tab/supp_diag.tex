@@ -1,0 +1,19 @@
+% Source: Seshat-Star/analysis/_diag_select.py (per-sample mask IoU of the four 3D-LLaVA cells; ScanRefer "multiple", n = 7,749).
+% Fitted = Acc@0.5 / Acc@0.25.  Missed = IoU below 0.05.  Between = IoU in [0.25, 0.5) (the band of fig:iou_hist).
+\begin{table}[t]
+\centering
+\small
+\setlength{\tabcolsep}{4pt}
+\caption{\textbf{Finding and fitting.} 3D-LLaVA on ScanRefer targets with distractors (7,749 items). \emph{Fitted}: share of the targets found at IoU 0.25 whose mask reaches 0.5. \emph{Missed}: IoU below 0.05.}
+\label{tab:supp_diag}
+\begin{tabular}{@{}llcccc@{}}
+\toprule
+Trained on & Tested on & Acc@0.25 & Fitted & Acc@0.5 & Missed \\
+\midrule
+originals & originals & 54.6 & 64.4 & 35.2 & 33.1 \\
+originals & rewrites  & 61.6 & 66.8 & 41.2 & 27.4 \\
+rewrites  & originals & 54.3 & 78.1 & 42.4 & 39.1 \\
+rewrites  & rewrites  & 71.9 & 83.1 & 59.8 & 23.2 \\
+\bottomrule
+\end{tabular}
+\end{table}
