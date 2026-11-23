@@ -1,0 +1,31 @@
+% Source: Seshat-Star/analysis/_transfer_strata.py --counts (QuatRoPE: len(pred_ids); 3DRS: n_pred), Multi3DRefer, per-sample files
+% of nozt_v2_per_sample_1124, each cell on its own items.  One target = Multi3DRefer's tag st_w_d (5,358 items; 976 in the 2k subset).
+% All rows: final weights, all items (5,358 with one target and a distractor; 2,757 with several, labels average 2 / 3.4 / 8.4).
+\begin{table}[t]
+\centering
+\small
+\setlength{\tabcolsep}{4.5pt}
+\caption{\textbf{How many objects a model returns} on Multi3DRefer: mean number of boxes by number of targets (one target: items with a distractor), and the share of multi-target items answered with a single box.}
+\label{tab:supp_count}
+\begin{tabular}{@{}llccccc@{}}
+\toprule
+ & & \multicolumn{4}{c}{Targets} & \\
+\cmidrule(lr){3-6}
+Trained on & Asked with & 1 & 2 & 3--4 & 5+ & One box (\%) \\
+\midrule
+\multicolumn{2}{@{}l}{\emph{Labels}} & 1 & 2 & 3.4 & 8.4 & 0 \\
+\addlinespace
+\multicolumn{7}{@{}l}{\emph{QuatRoPE}} \\
+originals & originals & 1.2 & 1.5 & 1.9 & 3.3 & 47 \\
+originals & rewrites  & 1.0 & 1.2 & 1.5 & 2.0 & 76 \\
+rewrites  & originals & 1.0 & 1.0 & 1.1 & 1.2 & 96 \\
+rewrites  & rewrites  & 1.0 & 2.0 & 3.4 & 8.0 & 0 \\
+\addlinespace
+\multicolumn{7}{@{}l}{\emph{3DRS}} \\
+originals & originals & 1.5 & 1.7 & 2.3 & 2.9 & 47 \\
+originals & rewrites  & 1.5 & 1.8 & 2.3 & 2.5 & 46 \\
+rewrites  & originals & 1.3 & 1.4 & 1.6 & 1.6 & 70 \\
+rewrites  & rewrites  & 1.2 & 1.3 & 1.5 & 1.4 & 74 \\
+\bottomrule
+\end{tabular}
+\end{table}
