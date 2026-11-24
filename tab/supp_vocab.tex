@@ -1,0 +1,28 @@
+% Source: Seshat-Star/spatial/compose.py, PREDICATE_SPEC (the vocabulary handed to the reader) and _SKILL_ALIAS.
+\begin{table*}[t]
+\centering
+\small
+\caption{\textbf{The predicates, by family}, under the names in which the reader states them. Each is read as a property of the candidates: \emph{the chairs that are next to $o$}. $o$, $a$ and $b$ are object ids; $v$ is the object at which the viewer stands.}
+\label{tab:supp_vocab}
+\begin{tabular}{@{}p{0.17\linewidth}p{0.36\linewidth}p{0.42\linewidth}@{}}
+\toprule
+Family & Predicates & Meaning \\
+\midrule
+Proximity & \texttt{closest\_to}($o$), \texttt{farthest\_from}($o$), \texttt{next\_to}($o$), \texttt{touching}($o$), \texttt{near}($o$, $k$), \texttt{k\_nearest}($o$, $k$), \texttt{between}($a$, $b$), \texttt{near\_two}($a$, $b$) & The candidate nearest to or farthest from $o$, by the gap between surfaces; right next to $o$; in contact with it; among the $k$ nearest to it; between $a$ and $b$; near both. \\
+\addlinespace
+Support and vertical order & \texttt{on}($o$), \texttt{under}($o$), \texttt{above}($o$), \texttt{below}($o$), \texttt{supports}($o$), \texttt{highest}, \texttt{lowest} & Resting on $o$ or underneath it; directly above or below it; what $o$ rests on; the highest or lowest of the candidates. \\
+\addlinespace
+Groups and large furniture & \texttt{cluster}, \texttt{row}, \texttt{n\_in\_row}($n$), \texttt{middle}, \texttt{around}($o$), \texttt{all\_near}($o$), \texttt{either\_side\_of}($o$), \texttt{ends\_of}($o$), \texttt{far\_end\_of}($o$), \texttt{on\_structure}($o$) & The candidates that sit together apart from the rest; that form one row, or a row of exactly $n$; the middle of a line; those that surround $o$, are all near it or flank it; those at its two ends, at its end away from the room's centre, or within its footprint. \\
+\addlinespace
+Positions in a row & \texttt{in\_row}, \texttt{nth\_in\_row}($n$), \texttt{ends\_of\_row}, \texttt{middle\_of\_row} & In the row; the $n$-th along it, from either end; the two at its ends; those between the ends. \\
+\addlinespace
+Directions from a standpoint & \texttt{leftmost}($v$), \texttt{rightmost}($v$), \texttt{nearest}($v$), \texttt{farthest}($v$), \texttt{middle}($v$), \texttt{nth\_left}($v$, $n$), \texttt{nth\_right}($v$, $n$), \texttt{nth\_front}($v$, $n$), \texttt{dir\_of}(side, $v$, $o$) & Seen from $v$, facing the candidates: the one at the left or right end, the nearest or farthest, the middle one, the $n$-th from the left, right or front; to the left, right, front or back of $o$, with an optional object that the viewer faces. \\
+\addlinespace
+Sides, from the room's centre & \texttt{left\_of}($o$), \texttt{right\_of}($o$), \texttt{in\_front\_of}($o$), \texttt{behind}($o$) & On that side of $o$ as seen from the middle of the room; used only when the sentence says that this is where it looks from. \\
+\addlinespace
+Room & \texttt{corner}, \texttt{center}, \texttt{end\_of\_room}, \texttt{wall} & In a corner, in the middle or at one end of the room; against a wall, which may be named by an object on it. \\
+\addlinespace
+Negation & \texttt{not}($p$) & The sentence says that the candidate does not have relation $p$. \\
+\bottomrule
+\end{tabular}
+\end{table*}

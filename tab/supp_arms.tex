@@ -1,0 +1,21 @@
+% Source: Seshat-Star/RESULTS.md §3.1 (docs/anchor_ab_results.md, analysis/_anchor_ab.py): 331 Multi3DRefer validation captions,
+% 83 grouped calls per arm, GPT-5.5 at high effort; the same 114 words in every arm.  Intervals: Wilson.
+% Paired: verdict vs silent 86 / 0; verdict vs caveat 87 / 1; caveat vs silent 6 / 6.
+\begin{table}[t]
+\centering
+\small
+\setlength{\tabcolsep}{2.5pt}
+\caption{\textbf{One word, presented in three ways.} Words of the original sentence that survive in the rewrite, of the 114 that our label lookup could not find, split into those for which the lookup is provably \emph{wrong} and the \emph{other}s, and of the 670 that it did find.}
+\label{tab:supp_arms}
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+ & \multicolumn{3}{c}{Not found by the lookup} & Found \\
+\cmidrule(lr){2-4}
+Told & all (114) & wrong (29) & other (85) & (670) \\
+\midrule
+A verdict & 22 & 6 & 16 & 660 \\
+The same, with caveat & 108 & 27 & 81 & 668 \\
+Nothing & 108 & 28 & 80 & 669 \\
+\bottomrule
+\end{tabular}
+\end{table}
