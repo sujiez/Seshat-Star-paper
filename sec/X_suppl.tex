@@ -51,7 +51,7 @@ The benchmark is filtered by our own scorer. & How often GPT-6, which is given n
 \addlinespace
 Writer, reader and GPT-6 are one model family; only the annotators stand outside it. & The human check in full (\cref{supp:human}). The trained models are a second check from outside: scored on the original sentences against the original labels, no model of that family takes part in the test (\cref{tab:supp_val}). \\
 \addlinespace
-Whether the lead extends to human-written sentences that say where is left open. & Beacon3D's sentences under the scorer, before GPT-6 and as questions to the trained models (\cref{supp:external}). On them the two arms of 3DRS are level, and 3D-LLaVA's rewrite arm leads at Acc@0.5 only. \\
+Whether the lead extends to human-written sentences that say where is left open. & Beacon3D's sentences under the scorer, before GPT-6 and as questions to the trained models (\cref{supp:external}). On them the two arms of 3DRS and of QuatRoPE are level, and 3D-LLaVA's rewrite arm leads at Acc@0.5 only. \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -111,8 +111,7 @@ We changed the code only where a run would otherwise not start or not finish on 
 None of these touches the model, the loss or the data.
 Two settings differ from the released recipes, again identically in both arms: the number of GPUs, and the list of training corpora, so that the three models train on the same ones---ScanRefer, Multi3DRefer, Nr3D and Sr3D for grounding, Scan2Cap and Nr3D for captioning.
 The two arms read the same files, row for row, and differ only in the sentence.
-In the rewrite arm every row has our rewrite in place of the original sentence, as the question in the grounding corpora and as the answer in the captioning corpora.
-The exceptions are four Multi3DRefer rows about one pair of monitors, for which no rewrite was produced and the original is kept.
+In the rewrite arm every row but four has our rewrite in place of the original sentence, as the question in the grounding corpora and as the answer in the captioning corpora.
 % REWRITE_ARM_REPORT.md: six training files, 240,444 rows, 240,440 replaced; kept_ids.json m3drefer_{3480,8926,28384,29953}, scene0305_00 objects [1,2], not zero-target.
 Multi3DRefer's zero-target items are removed from the training set of both arms, and no score we report includes them.
 3D-LLaVA is tuned with LoRA for one epoch (4,826 steps).
@@ -219,9 +218,6 @@ We drew these tiers for 3D-LLaVA after its overall figures were known, and expec
 And each model was trained once per arm.
 Multi3DRefer's single-target items give the same picture for each model, but they share scenes, objects and many sentences with ScanRefer and are not an independent replication.
 We have no tested explanation for the loss at one distractor.
-One might expect the loss to be smaller for original sentences that say more about position.
-We counted the spatial words in each original sentence against a fixed list, which is a crude measure.
-3D-LLaVA shows such a trend (from $-3.1$ points with no spatial word to $+2.1$ with three or more); the other two models show none, and we do not rely on it.
 \input{tab/supp_strata}
 
 \paragraph{Several targets.}
@@ -291,8 +287,31 @@ The groups differ in difficulty: a choice at random among the target and its dis
 Within one tier the order holds more weakly: 98.8\%, 96.0\% and 96.0\% at two to four distractors, 96.8\%, 95.1\% and 87.1\% at five or more.
 We claim the order, not the size of the gap.
 
-% OUTLINE (11-24; user: more 3D-LLaVA examples, in this section).
-\TODO{Outline. Figure, full width, one page: masks of the two 3D-LLaVA arms on the same original sentence, for a fixed list of items drawn at random with a stated seed from those where the two verdicts at Acc@0.5 differ, both directions shown; ground truth beside them. Possibly a second, smaller figure: the IoU histograms of the other cells.}
+\paragraph{Masks drawn at random.}
+% Draw: Seshat-Star/analysis/_supp_mask_draw.py (seed 20261124; .tools/supp_masks/DRAW.md): ScanRefer validation, `multiple'.
+%   A: both arms asked with the original, verdicts at Acc@0.5 differ: 1,488 items (rewrite arm alone right 1,024, original arm 464); 12 drawn (9 / 3).
+%   B: both asked with the rewrite: 2,091 items (1,765 / 326); 12 drawn (9 / 3), none of them among the first 12.
+% Masks exported on the cluster 11-24 (supp_masks/npz/NOTES.md); figure: analysis/supp_mask_fig.py.  Left out: A07 (idx 14), whose
+% rewrite-arm mask has an IoU between 0.36 and 0.91 over 36 runs of the same weights (35 of them at 0.5 or above).
+The paper shows the masks of the two arms of 3D-LLaVA for two chosen sentences.
+\Cref{fig:supp_masks_a,fig:supp_masks_b} show them for items drawn at random, with a fixed seed, from the ScanRefer targets with distractors on which the verdicts of the two arms at Acc@0.5 differ.
+There are 1,488 such items when both arms are asked with the original sentence, the rewrite arm alone being right for 1,024 of them, and 2,091 when both are asked with the rewrite, with 1,765 for the rewrite arm; twelve were drawn from each.
+One of the first twelve is not shown, because the rewrite arm's mask for it changes from one run of the same weights to the next.
+Of the items shown, the rewrite arm alone is right for 8 of 11 and for 9 of 12.
+A wrong mask is of one of two kinds in either arm.
+It lies on another object of the target's class (the original arm in items 3, 4 and 5 of \cref{fig:supp_masks_a} and 2, 4 and 5 of \cref{fig:supp_masks_b}; the rewrite arm in item 10 of the first and item 12 of the second), or it spreads from the target over its neighbours (the original arm in items 1, 6 and 7 of \cref{fig:supp_masks_a}; the rewrite arm in item 2).
+\begin{figure*}[p]
+\centering
+\includegraphics[width=\linewidth]{fig/supp_masks_a.pdf}
+\caption{\textbf{The same original sentence, the two arms of 3D-LLaVA.} Eleven ScanRefer validation items drawn at random from those on which the two arms' verdicts at Acc@0.5 differ. White outline: the target. Amber: the predicted mask.}
+\label{fig:supp_masks_a}
+\end{figure*}
+\begin{figure*}[p]
+\centering
+\includegraphics[width=\linewidth]{fig/supp_masks_b.pdf}
+\caption{\textbf{The same rewrite, the two arms of 3D-LLaVA.} Twelve items drawn in the same way from those on which the verdicts differ when both arms are asked with the rewrite. Outline and colour as in \cref{fig:supp_masks_a}.}
+\label{fig:supp_masks_b}
+\end{figure*}
 
 \section{Sentences written by others}
 \label{supp:external}
@@ -303,14 +322,15 @@ We claim the order, not the size of the gap.
 % Not said in the text (user, 11-23): Beacon3D's sentences mostly begin with a capital letter (1,222 of 1,611), as the rewrites do
 % and ScanRefer's lower-cased originals do not; both arms receive them unchanged (EVAL_INFO.txt of the 3D-LLaVA runs).
 The benchmark of the paper is written in the style of our rewrites and filtered by our scorer, and the paper leaves open whether the lead of the rewrite-trained models extends to sentences written by people that say where the target is (\cref{sec:discussion}).
-Beacon3D~\cite{beacon3d} is a test set made independently of ours, with sentences for ScanNet scenes that its authors tag as spatial.
+Beacon3D~\cite{beacon3d} is a test set whose sentences were written by annotators, who also marked which of them use a spatial relation; part of it is on ScanNet scenes.
+% Beacon3D paper, App. A (checked 11-23): ``the human annotator is supposed to fill the referential text ... and then select the involved knowledge types and a list of objects that match the referential text''.
 This section scores them with our scorer and gives them to GPT-6, next to sentences of ours for the same objects, and then asks the trained models with them.
 We set figures side by side and pass no judgement on Beacon3D.
 
 \paragraph{The sentences and the subset.}
 Beacon3D's ScanNet part has 1,611 sentences on 16 validation scenes, none of which is in our training files.
-For each object it has chains of sentences, from the most specific to the least, and each sentence is tagged with what it uses: the class, appearance, a spatial relation.
-For 68 sentences the target has no label in our vocabulary and the number of distractors is not defined; these stay in the files given to the models and are left out of the tiers.
+For each object its annotators wrote chains of sentences, from the most specific to the least, and tagged each sentence with what it uses: the class, appearance, a spatial relation.
+For 68 sentences the target has no label in our vocabulary, so that the number of distractors is not defined; these are left out.
 Of the other 1,543, 842 have a target without a distractor, 677 one with one to four and 24 one with five or more.
 Before any model was called we fixed a subset: the single-target sentences whose target has a distractor and which carry the spatial tag, 528 sentences on 202 objects.
 For each object one of its sentences was drawn at random, and these 202 sentences are used wherever two sentences or two arms are compared object by object.
@@ -348,7 +368,8 @@ A likely reason is that ScanRefer's sentences are three times as long and say mo
 \paragraph{The trained models.}
 % Analysis fixed before any result was in (ANALYSIS_PLAN_STEP8.md, 11-24 09:50 Beijing): the per-object measure split by distractors,
 % and the 202 drawn sentences.  The plan names Acc@0.5; the cluster proposed Acc@0.25 for the per-object measure before it had
-% a score (DATA_NOTES \S0); both are given.  The split of all single-target sentences by tier is POST HOC (user, 11-23 21:42 local).
+% a score (DATA_NOTES \S0); both are given.  A split of all single-target sentences by tier was made after the results were seen
+% (analysis/_beacon_models.py prints it; no arm leads with distractors in the two box models); it is NOT reported (user, 11-23).
 Both arms of each model were asked with all 1,611 sentences, unchanged.
 Before any result was in we fixed two things to report (\cref{tab:supp_b3d_models}).
 The first is Beacon3D's measure by object, under which an object counts as right when the most specific sentence of each of its three chains is right, split by whether the object has a distractor.
@@ -356,19 +377,20 @@ We keep that way of grouping sentences but judge each answer by IoU, as on our o
 One object is left out because the label of one of its sentences points at an object of another class.
 The second is the 202 drawn sentences, with an exact McNemar test between the two arms of a model.
 
-For 3DRS the two arms are level.
-By object, with distractors, the rewrite arm is right for 46.0\% and the original arm for 49.5\% at Acc@0.25, and for 38.6\% and 42.1\% at Acc@0.5 ($p = 0.31$ and $p = 0.25$); on the drawn sentences it is 62.4\% against 66.3\% and 53.0\% against 57.4\% ($p = 0.18$ and $p = 0.11$).
-After seeing these figures we also split all single-target sentences by tier, and no tier shows a difference: with distractors (638 sentences) Acc@0.25 is 62.5 against 63.8, without (685) it is 68.6 against 68.5.
-For 3DRS, then, the lead of the rewrite arm does not extend to Beacon3D's sentences.
-3DRS chooses among 50 proposals, and on Beacon3D one of them reaches an IoU of 0.25 with the target for 83.7\% of the sentences and 0.5 for 73.0\%; the ceiling is the same for both arms.
+For the two models that choose among boxes the arms are level.
+By object, with distractors, the rewrite arm of 3DRS is right for 46.0\% against 49.5\% at Acc@0.25 and for 38.6\% against 42.1\% at Acc@0.5; that of QuatRoPE for 28.7\% against 29.2\% and for 25.7\% against 27.2\%.
+On the drawn sentences the rewrite arm of 3DRS is 3.9 and 4.4 points lower than the original arm, and that of QuatRoPE 4.0 and 4.9 points higher.
+None of these differences passes a test ($p$ between 0.11 and 1).
+For these two models, then, the lead of the rewrite arm does not extend to Beacon3D's sentences.
+Both choose among proposals, 50 a scene for 3DRS and 100 for QuatRoPE; on Beacon3D one of them reaches an IoU of 0.25 with the target for 83.7\% and 89.4\% of the sentences and 0.5 for 73.0\% and 79.5\%, and the ceiling is the same for both arms.
+% QuatRoPE: EVAL_INFO.txt of quatrope_{orig,rw} (100 Mask3D proposals a scene; proposal_upper_bound in scores.json).
 
 For 3D-LLaVA the rewrite arm leads at Acc@0.5 and not at Acc@0.25.
 On the drawn sentences it is right for 54.0\% against 35.6\% at Acc@0.5 (it alone is right for 44 objects, the original arm alone for 7; $p < 0.001$) and for 63.4\% against 57.4\% at Acc@0.25 ($p = 0.11$).
 By object, with distractors, it is 28.7\% against 20.3\% at Acc@0.5 ($p = 0.012$) and 40.1\% against 40.6\% at Acc@0.25.
 This is the pattern of the original ScanRefer sentences (\cref{tab:supp_diag}): the rewrite arm finds the target about as often and fits its mask more closely.
-\TODO{QuatRoPE: both arms on Beacon3D; add its rows to the table and one sentence here.}
 
-Both results agree with what the validation sets show.
+These results agree with what the validation sets show.
 A sentence of Beacon3D has six words and less than one relation that the reader can bind, which is closer to an original sentence of ScanRefer than to a rewrite.
 On original sentences the rewrite arm finds no more targets overall either (\cref{tab:supp_strata}); it leads where the sentence itself says more, on the rewrites and on the benchmark.
 The lead needs the sentence as well as the training.
