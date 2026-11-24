@@ -33,6 +33,9 @@
 \noindent The paper lists what its evidence leaves open (\cref{sec:discussion}).
 \Cref{tab:supp_map} takes the points on which this supplement adds something and says what is added and where.
 Two notes on the paper, a disclosure and a qualification, are at the start of \cref{supp:models}; further results follow, and then the details of the system.
+% Checked 11-24: spatial/ (operators, verifier) last changed 11-13; after the paper's deadline rewrite/ and reader/ changed only in
+% 51fa265 (connection retries and a token ledger; no prompt, vocabulary or rule).  Training data not regenerated.
+The method is that of the paper throughout: the operators, the scorer, the rewriting pipeline and the rewritten data were not changed after submission.
 Throughout, \emph{the benchmark} is the paper's set of 621 validation items with same-class distractors (\emph{Hard} in \cref{tab:model}), each asked with a rewrite from which the target's attribute words are removed.
 Reference numbers are those of the paper's list of references.
 \begin{table}[!ht]
@@ -102,6 +105,7 @@ Two statements of the paper are to be read with what follows.
 First, a disclosure.
 The paper's figures for the rewrite-trained 3DRS are from the checkpoint at step 13,000 of the 16,266 steps of its one epoch, the latest that existed when the paper was due, and the paper does not say so.
 Its figures stand as reported for that checkpoint.
+3DRS is one of the three grounding models that are trained on the rewritten data in order to test it, and is no part of the method.
 The same run has since reached its end, with code, data and settings unchanged and no checkpoint chosen by a validation score, and \cref{tab:supp_hard} gives the two checkpoints side by side.
 On the benchmark the two figures of \cref{tab:model}, 62.1 and 60.5, are 60.2 and 61.6 at the end of the run; the lead given in \cref{sec:model} as 5 and 7 points is 4 and 8; and the range over the three models, given in the abstract and the introduction as 5 to 24 points, is 4 to 24.
 The rewrite arm leads on the benchmark at both checkpoints, and no other figure of the paper depends on this one.
