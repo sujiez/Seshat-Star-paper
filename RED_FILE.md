@@ -40,6 +40,7 @@
 
 - 补充 11-23 AoE；格式自由（可单栏），要整洁；鼓励附代码；**论文必须自足**，不能 "require" 审稿人去看补充；正文要恰当指向补充内容。
 - Rebuttal 一页，模板给定；不加新贡献 / 新实验（除非审稿人点名要）；不放链接；匿名。
+- **补充材料可放什么（11-23 重抓 2027 Author Guidelines 原文核对）**："Supplementary material may include videos, proofs, additional figures or tables, more detailed analysis of the experiments in the paper, or a concurrent submission to another conference." 往年指南里的那句禁止语（不得含新数据集上的结果、方法改进或继续训练后的结果、更正版 PDF）**今年的原文里没有**。但允许清单写的是"对正文实验的更细分析"：新数据集（Beacon3D）和训完权重的数属于清单没点名的内容，审稿人可以不看、也可能按往年习惯不认；写法上挂在正文已有的实验和已点名的局限上，不当作新贡献。
 
 ## §4 我们自己的写作纪律（PAPER_FRAMING / CLAIMS）
 

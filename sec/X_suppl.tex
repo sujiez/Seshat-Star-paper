@@ -33,6 +33,7 @@
 \noindent The paper lists what its evidence leaves open (\cref{sec:discussion}).
 \Cref{tab:supp_map} takes the points on which this supplement adds something and says what is added and where.
 Two corrections to the paper are stated at the start of \cref{supp:models}; further results follow, and then the details of the system.
+Throughout, \emph{the benchmark} is the paper's set of 621 validation items with same-class distractors (\emph{Hard} in \cref{tab:model}), each asked with a rewrite from which the target's attribute words are removed.
 \begin{table}[!ht]
 \centering
 \small
@@ -42,11 +43,11 @@ Two corrections to the paper are stated at the start of \cref{supp:models}; furt
 \toprule
 The paper & Added here \\
 \midrule
-3DRS is tested on fewer sets than the other two. & Its rewrite arm at the final weights, on the full validation sets and on every tier of the benchmark (\cref{tab:supp_val,tab:supp_hard}). \\
+3DRS is tested on fewer sets than the other two. & Its rewrite arm at the final weights, on the full validation sets and on every tier of the benchmark (\cref{tab:supp_val,tab:supp_hard}), so that the three models can be compared set by set. \\
 \addlinespace
-Each model is trained once per arm; no variance is reported. & Still one run per arm. Within each model, paired tests item by item; on the benchmark the direction is the same for three architectures and in every single-target tier (\cref{supp:models}). \\
+Each model is trained once per arm; no variance is reported. & Paired tests item by item within each model, which separate a difference from the draw of items. The comparison is also made three times over, on three architectures, and comes out alike in the respects listed in \cref{supp:models}. \\
 \addlinespace
-The benchmark is filtered by our own scorer. & The sample behind GPT-6's 98, 96 and 90\%, and the order within tiers of difficulty; the models on the original sentences of the benchmark's items (\cref{supp:models}). \\
+The benchmark is filtered by our own scorer. & How often GPT-6, which is given nothing from the scorer, resolves the sentences the scorer certifies strictly, only leniently or not at all (98, 96 and 90\% in the paper): the sample behind these rates, and the same comparison within tiers of difficulty (\cref{supp:models}). \\
 \addlinespace
 Writer, reader and GPT-6 are one model family; only the annotators stand outside it. & The human check in full (\cref{supp:human}). The trained models are a second check from outside: scored on the original sentences against the original labels, no model of that family takes part in the test (\cref{tab:supp_val}). \\
 \bottomrule
@@ -63,9 +64,30 @@ Writer, reader and GPT-6 are one model family; only the annotators stand outside
 
 % STATUS (11-24): this section is DRAFTED in full below (five tables).  The final 3DRS weights on the full sets are IN (val_orig,
 % val_rw; 11-24 05:17 Beijing) and every 3DRS figure below is from them.  Open: the remaining swapped cells of 3DRS; the figure of masks.
+\paragraph{Terms.}
+A \emph{distractor} is an object of the target's class in the same scene, other than the target; classes are matched by the head noun of the label.
+Each model is trained twice on the same items: once with the original sentences of the training corpora, which we call the \emph{original arm} or the original-trained model, and once with our rewrites of those sentences, the \emph{rewrite arm} or the rewrite-trained model.
+Either arm can be asked with the original validation sentences or with their rewrites; the items and their labels are the same in both cases, so each model has four cells.
+Acc@0.25 and Acc@0.5 are the shares of items whose predicted mask or box has an IoU of at least 0.25 or 0.5 with the target, and we say that a target is \emph{found} at 0.25.
+A \emph{tier} is the group of items with a given number of distractors or of targets, and a room is \emph{crowded} for a target with five or more distractors.
+Where three figures are given in a row without names, they are for 3D-LLaVA, QuatRoPE and 3DRS, in that order.
+
 \paragraph{What this section adds.}
 The paper trains three models twice each and reports their overall figures.
-This section gives how they were trained and scored; every tier of the benchmark and every cell of the full validation sets, now including the rewrite-trained 3DRS, which the paper could test on the benchmark only; the swap test in full; the same results split by the number of distractors and by the number of targets, with paired tests item by item; the number of boxes the two models that choose among boxes return; and, for 3D-LLaVA, the rise at Acc@0.5 separated into finding the target and fitting it.
+This section says how they were trained and scored, and gives every tier of the benchmark and every cell of the full validation sets; these now include the rewrite-trained 3DRS, which the paper could test on the benchmark only.
+It then gives the swap test in full; the same results split by the number of distractors and by the number of targets, with paired tests item by item; the number of boxes returned by the two models that choose among boxes; and, for 3D-LLaVA, how much of the rise at Acc@0.5 is finding the target and how much is fitting it.
+
+\paragraph{What the three models share.}
+% Every figure here is repeated, with its table, in the paragraphs below (analysis/_transfer_strata.py; tab/supp_hard, supp_val, supp_strata).
+The three models take in the scene as a point cloud, as object tokens and as posed video; one answers with a mask and two choose among boxes; two are tuned with LoRA and one in full.
+With 3DRS now run on the full sets, the comparison of the two arms comes out alike in all three, in five respects.
+Given the rewrites in place of the originals, the original-trained models find more targets with no retraining, at every number of distractors (by 6.0, 4.7 and 8.1 points of Acc@0.25 over all ScanRefer validation items).
+The rewrite-trained models, asked with the same rewrites, find more again (by a further 8.8, 4.4 and 4.6 points), and their lead over the original-trained models is larger in crowded rooms than with a single distractor.
+On the benchmark the rewrite-trained model leads in every single-target tier and in the two-target tier.
+Asked with the original sentences, the rewrite-trained model finds the target as often as the original-trained one or slightly less often (by 0.5, 1.2 and 1.5 points).
+And on Multi3DRefer's original multi-target sentences, the rewrite-trained model loses more the more targets a sentence has.
+The models part in two places, both set out below: only 3D-LLaVA gains on the original sentences in crowded rooms; and only 3DRS does not gain on multi-target items when it is both trained on the rewrites and asked with them, because of the rule by which its released code decides how many boxes to return.
+Each arm of each model was trained once. The replication we have is across models: three pairs of runs that agree.
 
 \paragraph{Corrections to the paper.}
 % Where each figure is in the paper: tab/model.tex (3DRS, hard, rew.: 62.1, 60.5); sec/6 "5 and 7 (3DRS)"; abstract and sec/1 "5 to 24".
@@ -75,97 +97,119 @@ First, the paper's figures for the rewrite-trained 3DRS come from the checkpoint
 With the final weights its two figures on the benchmark in \cref{tab:model}, 62.1 and 60.5, become 60.2 and 61.6; its lead there, given in \cref{sec:model} as 5 and 7 points, becomes 4 and 8; and the range over the three models, given in the abstract and the introduction as 5 to 24 points, becomes 4 to 24.
 All three rewrite-trained models still lead on the benchmark, and no other figure of the paper depends on this checkpoint; the cells that \cref{tab:model} leaves empty for 3DRS are filled in \cref{tab:supp_val}.
 Second, the paper says (\cref{sec:model}) that training on the rewrites ``changes not how often the right object is found from an original sentence, but what a model does when the sentence fits several''.
-The first half is too strong: over all ScanRefer items the rewrite-trained models find the target 0.5 (3D-LLaVA), 1.2 (QuatRoPE) and 1.5 (3DRS) points less often than the original-trained ones, and the nearly level figure of 3D-LLaVA is a loss when the target has exactly one same-class distractor set against a gain in crowded rooms.
+The first half is too strong: asked with the original ScanRefer validation sentences, the rewrite-trained models find the target 0.5 (3D-LLaVA), 1.2 (QuatRoPE) and 1.5 (3DRS) points less often than the original-trained ones, at Acc@0.25.
+For 3D-LLaVA the small difference is the sum of two opposite ones: it finds 3.5 points fewer of the targets that have exactly one same-class distractor and 2.8 points more of those that have five or more.
 The sentence should read: training on the rewrites leaves the share of targets found from an original sentence level or slightly lower, and changes what a model does when the sentence fits several.
 The second half stands, and the paragraphs below add to its evidence; the abstract's statement, which is about 3D-LLaVA on ScanRefer alone, is not affected.
 
 \paragraph{Training.}
 Each model is trained twice from the same public initialisation with its authors' released code and one seed.
-Apart from fixes to memory use and checkpointing, we changed two things, identically in both arms: the number of GPUs, and the list of training corpora, so that the three models train on the same ones---ScanRefer, Multi3DRefer, Nr3D and Sr3D for grounding, Scan2Cap and Nr3D for captioning.
-The two arms read the same files row for row, and only the sentence differs; in the rewrite arm the caption targets are rewrites too, and four Multi3DRefer rows that have no rewrite keep the original.
+We changed the code only where a run would otherwise not start or not finish on our machines, identically in both arms.
+3DRS's loader keeps the features of every scene it has read in memory, which over an epoch exceeds our memory limit, and we read them from disk each time; 3D-LLaVA runs with fewer data-loading processes for the same reason; and QuatRoPE and 3DRS save their training state more often, so that an interrupted run can continue.
+% LOG.md (paper_materials_1113) 11-10 01:20, 11-11 19:40, 11-12 04:10; CHECK_3drs_m3d_train_targets_1124.md \S4.2: llava/video_utils.py is the only tracked 3DRS source file changed.
+None of these touches the model, the loss or the data.
+Two settings differ from the released recipes, again identically in both arms: the number of GPUs, and the list of training corpora, so that the three models train on the same ones---ScanRefer, Multi3DRefer, Nr3D and Sr3D for grounding, Scan2Cap and Nr3D for captioning.
+The two arms read the same files, row for row, and differ only in the sentence.
+In the rewrite arm every row has our rewrite in place of the original sentence, as the question in the grounding corpora and as the answer in the captioning corpora.
+The exceptions are four Multi3DRefer rows about one pair of monitors, for which no rewrite was produced and the original is kept.
+% REWRITE_ARM_REPORT.md: six training files, 240,444 rows, 240,440 replaced; kept_ids.json m3drefer_{3480,8926,28384,29953}, scene0305_00 objects [1,2], not zero-target.
 Multi3DRefer's zero-target items are removed from the training set of both arms, and no score we report includes them.
 3D-LLaVA is tuned with LoRA for one epoch (4,826 steps).
 QuatRoPE is trained in its two stages, one epoch on ground-truth objects and three on Mask3D proposals, with LoRA of rank 16.
 3DRS is fine-tuned in full for one epoch (16,266 steps).
-We evaluate the last checkpoint of every run, with the one exception described below, and chose none by a validation score.
+Every figure in this supplement is from the last checkpoint of its run, unless a table says otherwise; no checkpoint was chosen by a validation score.
 
 \paragraph{Scoring.}
 3D-LLaVA outputs a mask and is scored by mask IoU; on Multi3DRefer its repository scores the mask against the union of the targets, which is not the official F1.
 QuatRoPE and 3DRS choose among Mask3D proposals and are scored by box IoU, with the official F1 on Multi3DRefer.
 The three blocks of \cref{tab:supp_hard,tab:supp_val} are therefore not comparable with one another; within a block, the rows are.
 On items with several targets the two kinds of score also reward different behaviour.
-Against the union of the targets, a mask spread over every object of the class scores well whenever the targets are most of them, and a mask on one target of $n$ scores about $1/n$.
-F1 counts each returned box as right or wrong, so one right box of $n$ earns $2/(n+1)$ and boxes on distractors cost precision.
-A mask can therefore hedge where a list of boxes cannot, and 3D-LLaVA's figures on multi-target items move further in both directions than those of the other two models.
+Scored against the union of the targets, a mask that covers every object of the class does well when most of those objects are targets, while a mask on a single target out of $n$ scores about $1/n$.
+The official F1 matches the returned boxes to the targets at the IoU threshold and, for each item, takes the harmonic mean of precision and recall.
+One right box where there are $n$ targets has a precision of 1 and a recall of $1/n$, which gives $2/(n+1)$, and every box on a distractor lowers the precision.
+A mask can therefore hedge, by spreading over several objects of the class, where a list of boxes cannot; this is why 3D-LLaVA's figures on multi-target items move further in both directions than those of the other two models.
 \input{tab/supp_hard}
 \input{tab/supp_val}
 
 \paragraph{The benchmark by tier.}
 On the benchmark's sentences the rewrite-trained model leads in every single-target tier and in the two-target tier, for all three models (\cref{tab:supp_hard}).
 The tier with three or more targets has 22 items: there 3D-LLaVA and QuatRoPE lead and 3DRS trails.
-On the original sentences of the same items the lead shrinks or reverses: at Acc@0.5 it is 6 and 3 points for 3D-LLaVA, where it was 24 and 23, and QuatRoPE's rewrite arm is 1 and 3 points behind.
+Asked with the original sentences of the same items, the rewrite-trained model's lead shrinks or reverses.
+For 3D-LLaVA it is 6 points on the ScanRefer items and 3 on the Multi3DRefer items at Acc@0.5, against 24 and 23 with the benchmark's sentences; QuatRoPE's rewrite arm falls 1 and 3 points behind its original arm.
 The lead on the benchmark thus needs the rewritten sentence as well as the model trained on rewrites.
 
 \paragraph{3DRS: which checkpoint the paper reports.}
 The checkpoint at step 13,000 and the final weights are both in \cref{tab:supp_hard}, tier by tier.
 With the final weights the rewrite arm leads the original arm by 3.5 points on the ScanRefer items of the benchmark (154 against 145 of 256) and by 8.3 on the Multi3DRefer items.
-Between the two checkpoints the ScanRefer figure moves by five items and the Multi3DRefer figure by 1.1 points the other way; with one run per arm we cannot tell such movement from noise.
-The direction is the same at both checkpoints in every tier, including the one where the rewrite arm trails.
+From step 13,000 to the end of training the rewrite arm loses five of the ScanRefer items (159 to 154 of 256) and gains 1.1 points on the Multi3DRefer items; with one run per arm we cannot tell such movement from noise.
+At both checkpoints the rewrite arm leads in the same tiers and trails in the same one.
 The original arm was evaluated at its final weights throughout.
 The paper tests the rewrite-trained 3DRS on the benchmark only.
-On the full validation sets the final weights give 76.1 and 68.1 on the ScanRefer rewrites, against 71.5 and 63.8 for the original arm, and 61.8 and 55.2 on the original sentences, against 63.3 and 56.5 (\cref{tab:supp_val}); on Multi3DRefer, 67.4 and 60.5 against 63.3 and 56.8 on the rewrites, and 57.7 and 51.8 against 59.8 and 53.7 on the originals.
+On the full validation sets the final weights give Acc@0.25 and Acc@0.5 of 76.1 and 68.1 on the ScanRefer rewrites, against 71.5 and 63.8 for the original arm, and 61.8 and 55.2 on the original sentences, against 63.3 and 56.5 (\cref{tab:supp_val}).
+On Multi3DRefer the F1 at the two thresholds is 67.4 and 60.5 against 63.3 and 56.8 on the rewrites, and 57.7 and 51.8 against 59.8 and 53.7 on the originals.
 The rewrite arm thus leads by 4 to 5 points on the rewrites and trails by 1 to 2 on the originals.
 \TODO{3DRS under the swap: one cell is in (original arm, swapped originals); add the other three when they arrive, or say that they were not run.}
 
 \paragraph{Swapped sentences.}
-\Cref{tab:supp_val} also gives every cell of the swap test.
-A swapped sentence still names the class, so targets without a distractor are still found (78 to 86\% at Acc@0.25); with distractors, every arm of the two models falls to between 34 and 41\%.
+The swap test asks whether a model reads what a sentence says about its scene.
+Every validation sentence is replaced by one written for an object of the same class in another scene, while the items, their order and their labels stay as they are.
+A swapped sentence thus names the right class and, except by chance, says nothing true about where the target is.
+\Cref{tab:supp_val} gives every cell of the test, for swapped originals and for swapped rewrites.
+Since a swapped sentence still names the class, targets without a distractor are still found (78 to 86\% at Acc@0.25); with distractors, both arms of 3D-LLaVA and of QuatRoPE fall to between 34 and 41\%.
 The one 3DRS cell we have, the original arm on swapped originals, falls likewise (78.0\% and 33.6\%).
-Swapped rewrites keep the style and lose the content, and on them the rewrite arm is no better than the original arm (35.1 against 39.5 for 3D-LLaVA, 35.3 against 35.5 for QuatRoPE).
-Its lead on the rewrites therefore comes from what a sentence says about its own scene, not from a familiar style.
+Swapped rewrites have the length and the style of rewrites but describe another scene.
+On them the rewrite arm is no better than the original arm: on ScanRefer targets with distractors, Acc@0.25 is 35.1 against 39.5 for 3D-LLaVA and 35.3 against 35.5 for QuatRoPE.
+The rewrite arm's lead on the rewrites therefore comes from what a sentence says about its own scene, not from a familiar style.
 
 \paragraph{On the original sentences, by number of distractors.}
 % Source: Seshat-Star/analysis/_transfer_strata.py (prints every figure quoted here; --tex writes tab/supp_strata.tex).
 % 3DRS: final weights of both arms on the full sets (3drs_rw_final/val_{orig,rw}, in since 11-24 05:17 Beijing).  At step 13,000 on
 % the 2k subset the loss at one distractor was larger (-5.8, p = 0.005) and the one in crowded rooms less clear (-3.7, p = 0.10).
-The paper reports that on the original ScanRefer sentences the rewrite-trained 3D-LLaVA finds the target as often as the original-trained one (Acc@0.25 61.0 against 61.5) and, reading it together with QuatRoPE, concludes that training on the rewrites does not change how often the right object is found from an original sentence.
+The paper reports that on the original ScanRefer sentences the rewrite-trained 3D-LLaVA finds the target as often as the original-trained one (Acc@0.25 61.0 against 61.5).
+Reading this together with QuatRoPE's figures, it concludes that training on the rewrites does not change how often the right object is found from an original sentence.
 The upper panel of \cref{tab:supp_strata} splits the same items by the number of same-class distractors, and the conclusion needs two qualifications.
 
 First, when the target has exactly one distractor, all three models find it less often after training on the rewrites: by 3.5 points for 3D-LLaVA, 2.4 for QuatRoPE and 1.7 for 3DRS.
-Among the items on which the two arms of a model give different verdicts, the rewrite arm loses 272 and gains 197 (3D-LLaVA), loses 243 and gains 192 (QuatRoPE), and loses 189 and gains 153 (3DRS); two-sided sign tests give $p < 0.001$, $p = 0.016$ and $p = 0.058$, so for 3DRS this loss is not established on its own.
+Counting only the items that one arm of a model finds and the other does not, the rewrite arm loses 272 and gains 197 (3D-LLaVA), loses 243 and gains 192 (QuatRoPE), and loses 189 and gains 153 (3DRS).
+A two-sided sign test asks how likely so uneven a split would be if each of these items were as likely to go one way as the other; it gives $p < 0.001$, $p = 0.016$ and $p = 0.058$, so for 3DRS this loss is not established on its own.
 
 Second, in crowded rooms the three models part.
-With five or more distractors 3D-LLaVA finds the target more often after training on the rewrites (29.1 against 26.3; it gains 307 items and loses 244, $p = 0.008$).
+With five or more distractors 3D-LLaVA finds the target more often after training on the rewrites (Acc@0.25 of 29.1 against 26.3; it gains 307 items and loses 244, $p = 0.008$).
 QuatRoPE is level (26.2 against 26.8, $p = 0.57$), and 3DRS is lower (34.1 against 37.4; it gains 242 items and loses 317, $p = 0.002$).
-The level average of 3D-LLaVA is therefore a loss at one distractor set against a gain in crowded rooms.
+3D-LLaVA's level average therefore hides a loss at one distractor and a gain in crowded rooms.
 The two models that choose among boxes show no such gain, and their averages are lower by 1.2 and 1.5 points.
-For 3D-LLaVA, Acc@0.5 on the original sentences still rises at every number of distractors, by 2.6 to 8.8 points; that is the tightening of masks described in the paper, and a model that chooses among boxes has no counterpart to it.
+For 3D-LLaVA, Acc@0.5 on the original sentences still rises at every number of distractors, by 2.6 to 8.8 points; that is the tightening of masks described in the paper, and a model that chooses among fixed boxes cannot tighten them.
 
-Asked with the rewrites, all three rewrite-trained models find more targets at every number of distractors, and their lead grows with crowding: it is 3.2, 4.7 and 2.1 points at one distractor and 18.2, 6.9 and 9.4 at five or more.
-Each arm, asked with the other arm's sentences, is outside the style it was trained on, and the two crossings are not alike: over all ScanRefer items the original-trained models gain 6.0, 4.7 and 8.1 points when given the rewrites, and gain in every tier, while the rewrite-trained models, given the originals, fall 0.5, 1.2 and 1.5 points short of the original-trained ones.
+Asked with the rewrites, all three rewrite-trained models find more targets than the original-trained ones at every number of distractors, and their lead grows with crowding: it is 3.2, 4.7 and 2.1 points at one distractor and 18.2, 6.9 and 9.4 at five or more.
+Each arm can also be asked with the kind of sentence it was not trained on, and the two cases differ.
+Given the rewrites, the original-trained models gain 6.0, 4.7 and 8.1 points over all ScanRefer items, and gain in every tier.
+Given the originals, the rewrite-trained models fall 0.5, 1.2 and 1.5 points short of the original-trained ones.
 
 Two cautions.
 We drew these tiers for 3D-LLaVA after its overall figures were known, and expected the other two models to repeat its pattern; they do not repeat the gain in crowded rooms, and only QuatRoPE clearly repeats the loss at one distractor.
 And each model was trained once per arm.
 Multi3DRefer's single-target items give the same picture for each model, but they share scenes, objects and many sentences with ScanRefer and are not an independent replication.
 We have no tested explanation for the loss at one distractor.
-One might expect it to depend on how much an original sentence says about position; splitting the items by the number of spatial words in the original sentence, counted crudely against a list of words, shows such a trend for 3D-LLaVA (from $-3.1$ points with none to $+2.1$ with three or more) and none for the other two models, and we do not rely on it.
+One might expect the loss to be smaller for original sentences that say more about position.
+We counted the spatial words in each original sentence against a fixed list, which is a crude measure.
+3D-LLaVA shows such a trend (from $-3.1$ points with no spatial word to $+2.1$ with three or more); the other two models show none, and we do not rely on it.
 \input{tab/supp_strata}
 
 \paragraph{Several targets.}
-The paper reports what the rewrites cost on Multi3DRefer's original multi-target sentences.
+The paper reports that on Multi3DRefer's original multi-target sentences the rewrite-trained models score lower.
 The lower panel of \cref{tab:supp_strata} splits those items by the number of targets.
-On the original sentences the cost grows with the number of targets in all three models: for 3D-LLaVA from 4 points at two targets to 42 at five or more, for QuatRoPE from 7 to 17, for 3DRS from 1 to 11.
+The loss grows with the number of targets in all three models: for 3D-LLaVA from 4 points at two targets to 42 at five or more, for QuatRoPE from 7 to 17, for 3DRS from 1 to 11.
 An original sentence seldom says how many objects are meant, and a model trained on the rewrites then answers with one: for these sentences the rewrite-trained QuatRoPE returns a single box in 96\% of cases, the original-trained one in 47\%.
 Given the rewrite, which states the number, the same model returns 2.0 boxes on average at two targets, 3.4 at three or four (the labels average 3.4) and 8.0 at five or more (8.4); \cref{tab:supp_count} gives every cell.
-The original-trained models, for their part, err towards the middle in both directions.
+The original-trained models err in both directions: too many boxes when there is one target, too few when there are many.
 For an original sentence with one target and at least one distractor, QuatRoPE returns more than one box in 13\% of cases and 3DRS in 32\%; for one with five or more targets they return 3.3 and 2.9 boxes on average, where the labels have 8.4.
 
 The converse holds as well.
-The rewrite of such an item does say how many are meant, yet the original-trained models gain nothing from it overall (72.3 to 67.0 for 3D-LLaVA, 47.6 to 42.3 for QuatRoPE, 43.5 to 42.7 for 3DRS), and they lose where the targets are many: at five or more, 3D-LLaVA falls from 78.4 to 45.9, QuatRoPE from 36.4 to 26.6 and 3DRS from 31.8 to 25.7.
+The rewrite of such an item does say how many are meant, yet the original-trained models gain nothing from it: over all multi-target items their score at the 0.25 threshold goes from 72.3 to 67.0 (3D-LLaVA), from 47.6 to 42.3 (QuatRoPE) and from 43.5 to 42.7 (3DRS).
+They lose most where the targets are many: at five or more, 3D-LLaVA falls from 78.4 to 45.9, QuatRoPE from 36.4 to 26.6 and 3DRS from 31.8 to 25.7.
 The counts show how: given a rewrite, the original-trained QuatRoPE answers with a single box for 76\% of these items, against 47\% for the original sentence.
 On multi-target items neither the sentence nor the training is enough alone.
-With both, 3D-LLaVA and QuatRoPE gain at every number of targets over the same model trained and asked with the originals, by 9 to 12 and by 13 to 21 points.
+Trained on the rewrites and asked with them, 3D-LLaVA and QuatRoPE score higher at every number of targets than the same model trained on and asked with the originals, by 9 to 12 and by 13 to 21 points.
 3DRS does not: it gains 6 points at two targets, loses 1 at three or four (35.3 against 36.6) and loses 9 at five or more (22.4 against 31.8).
 Unlike QuatRoPE, its rewrite arm does not return as many objects as the rewrite states: it returns a single box for 74\% of these rewrites, as for 70\% of the originals, and 1.4 boxes on average where the labels have 3.3.
 The same holds on the benchmark (1.6 boxes on the items with three or more targets, whose labels average 4.8), which is why that is the one tier in which the rewrite arm trails.
@@ -173,9 +217,12 @@ Nor does the number follow the sentence in the original arm, which returns 2.1 b
 
 The reason lies in how 3DRS returns boxes, not in the data: the training files of the two arms list the same target boxes in every row.
 In the released code the model does not state a number.
-The proposals are ranked by score and returned in that order until their probabilities add up to a fixed value (0.4 by default), so one confident choice ends the list; and the training loss asks only that the targets together receive the probability, which a single target can satisfy alone.
+Each proposal receives a score, a softmax turns the scores into probabilities, and the proposals are returned in descending order of probability until the probabilities returned add up to a fixed value, 0.4 by default.
+A proposal whose probability is 0.4 or more is therefore returned alone, whatever the sentence says about number.
+The training loss is the negative logarithm of the total probability that falls on the targets.
+It does not ask that each target receive a share, so it is as small when one target holds all the probability as when the targets divide it.
 The number of boxes therefore measures how peaked the scores are, and the rewrite arm's are more peaked.
-This costs it on items with several targets and spares it surplus boxes on items with one: for an original sentence with one target and a distractor it returns more than one box in 21\% of cases, where the original arm does in 32\%.
+Peaked scores lose boxes where several are wanted and avoid surplus boxes where one is wanted: for an original sentence with one target and a distractor it returns more than one box in 21\% of cases, where the original arm does in 32\%.
 We ran the released code unchanged in both arms and report what it returns; why the rewrite arm's scores are more peaked we have not tested.
 % Source: nozt_v2_per_sample_1124/CHECK_3drs_m3d_train_targets_1124.md (cluster, 11-24 04:40 Beijing).  Code facts, checked by the
 % cluster against the official repository Visual-AI/3DRS at commit 0401f547 (identical; relayed by the user 11-23 17:48 local):
@@ -196,20 +243,22 @@ We ran the released code unchanged in both arms and report what it returns; why 
 
 \paragraph{Finding the target and fitting it.}
 Call a target found when the mask reaches an IoU of 0.25 and fitted when it reaches 0.5; Acc@0.5 is then the share found times the share of those that are fitted (\cref{tab:supp_diag}).
-Training on the rewrites changes fitting and not finding: asked with the originals, the share fitted goes from 64.4\% to 78.1\% while Acc@0.25 stays level.
+Training on the rewrites changes fitting and not finding: asked with the originals, the share fitted goes from 64.4\% to 78.1\% while Acc@0.25 stays level (54.6 and 54.3).
 The sentence changes finding and hardly fitting: the original arm, asked with the rewrites, finds 61.6\% in place of 54.6\% and fits 66.8\% of them.
-Along the diagonal, from 35.2 to 59.8 at Acc@0.5, the two contribute about equally: in logarithms, 52\% of the rise is finding and 48\% fitting.
-Item by item, of the 3,518 targets the original arm did not find from the original sentence, the rewrite arm fits 38\% from the rewrite; of the 2,725 it fitted, 89\% stay fitted and 7\% are no longer found.
-Multi3DRefer's single-target items with distractors behave alike (38.5 to 64.3, 49\% of it finding).
-The rewrite arm also misses outright more often on the originals (39.1\% against 33.1\%): a mask that commits to one object is wholly wrong when the object is the wrong one.
+From the original arm asked with the originals to the rewrite arm asked with the rewrites, Acc@0.5 rises from 35.2 to 59.8, and the two contribute about equally.
+Because Acc@0.5 is a product, we divide its rise on a logarithmic scale: Acc@0.25 rises from 54.6 to 71.9 and the share fitted from 64.4\% to 83.1\%, and the logarithms of these two ratios are 52\% and 48\% of the logarithm of the ratio of Acc@0.5.
+Item by item, of the 3,518 targets the original arm did not find from the original sentence, the rewrite arm fits 38\% from the rewrite; of the 2,725 that the original arm fitted, 89\% stay fitted and 7\% are no longer found.
+Multi3DRefer's single-target items with distractors behave alike (Acc@0.5 from 38.5 to 64.3, 49\% of the rise being finding by the same division).
+A target is \emph{missed} when the IoU is below 0.05, that is, when the mask is on another object or empty.
+Asked with the originals, the rewrite arm misses more often than the original arm (39.1\% against 33.1\%): a mask that commits to one object is wholly wrong when the object is the wrong one.
 \input{tab/supp_diag}
 
 \paragraph{The sample behind the three rates of the scorer section.}
 The paper reports how often GPT-6 resolves sentences the scorer certifies strictly, only leniently, or not at all.
 The sample is the single-target candidates from which the benchmark was drawn, each a rewrite with the target's attribute words removed.
-The strictly certified ones are the benchmark's 546 single-target items, of which 536 returned an answer; 248 further candidates are certified only leniently and 349 not at all.
+The strictly certified ones are the benchmark's 546 single-target items, for 536 of which GPT-6 returned an answer; 248 further candidates are certified only leniently and 349 not at all.
 Given every object's label and position, GPT-6 resolves 98.1\%, 95.6\% and 89.7\% of the three groups; given unlabelled renderings instead, 76.3\%, 75.4\% and 69.1\%.
-The groups differ in difficulty---chance is 21.2\%, 18.2\% and 13.4\%---so the fall from 98 to 90 mixes the scorer's verdict with the number of distractors.
+The groups differ in difficulty: a choice at random among the target and its distractors would be right in 21.2\%, 18.2\% and 13.4\% of cases. The fall from 98 to 90 therefore mixes the scorer's verdict with the number of distractors.
 Within one tier the order holds more weakly: 98.8\%, 96.0\% and 96.0\% at two to four distractors, 96.8\%, 95.1\% and 87.1\% at five or more.
 We claim the order, not the size of the gap.
 
@@ -229,8 +278,11 @@ We claim the order, not the size of the gap.
 % predicate stays in the denominator as not certified); confidence intervals for the main data table; multi-target detail by number
 % of targets; left / right language per corpus (RESULTS §7.2); corpus sizes; Sr3D originals; generation mode with intervals.
 \paragraph{Beyond the vocabulary.}
-Of the relations the writer reports, 13.1\% are unknown to the verifier: 6.2\% are attributes and comparisons, which we leave unscored on purpose, and 6.9\% are spatial relations it has no predicate for, chiefly the faces and ends of furniture, \emph{facing} and \emph{across from}.
-Sentences whose relations verify and sentences whose relations do not carry them equally often (56\% and 58\%).
+With each rewrite the writer also returns a list of the relations it used.
+In a count over 15,108 validation rewrites of Multi3DRefer and ScanRefer these lists hold 68,177 relations, 4.5 per sentence.
+Of them 13.1\% are unknown to the verifier: 6.2\% are attributes and comparisons, which we leave unscored on purpose, and 6.9\% are spatial relations it has no predicate for, chiefly the faces and ends of furniture, \emph{facing} and \emph{across from}.
+Whether a rewrite contains such a relation does not decide whether it is certified: 56\% of the rewrites that the writer's own relations certify contain one, and 58\% of those they do not certify.
+% RESULTS \S7.5 (10-24 recomputation over both validation sets): 56.1\% against 57.6\%.
 
 \paragraph{Objects outside the label set.}
 The rewrites mention an object outside the scene's label set in 15.2\% of Multi3DRefer and 17.0\% of ScanRefer validation sentences, the originals in 16.3\% and 18.2\%.
@@ -309,11 +361,11 @@ The strict and the lenient score differ where the verifier finds that a predicat
 % scene0095_00 / scene0249_00 / scene0030_00), §4.5 (stack criterion, above / below).
 No operator was right the first time.
 Each revision began with a failure found by reading: the authors read some 1,500 rewrites in about 30 batches, over at least 245 scenes, next to the point cloud.
-Rows show what this buys.
+The row operator shows what such reading changes.
 We first required a row to be straight.
 Shown twelve computed rows, a human reader accepted eight and rejected four, and the rejected ones were among the straightest.
-What separates a row a person sees from a row only the algorithm sees is how isolated it is from other objects of its class, and the operator now tests that.
-Rows, furniture faces and per-distractor neighbours are given to the writer only when the target has five or more distractors.
+A person sees a row when its members stand apart from the other objects of their class; the rows that only the algorithm found did not. The operator now tests for that.
+Rows, furniture faces and per-distractor neighbours are given to the writer only when the target has five or more distractors: given all of it for a target with few distractors, the writer described more than was needed to tell the target apart.
 A development set of 49 scene--target units from the Multi3DRefer training split served these choices and enters no number we report.
 
 \paragraph{What the verifier shares with the operators.}
@@ -331,7 +383,12 @@ Three of the four are textbook geometry; only the row decomposition involves jud
 % crowded targets where geometry found a miss in 49%; the judge's "unlabelled" verdict never used in 5,768 calls), §3.5.
 \Cref{tab:principles} lists the observations that fixed the design.
 Whatever we assert, the writer treats as an instruction, whether or not the assertion is right and however we hedge it.
-Rows 1--3 come from one experiment on 331 Multi3DRefer validation captions with 114 such words, three arms that differ only in how the word is presented; under the verdict the word is deleted where the two other arms keep it in 86 cases, and never the reverse.
+Rows 1--3 come from one experiment on 331 Multi3DRefer validation captions, which contain 114 words that our label lookup could not find.
+Its three arms differ only in how such a word is presented to the writer.
+In the first the prompt states a verdict (nothing in this scene answers to that word); in the second it gives the same information with the caveat that labels and vocabulary may be incomplete; in the third it says nothing.
+The rest of the prompt is the same, and in all three arms it tells the writer three times to keep the original's words.
+The word survives in 22 of the 114 cases under the verdict and in 108 under each of the other two.
+In 86 cases the writer deletes the word when given the verdict and keeps it when told nothing; the reverse never happens.
 \input{tab/principles}
 
 % OUTLINE (11-24).  Two thirds of a page beyond what is written.
@@ -346,7 +403,10 @@ Rows 1--3 come from one experiment on 331 Multi3DRefer validation captions with 
 % by family: on 95%, corner 85%, proximity 76%, directions 44%, between 37%; reasons for unbound clauses), §1.6 (writer's own
 % relations vs the reader's in generation mode).
 We keep the reader blind because a reader that knows the answer finds it in the sentence, whether or not the sentence says it.
-Given a \emph{wrong} target on purpose, it certified that object in 2 of 15 trials, in one of them by silently dropping the two clauses that excluded it.
+In a probe we told the reader, on purpose, that an object other than the target was the target.
+In 2 of 15 trials it certified that object.
+In one of them the same sentence yielded four relations when the reader was given the true target and two when it was given the wrong one: the two that would have excluded the wrong object were neither translated nor listed as unbound.
+Fifteen trials are too few for a rate; the case shows the mechanism.
 Blindness costs little: in an earlier run of 200 pairs, telling the reader the true target raised the certified rate of the original sentences from 16.5\% to 17.5\%.
 For every clause it cannot bind to object ids the reader gives one of four reasons: no viewpoint, ambiguous anchor, object not in the list, not spatial.
 
@@ -359,8 +419,8 @@ For every clause it cannot bind to object ids the reader gives one of four reaso
 % the families beyond the vocabulary (faces / sides / ends of a structure 3.7% of rows, facing 2.4%, across from 1.5%).
 % Determinism: RESULTS §4.3 (analysis/_geom_repro.py): 9,719 / 9,738 records identical, the other 19 differ only in the count of
 % evaluated predicates; no verdict flipped.  The only random draw in spatial/compose.py has a fixed seed.
-The verifier is plain code, and its one random draw has a fixed seed.
-Recomputed offline from the predicates stored with 9,738 rewrites, no verdict changed.
+The verifier is plain code, and its one random step, a subsample of points from which a direction is fitted, has a fixed seed.
+We recomputed the verdicts offline from the predicates stored with 9,738 rewrites: 9,719 records were identical in every field, the other 19 differed only in the number of predicates evaluated, and no verdict changed.
 % OUTLINE (11-24).  One page, most of it the table.
 \TODO{Outline. Table, full width: the 42 predicates by family (proximity, direction with a viewpoint, vertical and support, between, room and wall, rows, furniture faces, stacks, order and extremes), with arguments and one line of meaning each; no thresholds. Figure: six predicates drawn on real scenes, one true and one false statement each, from the cards shown to the annotators. Text: aliases in one sentence; the relation families the vocabulary lacks, with their share.}
 
@@ -377,16 +437,18 @@ The referent is the union of the parts,
 \end{equation}
 or $R = B$ when the sentence has no parts, and the sentence is certified when at least one predicate was evaluated and $R = T$.
 Union, not intersection: the pillow on the left bed need not be on the right bed, so an object joins the referent by satisfying one part.
-Parts may overlap, and a part may cover fewer members than it seems to if another part makes up the difference.
-What no part may do is admit a distractor, since anything that survives one part survives in $R$.
+Parts may overlap, and a part may pick out fewer members than its wording suggests, provided another part covers the rest.
+No part may admit a distractor: an object that satisfies one part is in $R$.
 The strict score also requires every stated count to equal the size of the set it describes; the lenient score skips predicates that hold for no target and ignores counts.
 A single-target sentence is the special case of no parts and $|T| = 1$, which gives \cref{eq:exact}.
 
 \subsection{Proof of Proposition 1 and sensitivity}
 \label{supp:proof}
 % Source: Seshat-Star/docs/VALIDATION_AND_EXPERIMENTS.md §1.2; RESULTS §4.1--4.2 (numbers after the 11-12 correction).
+Proposition 1 of the paper says that a sentence the verifier certifies is exact, provided the verifier makes neither of two kinds of error.
 Recall that $\hat{E}_k$ is the set of candidates the verifier returns for predicate $p_k$ and $E_k$ the set that truly satisfies it; $T$ is the target set and $D$ the distractors.
-Assume (A1) $\hat{E}_k \cap T \subseteq E_k$ and (A2) $E_k \cap D \subseteq \hat{E}_k$ for every $k$, and $\bigcap_k \hat{E}_k = T$.
+The sentence is certified when $\bigcap_k \hat{E}_k = T$ and exact when $\bigcap_k E_k = T$.
+Assume (A1) $\hat{E}_k \cap T \subseteq E_k$, no false positive on a target, and (A2) $E_k \cap D \subseteq \hat{E}_k$, no false negative on a distractor, for every $k$, and $\bigcap_k \hat{E}_k = T$.
 
 \emph{$T \subseteq \bigcap_k E_k$.}
 Take $t \in T$.
@@ -422,8 +484,11 @@ On the Multi3DRefer validation rewrites, 13.5\% of the distractors of certified 
 % in 141 counterfactual pairs change winner; certified rate of sealed rewrites 72.9 -> 69.4 and 74.3 -> 71.3 on the writer's
 % relations; judge600 rewrites 57.3 -> 54.2 and 58.0 -> 54.8, originals within one point).  Training data were not regenerated.
 The verifier has been wrong before, and each time a human reader caught it.
-The latest case: it measured gaps between bounding boxes instead of surfaces, which changed the winner in 9.5\% of \emph{closest} and \emph{farthest} claims.
-The certified rates in the paper all follow the correction.
+In the latest case it measured the gap between two objects between their bounding boxes and not between their surfaces, so that a corner of the box of an object standing at an angle reached towards a landmark the object itself was far from.
+In one scene a chair was 0.41\,m from a cabinet by its box and 1.04\,m by its points, and was judged the closest to the cabinet although the three other chairs were 0.61 to 0.66\,m away.
+Measured on 444 \emph{closest} and \emph{farthest} claims, the two ways of measuring disagree on the winner in 9.5\%.
+The verifier now measures between surface points.
+The certified rates in the paper all follow the correction; on the sample of the paper's data table it lowered the certified rate of the rewrites by about three points (57.3 to 54.2 on Multi3DRefer, 58.0 to 54.8 on ScanRefer) and moved that of the originals by less than one.
 
 % OUTLINE (11-24).  Half a column.
 \TODO{Outline. Table: the three corrections (\emph{above} and \emph{below} with a same-class reference; the stack criterion; surface gap in place of box gap)---what was wrong, the case that exposed it, certified rate before and after. Text: two sentences; the training data were not regenerated after the last one. No figure.}
