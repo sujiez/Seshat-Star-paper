@@ -157,7 +157,7 @@ A swapped sentence thus names the right class and, except by chance, says nothin
 Since a swapped sentence still names the class, targets without a distractor are still found (76 to 86\% at Acc@0.25); with distractors, both arms of all three models fall to between 32 and 41\%.
 A choice at random among the objects of the target's class would find 41.0\% of these targets.
 Every swapped cell is at or below that figure: given a sentence about another scene, the models do no better than chance within the class, so what they find above it comes from what the sentence says.
-For 3DRS, whose results under the swap we have item by item, the same holds within each tier: its four swapped cells find 43 to 46\% of the targets with one distractor, where chance is 50\%, 24 to 26\% of those with two to four (chance 27.6\%) and 10 to 11\% of those with five or more (9.4\%).
+For 3DRS, whose results under the swap we have item by item, the four swapped cells stay within a few points of chance in every tier: they find 43 to 46\% of the targets with one distractor, where chance is 50\%, 24 to 26\% of those with two to four (chance 27.6\%) and 10 to 11\% of those with five or more (chance 9.4\%).
 % Floor: mean of 1/(distractors+1) over ScanRefer's `multiple' split (7,749 items; 17.8\% of them have no distractor by head noun).  Tiers: 3drs/{3drs_orig,3drs_rw_final}/mismatch_{orig,rw}/scanrefer_merge.jsonl joined with analysis/_transfer_strata.ndist().
 Swapped rewrites have the length and the style of rewrites but describe another scene.
 On them the rewrite arm is no better than the original arm: on ScanRefer targets with distractors, Acc@0.25 is 35.1 against 39.5 for 3D-LLaVA, 35.3 against 35.5 for QuatRoPE and 31.8 against 32.5 for 3DRS.
