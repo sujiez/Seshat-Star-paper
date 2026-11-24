@@ -1,13 +1,13 @@
 % Sources: paper_materials_1113/RESULTS_3dllava_quatrope_4090d.md tables 1a, 1b, 2a, 2b (full validation sets; generated from
 % scores.json); RESULTS_3drs_partial_a100.md "全量 val" (3DRS original arm).  Zero-target items excluded (non-ZT, n = 10,214).
 % 3DRS rows: scores.json under nozt_v2_per_sample_1124/3drs/{3drs_orig,3drs_rw_final}/{val_orig,val_rw,mismatch_orig} (final weights
-% of both arms, full sets; in 11-24 05:17 Beijing).  Three swapped cells of 3DRS are still to come.
+% of both arms, full sets; in 11-24 05:17 Beijing).  All swapped cells of 3DRS are in (11-24 09:27 Beijing).
 % Do not compare across the three blocks (mask IoU / box IoU; repository Acc / official F1).
 \begin{table*}[t]
 \centering
 \small
 \setlength{\tabcolsep}{4.2pt}
-\caption{\textbf{Full validation sets.} ScanRefer: Acc@0.25\,/\,Acc@0.5. Multi3DRefer without zero-target items: the same for 3D-LLaVA (mask against the union of the targets), F1@0.25\,/\,F1@0.5 for the other two. \emph{Swapped}: every sentence replaced by that of a same-class object in another scene, with items, order and labels unchanged. Not comparable across models. For 3DRS one swapped cell was available.}
+\caption{\textbf{Full validation sets.} ScanRefer: Acc@0.25\,/\,Acc@0.5. Multi3DRefer without zero-target items: the same for 3D-LLaVA (mask against the union of the targets), F1@0.25\,/\,F1@0.5 for the other two. \emph{Swapped}: every sentence replaced by that of a same-class object in another scene, with items, order and labels unchanged. Not comparable across models.}
 \label{tab:supp_val}
 \begin{tabular}{@{}llccc@{\hspace{12pt}}cccc@{}}
 \toprule
@@ -43,7 +43,10 @@ originals & rewrites           & 71.5\,/\,63.8 & 89.0\,/\,79.4 & 67.5\,/\,60.2 &
 rewrites  & originals          & 61.8\,/\,55.2 & 86.8\,/\,77.1 & 56.1\,/\,50.2 & 57.7\,/\,51.8 & 80.2\,/\,71.9 & 58.2\,/\,52.9 & 39.7\,/\,34.2 \\
 rewrites  & rewrites           & 76.1\,/\,68.1 & 89.7\,/\,79.8 & 73.0\,/\,65.5 & 67.4\,/\,60.5 & 85.7\,/\,76.7 & 71.7\,/\,65.2 & 45.2\,/\,39.0 \\
 originals & swapped originals  & 41.8\,/\,36.9 & 78.0\,/\,69.6 & 33.6\,/\,29.5 & 41.5\,/\,37.2 & 73.2\,/\,65.5 & 33.8\,/\,30.5 & 32.2\,/\,28.6 \\
-% originals x swapped rewrites, rewrites x swapped originals / rewrites: not in yet (3drs_orig/mismatch_rw, 3drs_rw_final/mismatch_*).
+originals & swapped rewrites   & 40.7\,/\,35.8 & 77.0\,/\,68.0 & 32.5\,/\,28.5 & 40.8\,/\,36.4 & 71.5\,/\,63.8 & 33.5\,/\,30.0 & 31.7\,/\,28.0 \\
+rewrites  & swapped originals  & 41.9\,/\,37.4 & 80.0\,/\,71.7 & 33.2\,/\,29.6 & 39.9\,/\,35.7 & 72.2\,/\,64.9 & 32.9\,/\,29.7 & 29.0\,/\,25.2 \\
+rewrites  & swapped rewrites   & 40.1\,/\,35.6 & 76.2\,/\,68.6 & 31.8\,/\,28.1 & 40.1\,/\,35.9 & 71.0\,/\,64.3 & 33.4\,/\,29.9 & 29.6\,/\,25.8 \\
+% 3DRS swapped cells: nozt_v2_per_sample_1124/3drs/{3drs_orig,3drs_rw_final}/mismatch_{orig,rw}/scores.json (all four in, 11-24 09:27 Beijing; final weights, sha 72d56453 for the rewrite arm).
 \bottomrule
 \end{tabular}
 \end{table*}

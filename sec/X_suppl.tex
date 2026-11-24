@@ -63,7 +63,7 @@ Writer, reader and GPT-6 are one model family; only the annotators stand outside
 % Seshat-Star/analysis/_transfer_strata.py, _diag_select.py; docs/CLAIMS.md "E5-fail" (hard/e5_fail/REPORT.md).
 
 % STATUS (11-24): this section is DRAFTED in full below (five tables).  The final 3DRS weights on the full sets are IN (val_orig,
-% val_rw; 11-24 05:17 Beijing) and every 3DRS figure below is from them.  Open: the remaining swapped cells of 3DRS; the figure of masks.
+% val_rw; 11-24 05:17 Beijing) and every 3DRS figure below is from them.  Open: the figure of masks.
 \paragraph{Terms.}
 A \emph{distractor} is an object of the target's class in the same scene, other than the target; classes are matched by the head noun of the label.
 Each model is trained twice on the same items: once with the original sentences of the training corpora, which we call the \emph{original arm} or the original-trained model, and once with our rewrites of those sentences, the \emph{rewrite arm} or the rewrite-trained model.
@@ -148,17 +148,20 @@ The paper tests the rewrite-trained 3DRS on the benchmark only.
 On the full validation sets the final weights give Acc@0.25 and Acc@0.5 of 76.1 and 68.1 on the ScanRefer rewrites, against 71.5 and 63.8 for the original arm, and 61.8 and 55.2 on the original sentences, against 63.3 and 56.5 (\cref{tab:supp_val}).
 On Multi3DRefer the F1 at the two thresholds is 67.4 and 60.5 against 63.3 and 56.8 on the rewrites, and 57.7 and 51.8 against 59.8 and 53.7 on the originals.
 The rewrite arm thus leads by 4 to 5 points on the rewrites and trails by 1 to 2 on the originals.
-\TODO{3DRS under the swap: one cell is in (original arm, swapped originals); add the other three when they arrive, or say that they were not run.}
 
 \paragraph{Swapped sentences.}
 The swap test asks whether a model reads what a sentence says about its scene.
 Every validation sentence is replaced by one written for an object of the same class in another scene, while the items, their order and their labels stay as they are.
 A swapped sentence thus names the right class and, except by chance, says nothing true about where the target is.
 \Cref{tab:supp_val} gives every cell of the test, for swapped originals and for swapped rewrites.
-Since a swapped sentence still names the class, targets without a distractor are still found (78 to 86\% at Acc@0.25); with distractors, both arms of 3D-LLaVA and of QuatRoPE fall to between 34 and 41\%.
-The one 3DRS cell we have, the original arm on swapped originals, falls likewise (78.0\% and 33.6\%).
+Since a swapped sentence still names the class, targets without a distractor are still found (76 to 86\% at Acc@0.25); with distractors, both arms of all three models fall to between 32 and 41\%.
+A choice at random among the objects of the target's class would find 41.0\% of these targets.
+Every swapped cell is at or below that figure: given a sentence about another scene, the models do no better than chance within the class, so what they find above it comes from what the sentence says.
+For 3DRS, whose results under the swap we have item by item, the same holds within each tier: its four swapped cells find 43 to 46\% of the targets with one distractor, where chance is 50\%, 24 to 26\% of those with two to four (chance 27.6\%) and 10 to 11\% of those with five or more (9.4\%).
+% Floor: mean of 1/(distractors+1) over ScanRefer's `multiple' split (7,749 items; 17.8\% of them have no distractor by head noun).  Tiers: 3drs/{3drs_orig,3drs_rw_final}/mismatch_{orig,rw}/scanrefer_merge.jsonl joined with analysis/_transfer_strata.ndist().
 Swapped rewrites have the length and the style of rewrites but describe another scene.
-On them the rewrite arm is no better than the original arm: on ScanRefer targets with distractors, Acc@0.25 is 35.1 against 39.5 for 3D-LLaVA and 35.3 against 35.5 for QuatRoPE.
+On them the rewrite arm is no better than the original arm: on ScanRefer targets with distractors, Acc@0.25 is 35.1 against 39.5 for 3D-LLaVA, 35.3 against 35.5 for QuatRoPE and 31.8 against 32.5 for 3DRS.
+At Acc@0.5 the rewrite-trained 3DRS falls from 65.5 on the rewrites to 28.1 on swapped rewrites; the paper reports 59.8 to 27.6 for 3D-LLaVA and 54.7 to 31.6 for QuatRoPE.
 The rewrite arm's lead on the rewrites therefore comes from what a sentence says about its own scene, not from a familiar style.
 
 \paragraph{On the original sentences, by number of distractors.}
@@ -277,9 +280,33 @@ We claim the order, not the size of the gap.
 % Sampling and statistics conventions (paired McNemar counts discordant pairs only; Wilson intervals; a sentence with no evaluable
 % predicate stays in the denominator as not certified); confidence intervals for the main data table; multi-target detail by number
 % of targets; left / right language per corpus (RESULTS §7.2); corpus sizes; Sr3D originals; generation mode with intervals.
+\paragraph{The sentences compared.}
+% Source: Seshat-Star/analysis/_corpus_table.py (judge | beacon | tex); prints every figure of this paragraph, for every tier.
+\Cref{tab:supp_corpora} puts the sentences that the paper and this supplement compare under the same reader and the same verifier: the original sentences of ScanRefer and Multi3DRefer, our rewrites of them, the sentences of Beacon3D~\cite{beacon3d}, and sentences of ours written for Beacon3D's targets from the scene alone.
+For our own sentences it adds a figure that the scorer never uses.
+With each sentence the writer returns a list of the relations it used, and \emph{Listed} is the length of that list.
+The table is restricted to targets with one to four distractors, the one tier in which every sample has more than a few sentences; the other tiers of the first two blocks are in \cref{tab:data} and those of Beacon3D in \cref{supp:external}.
+
+Three things can be read from it.
+First, the scorer credits our sentences with fewer relations than their writer claims.
+The writer lists 5.0 to 5.8 relations a sentence.
+The verifier has a predicate for 3.9 to 5.2 of them (averages over all tiers of each sample); the rest are attributes, comparisons and spatial relations outside its vocabulary.
+The blind reader, which sees the sentence and neither the list nor the target, binds 3.1 to 4.5 relations to objects, and only these are scored.
+Second, an original sentence of ScanRefer or Multi3DRefer has 15 to 17 words and about half a relation that the reader can bind; in six of ten it binds none.
+Third, Beacon3D's sentences are shorter still, about six words, and carry about as many relations as the originals, yet they are certified two to three times as often (38 and 46\% against 13 and 15\%): they say little, and the little they say more often suffices to single out the target.
+Our sentences for the same objects are certified more often again and are seven times as long (44 words against 6).
+The length is where the relations are: the reader binds 4.5 a sentence against 0.7.
+With several relations a distractor is usually ruled out more than once (\cref{supp:proof} counts this on the validation rewrites), and GPT-6, shown unlabelled renderings, finds the target from our sentence more often than from Beacon3D's (\cref{supp:external}).
+
+The three blocks are different targets, drawn in different ways, so the rates are not a ranking of the corpora.
+The first two blocks are the sample of \cref{tab:data}, drawn from the validation sets in equal numbers per tier.
+The third is every single-target sentence of Beacon3D's ScanNet part that we can score in this tier, then those its authors tagged as spatial, then one of these drawn at random for each object.
+\TODO{Add the row of ScanRefer's original sentences for the objects that Beacon3D shares with ScanRefer (95 objects), when that run is in; then say here that the three rows are the same targets.}
+\input{tab/supp_corpora}
+
 \paragraph{Beyond the vocabulary.}
-With each rewrite the writer also returns a list of the relations it used.
-In a count over 15,108 validation rewrites of Multi3DRefer and ScanRefer these lists hold 68,177 relations, 4.5 per sentence.
+The list of relations that the writer returns with each rewrite also shows what the verifier's vocabulary lacks.
+In a count over 15,108 validation rewrites of Multi3DRefer and ScanRefer these lists hold 68,177 relations.
 Of them 13.1\% are unknown to the verifier: 6.2\% are attributes and comparisons, which we leave unscored on purpose, and 6.9\% are spatial relations it has no predicate for, chiefly the faces and ends of furniture, \emph{facing} and \emph{across from}.
 Whether a rewrite contains such a relation does not decide whether it is certified: 56\% of the rewrites that the writer's own relations certify contain one, and 58\% of those they do not certify.
 % RESULTS \S7.5 (10-24 recomputation over both validation sets): 56.1\% against 57.6\%.
