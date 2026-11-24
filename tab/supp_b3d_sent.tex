@@ -1,0 +1,28 @@
+% Sources: /data/sujie/horus/_rerun/beacon3d/REPORT.md, steps 5-7 (202 objects, one Beacon3D sentence drawn per object before any
+% model call; our sentence written from scene and target alone) and step 9 (the 95 of them with a ScanRefer sentence; one drawn per
+% object).  Words of the first block: Seshat-Star/docs/corpus_table_beacon.json (b_drawn, ours_gen; all tiers).
+% none (%): 77 and 1 of 202; 52, 28 and 0 of 95.  Chance: mean of 1 / (distractors + 1).
+% Bold: Seshat-Star/analysis/_bold_best.py (idempotent; re-run after editing a cell).
+\begin{table}[t]
+\centering
+\small
+\setlength{\tabcolsep}{3pt}
+\caption{\textbf{Sentences for the same objects.} Objects of Beacon3D's ScanNet part with at least one distractor, one sentence of each kind for each object. \emph{Read}: relations per sentence that the blind reader binds to objects, and the share of sentences in which it binds none (\%). \emph{Certified}: by our scorer (\%). \emph{GPT-6}: Acc@0.5 from unlabelled renderings. Bold: the highest of a block.}
+\label{tab:supp_b3d_sent}
+\begin{tabular}{@{}lrrrrrr@{}}
+\toprule
+ & & \multicolumn{2}{c}{Read} & \multicolumn{2}{c}{Certified} & \\
+\cmidrule(lr){3-4}\cmidrule(lr){5-6}
+Sentence & Words & rel. & none & strict & lenient & GPT-6 \\
+\midrule
+\multicolumn{7}{@{}l}{\emph{All 202 objects (chance 39.4)}} \\
+Beacon3D & 6.3 & 0.7 & 38 & 44.6 & 45.5 & 66.8 \\
+Ours & 44.2 & 4.5 & 0 & \textbf{71.8} & \textbf{97.0} & \textbf{80.2} \\
+\addlinespace
+\multicolumn{7}{@{}l}{\emph{The 95 that ScanRefer also describes (chance 39.9)}} \\
+ScanRefer & 18.5 & 0.5 & 55 & 15.8 & 16.8 & 73.7 \\
+Beacon3D & 6.3 & 0.7 & 29 & 51.6 & 52.6 & 66.3 \\
+Ours & 44.1 & 4.5 & 0 & \textbf{82.1} & \textbf{100.0} & \textbf{82.1} \\
+\bottomrule
+\end{tabular}
+\end{table}

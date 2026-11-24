@@ -50,10 +50,11 @@ Each model is trained once per arm; no variance is reported. & Paired tests item
 The benchmark is filtered by our own scorer. & How often GPT-6, which is given nothing from the scorer, resolves the sentences the scorer certifies strictly, only leniently or not at all (98, 96 and 90\% in the paper): the sample behind these rates, and the same comparison within tiers of difficulty (\cref{supp:models}). \\
 \addlinespace
 Writer, reader and GPT-6 are one model family; only the annotators stand outside it. & The human check in full (\cref{supp:human}). The trained models are a second check from outside: scored on the original sentences against the original labels, no model of that family takes part in the test (\cref{tab:supp_val}). \\
+\addlinespace
+Whether the lead extends to human-written sentences that say where is left open. & Beacon3D's sentences under the scorer, before GPT-6 and as questions to the trained models (\cref{supp:external}). On them the two arms of 3DRS are level, and 3D-LLaVA's rewrite arm leads at Acc@0.5 only. \\
 \bottomrule
 \end{tabular}
 \end{table}
-\TODO{Row for ``whether the lead extends to human-written sentences that say where'': add it if the section on sentences written by others stays.}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Models: configurations and further results}
@@ -295,10 +296,83 @@ We claim the order, not the size of the gap.
 
 \section{Sentences written by others}
 \label{supp:external}
-% OUTLINE (11-24).  ONLY IF the runs finish in time; otherwise the section is deleted, not left empty.  Protocol fixed on 11-20
-% (CAMERA_READY.md): primary subset = target has a same-class object (ScanNet annotation) AND Beacon3D's own spatial tag; tiers
-% fixed before any model is run; the full set is also reported; results are reported whichever way they fall.
-\TODO{Outline. Text: what Beacon3D's ScanNet part is (1,611 sentences, 16 validation scenes) and the subset we report. Table: the scorer on its sentences---checkable relations per sentence and certified rate by number of distractors---next to a sentence of ours written for the same target without seeing theirs. Table: GPT-6 from unlabelled renderings, their sentence and ours. Table: the six trained models, primary subset and full set, with Beacon3D's per-object metric. Two sentences of reading, no judgement of the dataset.}
+% Protocol fixed on 11-20 (CAMERA_READY.md): primary subset = target has a same-class object (ScanNet annotation) AND Beacon3D's
+% own spatial tag; tiers fixed before any model is run; the full set is also reported; results are reported whichever way they fall.
+% Sources: /data/sujie/horus/_rerun/beacon3d/{REPORT.md (steps 1-7, 9), TIERS_FROZEN.md, ANALYSIS_PLAN_STEP8.md};
+% nozt_v2_per_sample_1124/beacon3d/{DATA_NOTES_from_cluster.md, */per_sample.jsonl}; Seshat-Star/analysis/_beacon_models.py.
+% Not said in the text (user, 11-23): Beacon3D's sentences mostly begin with a capital letter (1,222 of 1,611), as the rewrites do
+% and ScanRefer's lower-cased originals do not; both arms receive them unchanged (EVAL_INFO.txt of the 3D-LLaVA runs).
+The benchmark of the paper is written in the style of our rewrites and filtered by our scorer, and the paper leaves open whether the lead of the rewrite-trained models extends to sentences written by people that say where the target is (\cref{sec:discussion}).
+Beacon3D~\cite{beacon3d} is a test set made independently of ours, with sentences for ScanNet scenes that its authors tag as spatial.
+This section scores them with our scorer and gives them to GPT-6, next to sentences of ours for the same objects, and then asks the trained models with them.
+We set figures side by side and pass no judgement on Beacon3D.
+
+\paragraph{The sentences and the subset.}
+Beacon3D's ScanNet part has 1,611 sentences on 16 validation scenes, none of which is in our training files.
+For each object it has chains of sentences, from the most specific to the least, and each sentence is tagged with what it uses: the class, appearance, a spatial relation.
+For 68 sentences the target has no label in our vocabulary and the number of distractors is not defined; these stay in the files given to the models and are left out of the tiers.
+Of the other 1,543, 842 have a target without a distractor, 677 one with one to four and 24 one with five or more.
+Before any model was called we fixed a subset: the single-target sentences whose target has a distractor and which carry the spatial tag, 528 sentences on 202 objects.
+For each object one of its sentences was drawn at random, and these 202 sentences are used wherever two sentences or two arms are compared object by object.
+For the same 202 objects the writer wrote one sentence each from the scene and the target alone, as in \cref{tab:gen}; it did not see Beacon3D's sentence.
+
+\paragraph{Under the scorer.}
+The upper block of \cref{tab:supp_b3d_sent} has the two sentences of each object.
+The scorer certifies 44.6\% of Beacon3D's sentences and 71.8\% of ours strictly, and 45.5\% and 97.0\% leniently.
+Of the objects on which the strict verdicts differ, ours is the certified sentence for 76 and Beacon3D's for 21 (exact McNemar test, $p < 0.001$).
+The difference lies in how much a sentence says: Beacon3D's have 6 words and the reader binds 0.7 relations in them, none at all in 38\%; ours have 44 words and 4.5 relations.
+Over all 1,543 sentences that can be scored the certified rate is 29.9\%, and 61.9\% have no relation that the reader can bind.
+These rates count spatial relations only.
+A sentence that singles out its target by colour or shape is not certified, so the rate says how often the spatial content of a sentence suffices, not how often the sentence is ambiguous to a person.
+
+\paragraph{Before GPT-6.}
+GPT-6 is given four unlabelled renderings of the scene and the sentence, and marks a point; the point is mapped to an object, and the answer is right when that object's box has an IoU of at least 0.5 with the target's.
+It is right for 66.8\% of Beacon3D's sentences and 80.2\% of ours; where the two differ, ours is the one resolved for 42 objects and Beacon3D's for 15 ($p < 0.001$).
+A choice at random among the target and its distractors would be right for 39.4\%.
+Only seven of the 202 objects have five or more distractors, and we draw no conclusion for crowded rooms.
+
+\paragraph{Three sentences for one object.}
+ScanRefer describes 95 of the 202 objects.
+For each we drew one of its ScanRefer sentences at random and put it through the same reader, verifier and GPT-6 (lower block of \cref{tab:supp_b3d_sent}).
+The draw is not symmetric: Beacon3D's sentence is drawn from those tagged as spatial, ScanRefer's from all the sentences of the object.
+Under the scorer the three kinds are apart in every pair: 15.8\%, 51.6\% and 82.1\% are certified strictly.
+ScanRefer's sentence is certified where Beacon3D's is not for 7 objects, and the reverse for 41; against ours the counts are 2 and 65 for ScanRefer and 7 and 36 for Beacon3D ($p < 0.001$ in each case).
+GPT-6 resolves our sentence most often, 82.1\% against 73.7\% for ScanRefer's and 66.3\% for Beacon3D's.
+Where two sentences differ, ours is the one resolved for 20 objects of 25 against Beacon3D's ($p = 0.004$) and for 14 of 20 against ScanRefer's ($p = 0.12$).
+The two instruments order the other two kinds differently.
+The scorer certifies Beacon3D's sentence three times as often as ScanRefer's; GPT-6 resolves ScanRefer's a little more often (16 objects against 9, $p = 0.23$).
+We have not tested why.
+A likely reason is that ScanRefer's sentences are three times as long and say more about appearance, which the scorer does not credit and GPT-6 can see in the renderings.
+\input{tab/supp_b3d_sent}
+
+\paragraph{The trained models.}
+% Analysis fixed before any result was in (ANALYSIS_PLAN_STEP8.md, 11-24 09:50 Beijing): the per-object measure split by distractors,
+% and the 202 drawn sentences.  The plan names Acc@0.5; the cluster proposed Acc@0.25 for the per-object measure before it had
+% a score (DATA_NOTES \S0); both are given.  The split of all single-target sentences by tier is POST HOC (user, 11-23 21:42 local).
+Both arms of each model were asked with all 1,611 sentences, unchanged.
+Before any result was in we fixed two things to report (\cref{tab:supp_b3d_models}).
+The first is Beacon3D's measure by object, under which an object counts as right when the most specific sentence of each of its three chains is right, split by whether the object has a distractor.
+We keep that way of grouping sentences but judge each answer by IoU, as on our own sets, where Beacon3D's script compares object identities; our figures are therefore not comparable with those of its paper.
+One object is left out because the label of one of its sentences points at an object of another class.
+The second is the 202 drawn sentences, with an exact McNemar test between the two arms of a model.
+
+For 3DRS the two arms are level.
+By object, with distractors, the rewrite arm is right for 46.0\% and the original arm for 49.5\% at Acc@0.25, and for 38.6\% and 42.1\% at Acc@0.5 ($p = 0.31$ and $p = 0.25$); on the drawn sentences it is 62.4\% against 66.3\% and 53.0\% against 57.4\% ($p = 0.18$ and $p = 0.11$).
+After seeing these figures we also split all single-target sentences by tier, and no tier shows a difference: with distractors (638 sentences) Acc@0.25 is 62.5 against 63.8, without (685) it is 68.6 against 68.5.
+For 3DRS, then, the lead of the rewrite arm does not extend to Beacon3D's sentences.
+3DRS chooses among 50 proposals, and on Beacon3D one of them reaches an IoU of 0.25 with the target for 83.7\% of the sentences and 0.5 for 73.0\%; the ceiling is the same for both arms.
+
+For 3D-LLaVA the rewrite arm leads at Acc@0.5 and not at Acc@0.25.
+On the drawn sentences it is right for 54.0\% against 35.6\% at Acc@0.5 (it alone is right for 44 objects, the original arm alone for 7; $p < 0.001$) and for 63.4\% against 57.4\% at Acc@0.25 ($p = 0.11$).
+By object, with distractors, it is 28.7\% against 20.3\% at Acc@0.5 ($p = 0.012$) and 40.1\% against 40.6\% at Acc@0.25.
+This is the pattern of the original ScanRefer sentences (\cref{tab:supp_diag}): the rewrite arm finds the target about as often and fits its mask more closely.
+\TODO{QuatRoPE: both arms on Beacon3D; add its rows to the table and one sentence here.}
+
+Both results agree with what the validation sets show.
+A sentence of Beacon3D has six words and less than one relation that the reader can bind, which is closer to an original sentence of ScanRefer than to a rewrite.
+On original sentences the rewrite arm finds no more targets overall either (\cref{tab:supp_strata}); it leads where the sentence itself says more, on the rewrites and on the benchmark.
+The lead needs the sentence as well as the training.
+\input{tab/supp_b3d_models}
 
 \section{Data: further statistics}
 \label{supp:data}
@@ -326,7 +400,7 @@ With several relations a distractor is usually ruled out more than once (\cref{s
 The three blocks are different targets, drawn in different ways, so the rates are not a ranking of the corpora.
 The first two blocks are the sample of \cref{tab:data}, drawn from the validation sets in equal numbers per tier.
 The third is every single-target sentence of Beacon3D's ScanNet part that we can score in this tier, then those its authors tagged as spatial, then one of these drawn at random for each object.
-\TODO{Add the row of ScanRefer's original sentences for the objects that Beacon3D shares with ScanRefer (95 objects), when that run is in; then say here that the three rows are the same targets.}
+For the 95 of these objects that ScanRefer also describes, \cref{tab:supp_b3d_sent} sets one sentence of each of the three kinds side by side.
 \input{tab/supp_corpora}
 
 \paragraph{Beyond the vocabulary.}
