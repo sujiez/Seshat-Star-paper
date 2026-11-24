@@ -122,6 +122,8 @@ Every figure in this supplement is from the last checkpoint of its run, unless a
 \paragraph{Scoring.}
 3D-LLaVA outputs a mask and is scored by mask IoU; on Multi3DRefer its repository scores the mask against the union of the targets, which is not the official F1.
 QuatRoPE and 3DRS choose among Mask3D proposals and are scored by box IoU, with the official F1 on Multi3DRefer.
+A model that chooses among proposals cannot score above what the proposals allow: 3DRS has 50 for each scene, and for 90.5\% of the ScanRefer validation sentences one of them reaches an IoU of 0.25 with the target, for 82.1\% an IoU of 0.5.
+% nozt_v2_per_sample_1124/beacon3d/DATA_NOTES_from_cluster.md \S4 (computed from the proposal table, without any model output); the same table gives 83.7 / 73.0 on Beacon3D.
 The three blocks of \cref{tab:supp_hard,tab:supp_val} are therefore not comparable with one another; within a block, the rows are.
 On items with several targets the two kinds of score also reward different behaviour.
 Scored against the union of the targets, a mask that covers every object of the class does well when most of those objects are targets, while a mask on a single target out of $n$ scores about $1/n$.
@@ -154,15 +156,38 @@ The swap test asks whether a model reads what a sentence says about its scene.
 Every validation sentence is replaced by one written for an object of the same class in another scene, while the items, their order and their labels stay as they are.
 A swapped sentence thus names the right class and, except by chance, says nothing true about where the target is.
 \Cref{tab:supp_val} gives every cell of the test, for swapped originals and for swapped rewrites.
-Since a swapped sentence still names the class, targets without a distractor are still found (76 to 86\% at Acc@0.25); with distractors, both arms of all three models fall to between 32 and 41\%.
-A choice at random among the objects of the target's class would find 41.0\% of these targets.
-Every swapped cell is at or below that figure: given a sentence about another scene, the models do no better than chance within the class, so what they find above it comes from what the sentence says.
-For 3DRS, whose results under the swap we have item by item, the four swapped cells stay within a few points of chance in every tier: they find 43 to 46\% of the targets with one distractor, where chance is 50\%, 24 to 26\% of those with two to four (chance 27.6\%) and 10 to 11\% of those with five or more (chance 9.4\%).
-% Floor: mean of 1/(distractors+1) over ScanRefer's `multiple' split (7,749 items; 17.8\% of them have no distractor by head noun).  Tiers: 3drs/{3drs_orig,3drs_rw_final}/mismatch_{orig,rw}/scanrefer_merge.jsonl joined with analysis/_transfer_strata.ndist().
+Since a swapped sentence still names the class, most targets without a distractor are still found (76 to 86\% at Acc@0.25); with distractors, both arms of all three models fall to between 32 and 41\%.
+
+\emph{Chance.}
+A choice at random among the objects of the target's class would find 41.0\% of the targets with distractors.
+Every swapped cell is at or below that figure: given a sentence about another scene, the models do no better than chance within the class, so whatever they find above chance comes from what the sentence says.
+For 3DRS we have the results under the swap item by item, and \cref{tab:supp_swap} splits them by number of distractors.
+Its four swapped cells stay within a few points of chance in every tier: they find 43 to 46\% of the targets with one distractor, where chance is 50\%, 24 to 26\% of those with two to four (chance 27.6\%) and 10 to 11\% of those with five or more (chance 9.4\%).
+% Floor: mean of 1/(distractors+1) over ScanRefer's `multiple' split (7,749 items; 17.8\% of them have no distractor by head noun).
+% Tiers: Seshat-Star/analysis/_transfer_strata.py --swap (writes tab/supp_swap.tex).  For the other two models only scores.json of the swapped cells is held.
+
+\emph{What the content of a sentence adds.}
+The difference between a cell and its swapped counterpart is what the content of the sentence adds to its class word.
+On ScanRefer targets with distractors, at Acc@0.25, the content of an original sentence adds 13.9, 13.3 and 24.4 points for the models trained on originals.
+The content of a rewrite adds 36.8, 24.9 and 41.2 points for the models trained on rewrites.
+It is worth more than that of an original even to a model that saw no rewrite in training: for the original-trained models it adds 22.1, 19.4 and 35.0 points.
+For 3DRS the gap widens with crowding: with five or more distractors the original sentence adds 26 points for the original arm, and the rewrite adds 48 for the rewrite arm, over a chance of 9.4\%.
+% (matched - swapped), ScanRefer `multiple', tab:supp_val: 54.6-40.7, 49.4-36.1, 58.0-33.6; 71.9-35.1, 60.2-35.3, 73.0-31.8; 61.6-39.5, 54.9-35.5, 67.5-32.5.  3DRS 5+: 37.4-11.1, 58.4-10.1.
+
+\emph{Style.}
 Swapped rewrites have the length and the style of rewrites but describe another scene.
-On them the rewrite arm is no better than the original arm: on ScanRefer targets with distractors, Acc@0.25 is 35.1 against 39.5 for 3D-LLaVA, 35.3 against 35.5 for QuatRoPE and 31.8 against 32.5 for 3DRS.
+If the rewrite arm did better on rewrites merely because they look like the sentences it was trained on, it would do better on swapped rewrites too.
+It does not.
+Against the original arm on the same swapped rewrites, Acc@0.25 on ScanRefer targets with distractors is 35.1 against 39.5 for 3D-LLaVA, 35.3 against 35.5 for QuatRoPE and 31.8 against 32.5 for 3DRS.
+Against its own score on swapped originals, which are not in its training style, it is 35.1 against 37.0, 35.3 against 34.2 and 31.8 against 33.2.
 At Acc@0.5 the rewrite-trained 3DRS falls from 65.5 on the rewrites to 28.1 on swapped rewrites; the paper reports 59.8 to 27.6 for 3D-LLaVA and 54.7 to 31.6 for QuatRoPE.
-The rewrite arm's lead on the rewrites therefore comes from what a sentence says about its own scene, not from a familiar style.
+Without the content, then, the style is worth nothing, and the rewrite arm's lead on the rewrites cannot be a shift in style alone.
+The test does not separate the two when the content is right: a model trained on rewrites may read what a rewrite says more readily than a model that was not, and the paper's remark that the benchmark's style favours the models trained on it stands.
+
+\emph{Targets without a distractor.}
+These lose 5 to 18 points under the swap although the class word alone would find them, and most in the rewrite arm asked with swapped rewrites (17.5, 11.1 and 13.5 points).
+This is what one would expect if a sentence about another room misleads a model, and misleads most the model that relies most on the sentence; we have not examined these items.
+\input{tab/supp_swap}
 
 \paragraph{On the original sentences, by number of distractors.}
 % Source: Seshat-Star/analysis/_transfer_strata.py (prints every figure quoted here; --tex writes tab/supp_strata.tex).

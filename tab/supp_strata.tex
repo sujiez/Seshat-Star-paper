@@ -4,7 +4,7 @@
 \centering
 \small
 \setlength{\tabcolsep}{4.2pt}
-\caption{\textbf{Finding the target, by crowding and by number of targets.} Score at IoU 0.25 (Acc@0.25; F1@0.25 for the two box models on Multi3DRefer) of the model trained on the originals (orig.) or on the rewrites (rew.), asked with the original sentences or with the rewrites. Distractors are objects of the target's class by head noun, so the first row is larger than ScanRefer's own split of targets without a distractor.}
+\caption{\textbf{Finding the target, by crowding and by number of targets.} Score at IoU 0.25 (Acc@0.25; F1@0.25 for the two box models on Multi3DRefer) of the model trained on the originals (orig.) or on the rewrites (rew.), asked with the original sentences or with the rewrites. Distractors are objects of the target's class by head noun, so the first row is larger than ScanRefer's own split of targets without a distractor. Bold: the highest of a model's four cells in each row.}
 \label{tab:supp_strata}
 \begin{tabular}{@{}lr@{\hspace{10pt}}cccc@{\hspace{14pt}}cccc@{\hspace{14pt}}rcccc@{}}
 \toprule
@@ -14,18 +14,18 @@ Asked with & & \multicolumn{2}{c}{originals} & \multicolumn{2}{c}{rewrites} & \m
 Trained on & Items & orig. & rew. & orig. & rew. & orig. & rew. & orig. & rew. & Items & orig. & rew. & orig. & rew. \\
 \midrule
 \multicolumn{15}{@{}l}{\emph{ScanRefer, by number of distractors}} \\
-0 & 2,967 & 86.6 & 86.1 & 88.7 & 91.1 & 85.2 & 84.5 & 86.8 & 88.6 & 2,967 & 83.9 & 83.5 & 85.4 & 86.5 \\
-1 & 2,168 & 71.3 & 67.9 & 78.8 & 82.0 & 61.3 & 58.9 & 66.8 & 71.5 & 2,168 & 71.0 & 69.3 & 80.8 & 82.8 \\
-2--4 & 2,068 & 54.4 & 53.5 & 61.2 & 74.7 & 44.7 & 43.3 & 52.4 & 57.4 & 2,068 & 54.8 & 53.6 & 66.7 & 73.8 \\
-5--9 & 1,197 & 35.1 & 36.8 & 44.5 & 62.7 & 31.7 & 30.8 & 37.4 & 46.2 & 1,197 & 44.9 & 40.9 & 60.5 & 69.7 \\
-10+ & 1,108 & 16.9 & 20.8 & 25.2 & 43.4 & 21.4 & 21.1 & 25.9 & 30.7 & 1,108 & 29.3 & 26.9 & 36.6 & 46.1 \\
-all & 9,508 & 61.5 & 61.0 & 67.5 & 76.3 & 56.8 & 55.6 & 61.4 & 65.8 & 9,508 & 63.3 & 61.8 & 71.5 & 76.1 \\
+0 & 2,967 & 86.6 & 86.1 & 88.7 & \textbf{91.1} & 85.2 & 84.5 & 86.8 & \textbf{88.6} & 2,967 & 83.9 & 83.5 & 85.4 & \textbf{86.5} \\
+1 & 2,168 & 71.3 & 67.9 & 78.8 & \textbf{82.0} & 61.3 & 58.9 & 66.8 & \textbf{71.5} & 2,168 & 71.0 & 69.3 & 80.8 & \textbf{82.8} \\
+2--4 & 2,068 & 54.4 & 53.5 & 61.2 & \textbf{74.7} & 44.7 & 43.3 & 52.4 & \textbf{57.4} & 2,068 & 54.8 & 53.6 & 66.7 & \textbf{73.8} \\
+5--9 & 1,197 & 35.1 & 36.8 & 44.5 & \textbf{62.7} & 31.7 & 30.8 & 37.4 & \textbf{46.2} & 1,197 & 44.9 & 40.9 & 60.5 & \textbf{69.7} \\
+10+ & 1,108 & 16.9 & 20.8 & 25.2 & \textbf{43.4} & 21.4 & 21.1 & 25.9 & \textbf{30.7} & 1,108 & 29.3 & 26.9 & 36.6 & \textbf{46.1} \\
+all & 9,508 & 61.5 & 61.0 & 67.5 & \textbf{76.3} & 56.8 & 55.6 & 61.4 & \textbf{65.8} & 9,508 & 63.3 & 61.8 & 71.5 & \textbf{76.1} \\
 \addlinespace
 \multicolumn{15}{@{}l}{\emph{Multi3DRefer, several targets, by number of targets}} \\
-2 & 1,631 & 73.1 & 68.8 & 75.6 & 81.9 & 52.7 & 46.2 & 48.4 & 65.8 & 1,631 & 49.5 & 48.4 & 50.3 & 55.3 \\
-3--4 & 710 & 66.8 & 52.4 & 59.4 & 78.9 & 42.6 & 30.5 & 37.6 & 58.4 & 710 & 36.6 & 30.7 & 35.3 & 35.3 \\
-5+ & 416 & 78.4 & 36.8 & 45.9 & 89.7 & 36.4 & 19.7 & 26.6 & 57.4 & 416 & 31.8 & 21.3 & 25.7 & 22.4 \\
-all & 2,757 & 72.3 & 59.7 & 67.0 & 82.3 & 47.6 & 38.1 & 42.3 & 62.6 & 2,757 & 43.5 & 39.7 & 42.7 & 45.2 \\
+2 & 1,631 & 73.1 & 68.8 & 75.6 & \textbf{81.9} & 52.7 & 46.2 & 48.4 & \textbf{65.8} & 1,631 & 49.5 & 48.4 & 50.3 & \textbf{55.3} \\
+3--4 & 710 & 66.8 & 52.4 & 59.4 & \textbf{78.9} & 42.6 & 30.5 & 37.6 & \textbf{58.4} & 710 & \textbf{36.6} & 30.7 & 35.3 & 35.3 \\
+5+ & 416 & 78.4 & 36.8 & 45.9 & \textbf{89.7} & 36.4 & 19.7 & 26.6 & \textbf{57.4} & 416 & \textbf{31.8} & 21.3 & 25.7 & 22.4 \\
+all & 2,757 & 72.3 & 59.7 & 67.0 & \textbf{82.3} & 47.6 & 38.1 & 42.3 & \textbf{62.6} & 2,757 & 43.5 & 39.7 & 42.7 & \textbf{45.2} \\
 \bottomrule
 \end{tabular}
 \end{table*}

@@ -5,7 +5,7 @@
 \centering
 \small
 \setlength{\tabcolsep}{2.5pt}
-\caption{\textbf{The sentences compared, under one scorer.} Targets with one to four distractors, the one tier in which every sample has more than a few sentences. \emph{Listed}: relations per sentence in the list the writer returns with its sentence. \emph{Read}: relations per sentence that the blind reader binds to objects, and the share of sentences in which it binds none (\%). \emph{Certified}: \%. The first two blocks are the sample of \cref{tab:data}. The blocks are different targets, drawn in different ways; the two rows of each of the first two blocks are the same targets, and so are the last two rows of the third.}
+\caption{\textbf{The sentences compared, under one scorer.} Targets with one to four distractors, the one tier in which every sample has more than a few sentences. \emph{Listed}: relations per sentence in the list the writer returns with its sentence. \emph{Read}: relations per sentence that the blind reader binds to objects, and the share of sentences in which it binds none (\%). \emph{Certified}: \%. The first two blocks are the sample of \cref{tab:data}. The blocks are different targets, drawn in different ways; the two rows of each of the first two blocks are the same targets, and so are the last two rows of the third. Bold: the highest certified rate of a block.}
 \label{tab:supp_corpora}
 \begin{tabular}{@{}lrrrrrrr@{}}
 \toprule
@@ -15,17 +15,17 @@ Sentences & $n$ & Words & rel. & rel. & none & strict & lenient \\
 \midrule
 \multicolumn{8}{@{}l}{\emph{ScanRefer, validation}} \\
 Originals & 200 & 17.2 & -- & 0.4 & 60 & 13.0 & 13.5 \\
-Our rewrites & 200 & 39.8 & 5.0 & 3.1 & 3 & 66.0 & 85.0 \\
+Our rewrites & 200 & 39.8 & 5.0 & 3.1 & 3 & \textbf{66.0} & \textbf{85.0} \\
 \addlinespace
 \multicolumn{8}{@{}l}{\emph{Multi3DRefer, validation, single-target}} \\
 Originals & 200 & 15.2 & -- & 0.5 & 58 & 15.0 & 17.5 \\
-Our rewrites & 200 & 40.0 & 5.2 & 3.3 & 0 & 67.5 & 90.0 \\
+Our rewrites & 200 & 40.0 & 5.2 & 3.3 & 0 & \textbf{67.5} & \textbf{90.0} \\
 \addlinespace
 \multicolumn{8}{@{}l}{\emph{Beacon3D, ScanNet part}} \\
 All single-target & 617 & 5.7 & -- & 0.5 & 48 & 38.4 & 38.7 \\
 Tagged spatial & 507 & 6.3 & -- & 0.7 & 37 & 46.4 & 46.7 \\
 \quad one per object & 195 & 6.3 & -- & 0.7 & 37 & 46.2 & 47.2 \\
-Ours, same objects & 195 & 44.0 & 5.8 & 4.5 & 1 & 72.3 & 97.9 \\
+Ours, same objects & 195 & 44.0 & 5.8 & 4.5 & 1 & \textbf{72.3} & \textbf{97.9} \\
 \bottomrule
 \end{tabular}
 \end{table}
