@@ -293,24 +293,31 @@ We claim the order, not the size of the gap.
 %   B: both asked with the rewrite: 2,091 items (1,765 / 326); 12 drawn (9 / 3), none of them among the first 12.
 % Masks exported on the cluster 11-24 (supp_masks/npz/NOTES.md); figure: analysis/supp_mask_fig.py.  Left out: A07 (idx 14), whose
 % rewrite-arm mask has an IoU between 0.36 and 0.91 over 36 runs of the same weights (35 of them at 0.5 or above).
+% Left out as well (user, 11-24): A10 (idx 20), ``the table is south of the leftmost bed'' -- the only shown sentence with a compass
+% word; original arm IoU 0.83, rewrite arm 0.00.  Compass words: Seshat-Star/analysis/_compass_items.py (366 of the 9,508 ScanRefer
+% validation originals, none of the rewrites; on the 366, both arms asked with the original: Acc@0.5 32.5 against 38.3, 14 / 35,
+% p = 0.004; Acc@0.25 51.6 against 49.7, 40 / 33, p = 0.48).
 The paper shows the masks of the two arms of 3D-LLaVA for two chosen sentences.
 \Cref{fig:supp_masks_a,fig:supp_masks_b} show them for items drawn at random, with a fixed seed, from the ScanRefer targets with distractors on which the verdicts of the two arms at Acc@0.5 differ.
 There are 1,488 such items when both arms are asked with the original sentence, the rewrite arm alone being right for 1,024 of them, and 2,091 when both are asked with the rewrite, with 1,765 for the rewrite arm; twelve were drawn from each.
-One of the first twelve is not shown, because the rewrite arm's mask for it changes from one run of the same weights to the next.
-Of the items shown, the rewrite arm alone is right for 8 of 11 and for 9 of 12.
+Two of the first twelve are not shown.
+For one, the rewrite arm's mask changes from one run of the same weights to the next.
+The sentence of the other places the target by a point of the compass (\emph{the table is south of the leftmost bed}), a kind of word that the writer is told not to use and that no rewrite of the ScanRefer validation set contains; on this item the original arm alone was right.
+Of the 9,508 original sentences 366 contain such a word, and on these the rewrite arm is right more often than the original arm at Acc@0.5 (38.3\% against 32.5\%, $p = 0.004$) and about as often at Acc@0.25 (49.7\% against 51.6\%, $p = 0.48$).
+Of the items shown, the rewrite arm alone is right for 8 of 10 and for 9 of 12.
 % What each mask covers, by ScanNet instance: `python analysis/supp_mask_fig.py kinds' (rule in its docstring).
 %   original arm, 17 failures: 6 on other objects (a3 a4 a5 b2 b4 b5), 10 the target and more (a1 a6 a7 a9 b1 b3 b7 b8 b9 b10), 1 part of the target (a8);
-%   rewrite arm, 6 failures: 2 (a10 b12), 3 (a2 b6 b11), 1 (a11).  Passing, yet covering at least half of another object:
+%   rewrite arm, 5 failures: 1 (b12), 3 (a2 b6 b11), 1 (a10).  Passing, yet covering at least half of another object:
 %   rewrite arm a1 a3 a5 b5 b7, original arm b6 b11 b12.  a2: scene0678_00 has two vending machines side by side (objects 0 and 34).
 A mask that fails does so in one of two ways in either arm.
-It lies on objects other than the target, as in six of the seventeen failures of the original arm (items 3, 4 and 5 of \cref{fig:supp_masks_a}; 2, 4 and 5 of \cref{fig:supp_masks_b}) and two of the six of the rewrite arm (item 10 of the first figure, item 12 of the second).
+It lies on objects other than the target, as in six of the seventeen failures of the original arm (items 3, 4 and 5 of \cref{fig:supp_masks_a}; 2, 4 and 5 of \cref{fig:supp_masks_b}) and one of the five of the rewrite arm (item 12 of the second figure).
 Or it covers the target and other objects with it, as in ten failures of the original arm and three of the rewrite arm; in item 2 of \cref{fig:supp_masks_a} the rewrite arm's mask covers both of two vending machines that stand side by side.
 The one remaining failure of each arm covers less than half of the target.
 A mask that passes is not always of the target alone: in item 3 of \cref{fig:supp_masks_a} the rewrite arm's mask covers the target and the chair beside it, and passes with an IoU of 0.52.
 \begin{figure*}[t]
 \centering
 \includegraphics[width=\linewidth]{fig/supp_masks_a.pdf}
-\caption{\textbf{The same original sentence, the two arms of 3D-LLaVA.} Eleven ScanRefer validation items drawn at random from those on which the two arms' verdicts at Acc@0.5 differ. White outline: the target. Amber: the predicted mask.}
+\caption{\textbf{The same original sentence, the two arms of 3D-LLaVA.} Ten ScanRefer validation items drawn at random from those on which the two arms' verdicts at Acc@0.5 differ. White outline: the target. Amber: the predicted mask.}
 \label{fig:supp_masks_a}
 \end{figure*}
 \begin{figure*}[t]
@@ -454,13 +461,32 @@ In this supplement a difference between two versions of the same items is tested
 Intervals are 95\% Wilson intervals.
 Where two columns hold different items we give the two shares and no test.
 A sentence in which the reader binds no relation that the verifier can evaluate stays in the denominator and counts as not certified under both scores.
-With 200 items in each tier of \cref{tab:data}, the interval of a rate in that table reaches at most seven points to either side.
 
-\paragraph{Left and right.}
-% RESULTS \S7.2 (analysis/_ds_survey.py, pattern matching): bare left / right 43.2% of ScanRefer train, 38.8% of Multi3DRefer train;
-% an explicit standpoint 4.6% and 4.4%.
-A side word, \emph{left} or \emph{right}, occurs in 43\% of the training sentences of ScanRefer and in 39\% of those of Multi3DRefer; a place to stand is stated in 5\% and 4\%.
+\paragraph{The data table with intervals.}
+% Seshat-Star/analysis/supp_data_tables.py (recomputed from judge600_g with the scorer of tab:data; reproduces every cell of tab:data
+% and the paired counts quoted in sec. 5).
+\Cref{tab:supp_data_ci} repeats \cref{tab:data} with intervals, and adds the items on which the two sentences differ and the multi-target sample that the paper gives in its text.
+With 200 items in a tier an interval reaches at most seven points to either side.
+In every tier the rewrite alone is certified for several times as many items as the original alone: over the three tiers, for 247 against 36 on Multi3DRefer and for 248 against 33 on ScanRefer.
+The original alone is certified most often where there is no distractor (22 and 24 items of 200).
+There a sentence is certified as soon as every relation read holds of the target, and the rewrite, which states more relations, has more that can fail: its strict rate (57.5\% and 71.0\%) lies well below its lenient rate (93.0\% and 96.0\%).
+\input{tab/supp_data_ci}
+
+\paragraph{Several targets, by their number.}
+\Cref{tab:supp_multi_n} splits the 300 multi-target items by the number of targets.
+With two targets the rewrite is certified for 30\% of the sentences, and for 53\% under the lenient score; with more than two, for 11 to 19\% and for 26 to 30\%.
+The originals are certified for 12\% with two targets and for 4 of the 168 with more.
+The groups of three and of four targets hold 50 and 35 items, and an interval there reaches ten points or more to either side.
+\input{tab/supp_multi_n}
+
+\paragraph{The corpora, and left and right in them.}
+% Seshat-Star/analysis/_ds_survey.py (re-run 11-24; counts by pattern): sentences, bare left / right, an explicit standpoint.
+% Zero-target sentences of Multi3DRefer: 4,862 (train) and 906 (validation), RESULTS \S3.3 / \S7.1.
+\Cref{tab:supp_sizes} gives the sizes of the four grounding corpora and how often their sentences use a side word, \emph{left} or \emph{right}, and state a place to stand.
+In ScanRefer and Multi3DRefer about four training sentences in ten use a side word and about one in twenty states a standpoint.
+Nr3D states one more often; Sr3D, which is written from templates, hardly uses side words.
 The counts are by pattern and so approximate; what the blind reader makes of such clauses is in \cref{supp:reader}.
+\input{tab/supp_sizes}
 
 \section{Human check}
 \label{supp:human}
@@ -498,13 +524,12 @@ In the third task one statement is shown about objects that are boxed and tinted
 The annotators' first language is not English.
 The statements of the third task were written in their language.
 The sentences of the first two tasks could be displayed in a translation, made one sentence at a time by GPT-5.5 under the instruction to keep every relation, count and ambiguity as it stands, and 514 of the 536 judgements of the first task were given with the translation displayed.
-The screenshots show the English version of the interface.
 \begin{figure*}[t]
 \centering
 \includegraphics[width=\linewidth]{fig/supp_ui_a.jpg}\\[3pt]
 \includegraphics[height=0.299\linewidth]{fig/supp_ui_b.jpg}\hfill
 \includegraphics[height=0.299\linewidth]{fig/supp_ui_c.jpg}
-\caption{\textbf{The annotation interface, in its English version.} Top: selecting the objects that a sentence fits; the objects of the target's class carry letters and the other objects numbers. Bottom left: deciding whether what a sentence describes is in the room. Bottom right: judging one statement about objects that are boxed and tinted, here that the coffee table stands at the long side of the couch that is nearest the plant.}
+\caption{\textbf{The annotation interface.} Top: selecting the objects that a sentence fits; the objects of the target's class carry letters and the other objects numbers. Bottom left: deciding whether what a sentence describes is in the room. Bottom right: judging one statement about objects that are boxed and tinted, here that the coffee table stands at the long side of the couch that is nearest the plant.}
 \label{fig:supp_ui}
 \end{figure*}
 
@@ -545,15 +570,19 @@ The pipeline does not rewrite these sentences (\cref{sec:pipeline}), and the pap
 % teaser colours; clauses the reader bound in colour, unbound in grey; selection rule stated; failures included.  Before an
 % example goes in, check that its instance is one whole object (the kitchen-cabinet case).  One and a half to two pages.
 % Figure: Seshat-Star/analysis/supp_examples_fig.py (seed 20261124; population = the 800 items with distractors of tab:data, both
-% sentences read by the blind reader; verdicts recomputed from the stored reader outputs).  Nothing dropped or replaced.
+% sentences read by the blind reader; verdicts recomputed from the stored reader outputs).  Items whose original has a compass word
+% are passed over (user, 11-24; 32 of the 800): one was, the fifth drawn (scene0616_00, ``directly south of the fireplace'': original
+% no relation bound, rewrite certified under the lenient score only), and the ninth drawn took its place.  Nothing else dropped.
 The examples in the paper are chosen.
 \Cref{fig:supp_examples} shows eight items drawn at random, with a fixed seed, from the 800 items with distractors of \cref{tab:data}, and the scorer's verdict on both sentences of each.
+Items whose original sentence places the target by a point of the compass were passed over, for the reason given in \cref{supp:models}; there are 32 among the 800, and one was drawn.
 None of the eight originals is certified.
-In five the reader binds no relation: a side word or a seat in a row comes without a place to stand (items 1, 4 and 7), the anchors fit several objects (item 3), or the direction is a point of the compass (item 5).
-In the other three it binds one relation, \emph{against the wall}, which every candidate satisfies.
-Four of the rewrites are certified.
-Three more, items 1, 5 and 7, are certified under the lenient score only: one of the relations read is false of the target in the verifier's judgement, and the scores do not say whose error that is (\cref{sec:scorer}).
+In four the reader binds no relation: a side word or a seat in a row comes without a place to stand (items 1, 4 and 6), or the anchors fit several objects (item 3).
+In the other four it binds one relation, \emph{against the wall}, which every candidate satisfies.
+Five of the rewrites are certified.
+Two more, items 1 and 6, are certified under the lenient score only: one of the relations read is false of the target in the verifier's judgement, and the scores do not say whose error that is (\cref{sec:scorer}).
 The rewrite of item 2 fails outright: the reader binds only \emph{against the wall}, and cannot tie the radiator and the chair of the other clauses to one object each.
+Eight items say nothing about rates; those are in \cref{tab:supp_data_ci}.
 \begin{figure*}[t]
 \centering
 \includegraphics[width=\linewidth]{fig/supp_examples.pdf}
@@ -617,11 +646,17 @@ GPT-6 is given the sentence and four renderings of the scene with no labels or m
 % the feedback loop (scorer verdict returned to the writer), abandoned for the reason given in the pipeline section; "rich" evidence
 % in uncrowded rooms (over-description) -> gating; two-pass writing.
 % OUTLINE (11-24).  Half a column, text only.
+We tried three other designs, and describe them briefly.
+None was scored with the present scorer; what we report of them is what we saw on reading their sentences.
+
 \paragraph{A menu, a set cover and a small model.}
 The first design let geometry decide what is said.
 It listed the relations that hold for the target, chose by set cover a few that exclude every distractor, and had a small language model put them into a sentence.
-The sentences were exact by construction and read like templates, one relation stacked on another, with nothing of what the annotator had said.
+The sentences were exact by construction and read like templates, one relation stacked on another, with nothing of what the annotator had said; by our reading they were far poorer than the present ones.
 The present design reverses the roles: geometry supplies evidence, the writer chooses, and exactness is judged afterwards.
+What followed taught us that a sentence is as good as its evidence.
+The writer repeats what the operators tell it, right or wrong: when the row operator drew a row through the corner of a room, the sentence counted seats along that row (\cref{supp:operators,supp:writer}).
+Most of the later work therefore went into the operators.
 
 \paragraph{Returning the verdict to the writer.}
 The pipeline can pass the verifier's verdict on a draft back to the writer for a second attempt.
@@ -768,13 +803,16 @@ For every clause it cannot bind to object ids the reader gives one of four reaso
 
 % OUTLINE (11-24).  Half a column.
 \paragraph{What the reader costs.}
+% Reasons for unbound clauses: the reader outputs of judge600_g (the present reader), 1,200 single-target originals and their
+% rewrites: originals 1,815 clauses (no viewpoint 797, ambiguous anchor 394, not spatial 329, not in list 295); rewrites 2,457
+% (ambiguous anchor 1,192, not in list 560, not spatial 497, no viewpoint 208).  80 / 55: RESULTS \S1.6 (80.0 against 54.7).
+% (The by-family recovery table of RESULTS \S4.7 was made with an earlier reader and is not given; user, 11-24.)
 A relation that the writer puts into a sentence is scored only if the reader gets it out again.
-\Cref{tab:supp_reader} counts, for an earlier version of the reader with a smaller vocabulary, how often it does: nearly always for support and for corners, three times in four for proximity, and less than half the time for directions and for \emph{between}; we have not repeated the count with the present reader.
 The reader's own reasons for leaving a clause unbound show where the loss arises.
-In the originals the commonest reason is a side word with no viewpoint (109 of 293 clauses); in the rewrites this falls to 36 of 478, and the commonest becomes an anchor that the reader cannot tie to one object, such as \emph{the table-and-chair setup} or \emph{the book side}.
+In the 1,200 single-target originals of \cref{tab:supp_data_ci} it leaves 1,815 clauses unbound, 797 of them because a side word comes with no viewpoint.
+In their rewrites it leaves 2,457; a missing viewpoint accounts for 208, and the commonest reason, with 1,192, is an anchor that the reader cannot tie to one object of the list, such as \emph{the nearby cluster of chairs} in item 4 of \cref{fig:supp_examples}.
 The cost shows most plainly when there is no original sentence: on ScanNet the writer's own relations certify 80\% of the sentences written from the scene alone, the blind reader's 55\% (300 targets).
 We score with the reader's.
-\input{tab/supp_reader}
 
 \subsection{Predicate vocabulary}
 \label{supp:vocab}

@@ -1,0 +1,20 @@
+% Source: Seshat-Star/analysis/_ds_survey.py (re-run 11-24) on the training files; validation sizes from the evaluation files.
+% Patterns: side word = left / right (and -hand); standpoint = "as you / when you / from the door / standing / facing the ..." etc.
+\begin{table}[t]
+\centering
+\small
+\setlength{\tabcolsep}{4.5pt}
+\caption{\textbf{The four grounding corpora.} Sentences in the training and validation sets, and the share of training sentences that use \emph{left} or \emph{right} and that state a place to stand, counted by pattern. Multi3DRefer's counts include its zero-target sentences (4,862 and 906), which are not rewritten. The paper evaluates on the first two.}
+\label{tab:supp_sizes}
+\begin{tabular}{@{}lrrcc@{}}
+\toprule
+ & \multicolumn{2}{c}{Sentences} & Side & Stand- \\
+Corpus & train & val. & word (\%) & point (\%) \\
+\midrule
+ScanRefer    & 36,665 & 9,508  & 43.2 & 4.6 \\
+Multi3DRefer & 43,838 & 11,120 & 38.8 & 4.4 \\
+Nr3D         & 28,716 & --     & 25.1 & 18.3 \\
+Sr3D         & 65,844 & --     & 2.6  & 7.4 \\
+\bottomrule
+\end{tabular}
+\end{table}
