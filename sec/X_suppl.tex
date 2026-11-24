@@ -470,15 +470,63 @@ Each was asked individually and agreed to take part.
 They were paid per item, at one of three fixed rates according to the task: selecting the objects a sentence fits, deciding whether a sentence has a referent, and judging a single statement.
 The tasks ask for judgements about sentences and scenes; no personal data about the annotators was collected and none is reported.
 For that reason no review by an ethics board was sought.
+One annotator began, part of the way through, to skip items in long runs; that annotator's answers from there on were discarded and the items were offered to the others.
+
+\paragraph{The interface.}
+% Screenshots: the user, 11-23, from the English version of the site (e7/site/en.html).  Language of display: field `lang' of each
+% answer, 514 zh / 4 en / 18 not recorded of the 536 judgements of the first task; translations by GPT-5.5 (medium), one sentence
+% at a time, told to keep every relation, count and ambiguity (docs/HUMAN_EVAL.md, record of 11-14).  The statements of the third
+% task exist in the annotators' language only (b_items.jsonl, statement_shown).
+\Cref{fig:supp_ui} shows the three tasks.
+In each the scene is a point cloud that the annotator turns, shifts and zooms, and the objects carry labels whose class names are listed at the side.
+In the first task the objects of the target's class carry letters, assigned afresh at random for every item, and the other objects carry numbers.
+The annotator is told how many objects the sentence describes, and selects every letter the sentence fits, or answers that none fits or that they cannot tell.
+Nothing says whether the sentence is an original or a rewrite, and no annotator was given both versions of an item.
+In the third task one statement is shown about objects that are boxed and tinted, with a line above it naming the relation under test.
+
+The annotators' first language is not English.
+The statements of the third task were written in their language.
+The sentences of the first two tasks could be displayed in a translation, made one sentence at a time by GPT-5.5 under the instruction to keep every relation, count and ambiguity as it stands, and 514 of the 536 judgements of the first task were given with the translation displayed.
+The screenshots show the English version of the interface.
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\linewidth]{fig/supp_ui_a.jpg}\\[3pt]
+\includegraphics[height=0.299\linewidth]{fig/supp_ui_b.jpg}\hfill
+\includegraphics[height=0.299\linewidth]{fig/supp_ui_c.jpg}
+\caption{\textbf{The annotation interface, in its English version.} Top: selecting the objects that a sentence fits; the objects of the target's class carry letters and the other objects numbers. Bottom left: deciding whether what a sentence describes is in the room. Bottom right: judging one statement about objects that are boxed and tinted, here that the coffee table stands at the long side of the couch that is nearest the plant.}
+\label{fig:supp_ui}
+\end{figure*}
+
+\paragraph{Resolving a sentence.}
+% a1_items.jsonl: 200 items = 100 Multi3DRefer single-target + 33 multi-target + 67 ScanRefer; strata <=2 / 3-5 / 6-9 / >=10 same-class
+% objects: 51 / 51 / 49 / 49.  Judgements per annotator 200, 200, 97, 39.  `cannot tell': 70 of 271 (originals), 25 of 265 (rewrites);
+% `none fits': 6 and 5.  Judged twice: 156 pairs, same verdict 116 (originals 61 of 80, rewrites 55 of 76).
+The 200 items of \cref{tab:human} are 100 single-target and 33 multi-target items of the Multi3DRefer validation set and 67 items of ScanRefer's, drawn in four strata of about fifty by the number of objects of the target's class in the scene.
+Each is shown once as its original sentence and once as its rewrite.
+A judgement \emph{resolves} the sentence when the letters selected are exactly the target set; ``none fits'' and ``cannot tell'' count as misses.
+``Cannot tell'' was the answer in 70 of the 271 judgements of originals and in 25 of the 265 of rewrites.
+Annotation closed with 380 of the 400 item--version pairs judged, 156 of them by two annotators; the two give the same verdict, resolved or not, for 116 of these (74\%).
+\Cref{tab:supp_human} gives the counts behind \cref{tab:human} and their intervals.
+With several targets the rewrite is resolved less often than with one (59\% against 72\%), and so is the original (43\% against 48\%); there are fewer than fifty judgements of each.
+\input{tab/supp_human}
+
 \paragraph{Predicate by predicate.}
 We also checked the verifier on the structures we define ourselves: rows, furniture faces and stacks, with plain adjacency as a control.
 Annotators judged single statements with the objects marked.
+The statements about the three structures were drawn from targets with five or more distractors, the only ones for which the writer is given these structures.
 Half of the statements were made false by pointing at an object the verifier excludes, and half of those were near misses: a seat off by one, an object at the corner of the furniture, a gap just over the adjacency threshold.
-Annotators agree with the verifier on \TODO{78}\% of the statements they could decide for the three structures and on \TODO{84}\% for the control; for the three structures, agreement is \TODO{87}\% on clearly false statements and \TODO{68}\% on near misses.
+Of the 350 statements prepared, 203 had been judged when annotation closed, 15 of them twice, with the same answer for 14.
+Annotators agree with the verifier on 78\% of the statements they could decide for the three structures and on 84\% for the control; for the three structures, agreement is 87\% on clearly false statements and 68\% on near misses (\cref{tab:supp_human_b}).
+Rows are where the annotators could least often decide: ``cannot tell'' is the answer to 25 of 60 row statements, and to 3 of the 158 others.
+With 35 to 61 decided statements for each structure, the table cannot tell the structures apart.
 The strict and the lenient score differ where the verifier finds that a predicate does not hold for the target; such a predicate may be the writer's mistake, the reader's over-translation (\emph{along the wall} read as \emph{against the wall}) or the verifier's rigidity (a wall test in a room that is not a rectangle).
+\input{tab/supp_human_b}
 
-% OUTLINE (11-24).  One page.
-\TODO{Outline. Figure: the annotation interface, one screenshot of each task (select the targets; single statement with the objects marked). Text: sampling (200 items in strata by number of same-class distractors, two arms, arm hidden, letters at random), what counts as resolved. Table: resolved rate by stratum and arm with intervals, and agreement between annotators. Table: the predicate check by family (rows, faces, stacks, adjacency control) split into clear and near-miss negatives. Text: the zero-target task in three sentences.}
+\paragraph{Sentences with no target.}
+% a2_items.jsonl: 100 of the 906 zero-target validation sentences of Multi3DRefer, drawn at random; 52 judged, once each: no 48, yes 3, cannot tell 1.
+The task of the bottom left panel was put for 100 of the 906 validation sentences that Multi3DRefer labels with no target, drawn at random.
+Annotation closed with 52 of them judged, once each: the annotator found nothing that the sentence describes for 48, found something for 3, and could not tell for 1.
+The pipeline does not rewrite these sentences (\cref{sec:pipeline}), and the paper uses no figure from this task.
 
 \section{Examples}
 \label{supp:qual}
