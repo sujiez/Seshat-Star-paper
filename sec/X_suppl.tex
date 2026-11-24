@@ -300,10 +300,8 @@ We claim the order, not the size of the gap.
 The paper shows the masks of the two arms of 3D-LLaVA for two chosen sentences.
 \Cref{fig:supp_masks_a,fig:supp_masks_b} show them for items drawn at random, with a fixed seed, from the ScanRefer targets with distractors on which the verdicts of the two arms at Acc@0.5 differ.
 There are 1,488 such items when both arms are asked with the original sentence, the rewrite arm alone being right for 1,024 of them, and 2,091 when both are asked with the rewrite, with 1,765 for the rewrite arm; twelve were drawn from each.
-Two of the first twelve are not shown.
-For one, the rewrite arm's mask changes from one run of the same weights to the next.
-The sentence of the other places the target by a point of the compass (\emph{the table is south of the leftmost bed}), a kind of word that the writer is told not to use and that no rewrite of the ScanRefer validation set contains; on this item the original arm alone was right.
-Of the 9,508 original sentences 366 contain such a word, and on these the rewrite arm is right more often than the original arm at Acc@0.5 (38.3\% against 32.5\%, $p = 0.004$) and about as often at Acc@0.25 (49.7\% against 51.6\%, $p = 0.48$).
+Two of the first twelve are not shown: one because the rewrite arm's mask for it changes from one run of the same weights to the next, the other because its sentence gives a compass direction (\emph{south of the leftmost bed}), a kind of word that the writer is told not to use and that no rewrite contains.
+The first had counted for the rewrite arm and the second for the original arm.
 Of the items shown, the rewrite arm alone is right for 8 of 10 and for 9 of 12.
 % What each mask covers, by ScanNet instance: `python analysis/supp_mask_fig.py kinds' (rule in its docstring).
 %   original arm, 17 failures: 6 on other objects (a3 a4 a5 b2 b4 b5), 10 the target and more (a1 a6 a7 a9 b1 b3 b7 b8 b9 b10), 1 part of the target (a8);
@@ -574,8 +572,8 @@ The pipeline does not rewrite these sentences (\cref{sec:pipeline}), and the pap
 % are passed over (user, 11-24; 32 of the 800): one was, the fifth drawn (scene0616_00, ``directly south of the fireplace'': original
 % no relation bound, rewrite certified under the lenient score only), and the ninth drawn took its place.  Nothing else dropped.
 The examples in the paper are chosen.
-\Cref{fig:supp_examples} shows eight items drawn at random, with a fixed seed, from the 800 items with distractors of \cref{tab:data}, and the scorer's verdict on both sentences of each.
-Items whose original sentence places the target by a point of the compass were passed over, for the reason given in \cref{supp:models}; there are 32 among the 800, and one was drawn.
+\Cref{fig:supp_examples,fig:supp_examples_b} show eight items drawn at random, with a fixed seed, from the 800 items with distractors of \cref{tab:data}, and the scorer's verdict on both sentences of each.
+Items whose original sentence gives a compass direction were passed over, as in \cref{supp:models}; there are 32 among the 800, and one was drawn.
 None of the eight originals is certified.
 In four the reader binds no relation: a side word or a seat in a row comes without a place to stand (items 1, 4 and 6), or the anchors fit several objects (item 3).
 In the other four it binds one relation, \emph{against the wall}, which every candidate satisfies.
@@ -585,39 +583,63 @@ The rewrite of item 2 fails outright: the reader binds only \emph{against the wa
 Eight items say nothing about rates; those are in \cref{tab:supp_data_ci}.
 \begin{figure*}[t]
 \centering
-\includegraphics[width=\linewidth]{fig/supp_examples.pdf}
-\caption{\textbf{Eight items drawn at random.} Red with a white outline: the target. Teal: the other candidates. Under each sentence: the scorer's strict verdict, the number of relations the blind reader bound, and how many candidates satisfy all of them.}
+\includegraphics[width=\linewidth]{fig/supp_examples_a.pdf}
+\caption{\textbf{Items drawn at random, 1 to 4.} Red with a white outline: the target. Teal: the other candidates. Under each sentence: the scorer's strict verdict, the number of relations the blind reader bound, and how many candidates satisfy all of them.}
 \label{fig:supp_examples}
+\end{figure*}
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\linewidth]{fig/supp_examples_b.pdf}
+\caption{\textbf{Items drawn at random, 5 to 8.} As \cref{fig:supp_examples}.}
+\label{fig:supp_examples_b}
 \end{figure*}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{The pipeline}
 \label{supp:pipeline}
 % OUTLINE (11-24; user: add pseudo-code, coarse grain, no thresholds).  Half a page.
-The two procedures below give the pipeline at the grain of its steps, without thresholds.
-
-\paragraph{Procedure 1: writing,} for a scene, a target set $T$ and, when there is one, an original sentence.
-\begin{enumerate}
-\setlength{\itemsep}{0pt}
-\item Build the object table from the labelled point cloud: for each object its id, class, centre, bounding box and a sample of surface points.
-\item Take as candidates $C$ every object whose class shares the head noun of the target's class; the distractors are $D = C \setminus T$.
-\item Compute the evidence with the operators of \cref{supp:operators}: the nearest landmarks with their surface gaps, places to stand with the order of the candidates seen from each, what rests on what, the wall, corner or end of the room each candidate belongs to, and the list of distractors to exclude.
-\item If the target has five or more distractors, add the rows, the furniture faces and the neighbours of every distractor.
-\item Render the point cloud from several cameras with the objects marked by id, and draw a top-down outline of the room.
-\item Call the writer once with the renderings, the object table, the evidence and the original sentence. It returns a sentence and the relations that sentence uses, written over object ids.
-\item Keep the sentence as it is. The scorer's verdict is not returned to the writer.
-\end{enumerate}
+\Cref{alg:write,alg:score} give the pipeline at the grain of its steps, without thresholds.
+In \cref{alg:write} the evidence of line 3 is, for each candidate, the nearest landmarks with their surface gaps, the places to stand with the order of the candidates seen from each, what rests on what, and the wall, corner or end of the room it belongs to (\cref{supp:operators}).
+The writer returns, with its sentence, the relations that the sentence uses, written over object ids.
 When a corpus has several sentences for the same targets, they are rewritten in one call.
+\begin{algorithm}[t]
+\caption{Writing a sentence}
+\label{alg:write}
+\begin{algorithmic}[1]
+\small
+\Require scene $S$; target set $T$; original sentence $s$, if any
+\Ensure sentence $s'$
+\State $O \gets$ object table of $S$: id, class, centre, box, surface points
+\State $C \gets \{o \in O : o$ shares the head noun of the target's class$\}$;\ \ $D \gets C \setminus T$
+\State $E \gets \textsc{Evidence}(O, C, T)$, with $D$ as the list to exclude
+\If{$|D| \ge 5$}
+  \State add to $E$ the rows and furniture faces of $C$ and the neighbours of every $d \in D$
+\EndIf
+\State $V \gets$ renderings of $S$ with ids marked; top-down outline
+\State $(s', \mathit{relations}) \gets \textsc{Writer}(V, O, E, s)$ \Comment{one call}
+\State \Return $s'$ \Comment{no verdict is returned to the writer}
+\end{algorithmic}
+\end{algorithm}
+\begin{algorithm}[t]
+\caption{Scoring a sentence}
+\label{alg:score}
+\begin{algorithmic}[1]
+\small
+\Require sentence $s$; object table $O$ and points of the scene; target set $T$, never shown to the reader
+\Ensure strict and lenient verdict
+\State $L \gets$ every object of $O$: id, class, position, size
+\State $(P_0, \{P_j\}, U) \gets \textsc{Reader}(s, L, \text{vocabulary})$ \Comment{one call}
+\For{each predicate $p$ in $P_0$ and the $P_j$}
+  \State $\hat{E}_p \gets$ candidates that satisfy $p$, from $O$ and the points
+\EndFor
+\State $B \gets \bigcap_{p \in P_0} \hat{E}_p$;\ \ $S_j \gets B \cap \bigcap_{p \in P_j} \hat{E}_p$
+\State $R \gets \bigcup_j S_j$, or $B$ if there are no parts \Comment{\cref{eq:parts}}
+\State \Return certified iff a predicate was evaluated and $R = T$
+\end{algorithmic}
+\end{algorithm}
 
-\paragraph{Procedure 2: scoring,} for a sentence, a scene and the target set $T$, which is withheld until the last step.
-\begin{enumerate}
-\setlength{\itemsep}{0pt}
-\item Call the reader once with the sentence, the list of every object in the room (id, class, position and size) and the predicate vocabulary of \cref{supp:vocab}.
-\item The reader returns predicates over object ids that hold of everything the sentence describes, the parts that the sentence describes separately, each with its own predicates and stated count, and every clause it could not bind, with a reason.
-\item For each predicate the verifier computes, from the object table and the points, the candidates that satisfy it.
-\item Intersect the sets of the common predicates and of each part, and unite the parts (\cref{eq:parts}); the result is the referent $R$.
-\item The sentence is certified when at least one predicate was evaluated and $R = T$. The strict score uses every predicate and every stated count; the lenient score first drops the predicates that hold for no target, and ignores counts.
-\end{enumerate}
+In \cref{alg:score}, $P_0$ are the predicates that the reader finds to hold of everything the sentence describes, $P_j$ those of each part that the sentence describes separately, with its stated count, and $U$ the clauses it could not bind, each with a reason.
+The strict score uses every predicate and every stated count; the lenient score first drops the predicates that hold for no target, and ignores counts.
 The writer knows the target and sees the scene.
 The reader sees no image and is told neither the target, the candidates, the evidence nor the relations the writer returned.
 The verifier sees predicates and geometry and no text.
@@ -674,6 +696,12 @@ These blocks are now given only when the target has five or more distractors.
 % existed: corner_of, head_of_table, ends_of_row ...), one real fact block.  Level of detail: what is computed, no thresholds.
 % Source: CLAIMS §8 "算子选讲"; RESULTS §3.2 (rows: five revisions, each with its numbers; figure old vs new decomposition on
 % scene0095_00 / scene0249_00 / scene0030_00), §4.5 (stack criterion, above / below).
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\linewidth]{fig/supp_operators.pdf}
+\caption{\textbf{Three operators on validation scenes}, chosen for illustration. \emph{Rows}: each row has a colour and a line through its seats in order, with its number at the first seat; chairs in no row are grey. \emph{Furniture faces}: the chairs at a long side (L) or a short end (S) of a table; the digit tells the two faces of a kind apart. \emph{Stacks}: the upper member, in orange, rests on the lower, in blue; the digit numbers the stacks. The left and middle panels of the lower row are the same room.}
+\label{fig:supp_operators}
+\end{figure*}
 No operator was right the first time.
 Each revision began with a failure found by reading: the authors read some 1,500 rewrites in about 30 batches, over at least 245 scenes, next to the point cloud.
 The row operator shows what such reading changes.
@@ -714,26 +742,33 @@ A stack counts as one seat in a row, and a horizontal relation is answered for t
 From the outline of the room the operator gives the wall, the corner or the end of the room that a candidate belongs to.
 
 \emph{Rows} are described next.
-\begin{figure*}[t]
-\centering
-\includegraphics[width=\linewidth]{fig/supp_operators.pdf}
-\caption{\textbf{Three operators on validation scenes}, chosen for illustration. \emph{Rows}: each row has a colour and a line through its seats in order, with its number at the first seat; chairs in no row are grey. \emph{Furniture faces}: the chairs at a long side (L) or a short end (S) of a table; the digit tells the two faces of a kind apart. \emph{Stacks}: the upper member, in orange, rests on the lower, in blue; the digit numbers the stacks. The left and middle panels of the lower row are the same room.}
-\label{fig:supp_operators}
-\end{figure*}
 Before these operators existed the writer named such relations itself, with names such as \texttt{corner\_of}, \texttt{head\_of\_table} and \texttt{ends\_of\_row}, which the verifier could not evaluate.
 
-\paragraph{Procedure 3: rows,} for the candidates of one class.
-\begin{enumerate}
-\setlength{\itemsep}{0pt}
-\item Fold every stack into one seat.
-\item From each pair of neighbouring seats grow a chain: add at either end the next seat only if it is among the nearest ones and at a spacing like that of the chain so far; the direction is refitted to the chain at every step.
-\item Cut off an end seat that lies off the line of the chain and is an outlier among its members.
-\item Score every chain, chiefly by its isolation, that is, by how few other objects of the class stand loose around its members. A long chain must also hold together; straightness and the other quantities enter the score and are not conditions of their own.
-\item Order the seats along each row and name each end of a row by the landmark nearest to it; number the rows across the room.
-\item Report the candidates in no row as a loose group.
-\end{enumerate}
+\paragraph{Rows.}
+\Cref{alg:rows} gives the row operator as the order of its tests.
+The score of a chain is a product of how straight it is, how even its spacing and how isolated it is, that is, how few other objects of the class stand loose around its members, times its length; no one of these is a condition of its own, and isolation is the one that tells apart the rows a person accepts.
+\begin{algorithm}[t]
+\caption{Rows among the candidates of one class}
+\label{alg:rows}
+\begin{algorithmic}[1]
+\small
+\Require candidates $C$ of one class
+\Ensure rows, each an ordered list of seats; the seats in no row
+\State fold every stack into one seat
+\For{each pair of nearby seats}
+  \State grow a chain: add at either end the next seat if it is among the nearest and at a spacing like the chain's; refit the direction at every step
+  \State cut off an end seat that lies off the line and is an outlier
+\EndFor
+\State score every chain
+\State take the chains best first, each seat in one row only
+\State score the rows again against the seats left in no row; drop those that fail, worst first
+\State order the seats of each row; name each end by the landmark nearest to it; number the rows across the room
+\State \Return the rows, and the seats in no row as loose groups
+\end{algorithmic}
+\end{algorithm}
 The block that results has this form:
-{\footnotesize
+
+\smallskip\noindent\begin{minipage}{\linewidth}\footnotesize
 \begin{verbatim}
 ROW LAYOUT: of the 9 chairs, 7 stand in 2
  straight rows, listed in order across the room
@@ -747,8 +782,9 @@ ROW LAYOUT: of the 9 chairs, 7 stand in 2
  a loose group of 2, not in any row,
    beside the table #1: #13=exclude, #14=exclude
 \end{verbatim}
-}
-\noindent The block also says what it cannot know: it is computed from the centres of footprints and can say which objects line up and in what order, not whether the line reads as a row in the picture, and it asks the writer to find the row in the rendering before counting.
+\end{minipage}
+
+\smallskip\noindent The block also says what it cannot know: it is computed from the centres of footprints and can say which objects line up and in what order, not whether the line reads as a row in the picture, and it asks the writer to find the row in the rendering before counting.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{The writer}
