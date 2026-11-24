@@ -281,13 +281,17 @@ Asked with the originals, the rewrite arm misses more often than the original ar
 
 \paragraph{The sample behind the three rates of the scorer section.}
 The paper reports how often GPT-6 resolves sentences the scorer certifies strictly, only leniently, or not at all.
-The sample is the single-target candidates from which the benchmark was drawn, each a rewrite with the target's attribute words removed.
-The strictly certified ones are the benchmark's 546 single-target items, for 536 of which GPT-6 returned an answer; 248 further candidates are certified only leniently and 349 not at all.
+The sample comes from the 1,200 single-target candidates from which the benchmark was drawn, each a rewrite with the target's attribute words removed.
+% Seshat-Star/analysis/_e5_groups_recheck.py (11-24): hard/e5_fail/REPORT.md formed its groups with the verdicts BEFORE the 11-12
+% correction (hard_all_scored.jsonl); the benchmark was fixed after it.  10 benchmark items were not strict before (3 lenient only,
+% 7 neither) -> strict group 536.  GPT-6 answered all 546 with labels and positions; nothing is missing.  With the benchmark's
+% verdicts: 536/546, 229/237, 311/350; tiers 350/354, 116/119, 94/100 and 186/192, 113/118, 217/250; 67 candidates not put to GPT-6.
+The three groups were formed with the verifier's verdicts as they stood before its last correction (\cref{supp:ruler}); the benchmark was fixed after it.
+The first group is therefore 536 of the benchmark's 546 single-target items: the other ten were not strictly certified before the correction, and three of them are counted among the 248 candidates certified only leniently and seven among the 349 not certified at all.
 Given every object's label and position, GPT-6 resolves 98.1\%, 95.6\% and 89.7\% of the three groups; given unlabelled renderings instead, 76.3\%, 75.4\% and 69.1\%.
-% E5-fail (docs/PAPER_FRAMING.md §5b, 11-15): the strict group had 536 answers, 10 calls having failed; tab/gpt6.tex is over all 546.
-The rates of the first group are over the items answered; \cref{tab:gpt6}, over all 546 items (533 of them with renderings), gives 98.2\% and 75.6\%.
 The groups differ in difficulty: a choice at random among the target and its distractors would be right in 21.2\%, 18.2\% and 13.4\% of cases. The fall from 98 to 90 therefore mixes the scorer's verdict with the number of distractors.
 Within one tier the order holds more weakly: 98.8\%, 96.0\% and 96.0\% at two to four distractors, 96.8\%, 95.1\% and 87.1\% at five or more.
+With the present verdicts, which are those of the benchmark, the first group is the 546 items of \cref{tab:gpt6} and the rates with labels and positions are 98.2\%, 96.6\% and 88.9\%, on the 546, 237 and 350 candidates that were put to GPT-6; within the two tiers they are 98.9\%, 97.5\% and 94.0\%, and 96.9\%, 95.8\% and 86.8\%.
 We claim the order, not the size of the gap.
 
 \paragraph{Masks drawn at random.}
@@ -877,9 +881,11 @@ The verifier is plain code, and its one random step, a subsample of points from 
 We recomputed the verdicts offline from the predicates stored with 9,738 rewrites: 9,719 records were identical in every field, the other 19 differed only in the number of predicates evaluated, and no verdict changed.
 % OUTLINE (11-24).  One page, most of it the table.
 \Cref{tab:supp_vocab} lists the predicates by family.
-% RESULTS §7.5: the verifier had 42 predicates at the count of 10-24 behind the 87% of sec/5; PREDICATE_SPEC now has 46 names.
+% RESULTS §7.5: the verifier had 42 predicates at the count of 10-24 behind the 87% of sec/5.  PREDICATE_SPEC has had its 46 names
+% since commit 14a8c9e (11-03); the earliest reader outputs behind a score in the paper are of 11-09 (judge600_g).
 It has 46 names, \texttt{middle} standing in two families.
-The paper counts 42, the size of the vocabulary when the coverage reported in its data section was measured; a few names have been added since.
+The paper counts 42; that count is an earlier one, made when the coverage reported in its data section was measured.
+The vocabulary has had the 46 names of the table since before the paper's data table, its benchmark and its human check were scored.
 The verifier also accepts a few other spellings of the same relations, such as \texttt{beside} for \texttt{next\_to}.
 What the vocabulary lacks is counted in \cref{supp:data}: the faces and ends of furniture beyond those in the table, \emph{facing}, and \emph{across from}.
 \input{tab/supp_vocab}
