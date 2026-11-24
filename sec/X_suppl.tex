@@ -300,8 +300,9 @@ We claim the order, not the size of the gap.
 The paper shows the masks of the two arms of 3D-LLaVA for two chosen sentences.
 \Cref{fig:supp_masks_a,fig:supp_masks_b} show them for items drawn at random, with a fixed seed, from the ScanRefer targets with distractors on which the verdicts of the two arms at Acc@0.5 differ.
 There are 1,488 such items when both arms are asked with the original sentence, the rewrite arm alone being right for 1,024 of them, and 2,091 when both are asked with the rewrite, with 1,765 for the rewrite arm; twelve were drawn from each.
-Two of the first twelve are not shown: one because the rewrite arm's mask for it changes from one run of the same weights to the next, the other because its sentence gives a compass direction (\emph{south of the leftmost bed}), a kind of word that the writer is told not to use and that no rewrite contains.
-The first had counted for the rewrite arm and the second for the original arm.
+Two of the first twelve are not shown: one because the rewrite arm's mask for it changes from one run of the same weights to the next, the other because its sentence gives a compass direction (\emph{south of the leftmost bed}).
+The writer's prompt forbids compass words (\cref{supp:writer}) and no rewrite of the ScanRefer validation set contains one, so we show no sentence that does.
+The first item had counted for the rewrite arm and the second for the original arm.
 Of the items shown, the rewrite arm alone is right for 8 of 10 and for 9 of 12.
 % What each mask covers, by ScanNet instance: `python analysis/supp_mask_fig.py kinds' (rule in its docstring).
 %   original arm, 17 failures: 6 on other objects (a3 a4 a5 b2 b4 b5), 10 the target and more (a1 a6 a7 a9 b1 b3 b7 b8 b9 b10), 1 part of the target (a8);
