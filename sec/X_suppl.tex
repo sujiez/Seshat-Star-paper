@@ -544,7 +544,22 @@ The pipeline does not rewrite these sentences (\cref{sec:pipeline}), and the pap
 % OUTLINE (11-24; user: half a page like the paper's figure of examples, so that the numbers can be seen).  Layout agreed 11-16:
 % teaser colours; clauses the reader bound in colour, unbound in grey; selection rule stated; failures included.  Before an
 % example goes in, check that its instance is one whole object (the kitchen-cabinet case).  One and a half to two pages.
-\TODO{Outline. Figure, full width, half a page to a page: eight targets drawn at random from the benchmark with a fixed seed, each with the top view, the original sentence and the rewrite, and the scorer's verdict on both; at least two where the rewrite is not certified or is wrong. Text: the selection rule, in the caption. No table.}
+% Figure: Seshat-Star/analysis/supp_examples_fig.py (seed 20261124; population = the 800 items with distractors of tab:data, both
+% sentences read by the blind reader; verdicts recomputed from the stored reader outputs).  Nothing dropped or replaced.
+The examples in the paper are chosen.
+\Cref{fig:supp_examples} shows eight items drawn at random, with a fixed seed, from the 800 items with distractors of \cref{tab:data}, and the scorer's verdict on both sentences of each.
+None of the eight originals is certified.
+In five the reader binds no relation: a side word or a seat in a row comes without a place to stand (items 1, 4 and 7), the anchors fit several objects (item 3), or the direction is a point of the compass (item 5).
+In the other three it binds one relation, \emph{against the wall}, which every candidate satisfies.
+Four of the rewrites are certified.
+Three more, items 1, 5 and 7, are certified under the lenient score only: one of the relations read is false of the target in the verifier's judgement, and the scores do not say whose error that is (\cref{sec:scorer}).
+The rewrite of item 2 fails outright: the reader binds only \emph{against the wall}, and cannot tie the radiator and the chair of the other clauses to one object each.
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\linewidth]{fig/supp_examples.pdf}
+\caption{\textbf{Eight items drawn at random.} Red with a white outline: the target. Teal: the other candidates. Under each sentence: the scorer's strict verdict, the number of relations the blind reader bound, and how many candidates satisfy all of them.}
+\label{fig:supp_examples}
+\end{figure*}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{The pipeline}
