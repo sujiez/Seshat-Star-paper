@@ -298,8 +298,15 @@ The paper shows the masks of the two arms of 3D-LLaVA for two chosen sentences.
 There are 1,488 such items when both arms are asked with the original sentence, the rewrite arm alone being right for 1,024 of them, and 2,091 when both are asked with the rewrite, with 1,765 for the rewrite arm; twelve were drawn from each.
 One of the first twelve is not shown, because the rewrite arm's mask for it changes from one run of the same weights to the next.
 Of the items shown, the rewrite arm alone is right for 8 of 11 and for 9 of 12.
-A wrong mask is of one of two kinds in either arm.
-It lies on another object of the target's class (the original arm in items 3, 4 and 5 of \cref{fig:supp_masks_a} and 2, 4 and 5 of \cref{fig:supp_masks_b}; the rewrite arm in item 10 of the first and item 12 of the second), or it spreads from the target over its neighbours (the original arm in items 1, 6 and 7 of \cref{fig:supp_masks_a}; the rewrite arm in item 2).
+% What each mask covers, by ScanNet instance: `python analysis/supp_mask_fig.py kinds' (rule in its docstring).
+%   original arm, 17 failures: 6 on other objects (a3 a4 a5 b2 b4 b5), 10 the target and more (a1 a6 a7 a9 b1 b3 b7 b8 b9 b10), 1 part of the target (a8);
+%   rewrite arm, 6 failures: 2 (a10 b12), 3 (a2 b6 b11), 1 (a11).  Passing, yet covering at least half of another object:
+%   rewrite arm a1 a3 a5 b5 b7, original arm b6 b11 b12.  a2: scene0678_00 has two vending machines side by side (objects 0 and 34).
+A mask that fails does so in one of two ways in either arm.
+It lies on objects other than the target, as in six of the seventeen failures of the original arm (items 3, 4 and 5 of \cref{fig:supp_masks_a}; 2, 4 and 5 of \cref{fig:supp_masks_b}) and two of the six of the rewrite arm (item 10 of the first figure, item 12 of the second).
+Or it covers the target and other objects with it, as in ten failures of the original arm and three of the rewrite arm; in item 2 of \cref{fig:supp_masks_a} the rewrite arm's mask covers both of two vending machines that stand side by side.
+The one remaining failure of each arm covers less than half of the target.
+A mask that passes is not always of the target alone: in item 3 of \cref{fig:supp_masks_a} the rewrite arm's mask covers the target and the chair beside it, and passes with an IoU of 0.52.
 \begin{figure*}[p]
 \centering
 \includegraphics[width=\linewidth]{fig/supp_masks_a.pdf}
