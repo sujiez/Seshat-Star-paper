@@ -691,6 +691,8 @@ Three of the four are textbook geometry; only the row decomposition involves jud
 % OUTLINE (11-24).  One and a half pages.
 \paragraph{What each operator computes.}
 % CLAIMS \S8 (operators, level of detail: what is computed, no thresholds); the paper's Evidence paragraph; spatial/compose.py.
+% Figure: Seshat-Star/analysis/supp_operators_fig.py -- the operators' present output on five validation scenes, CHOSEN.
+\Cref{fig:supp_operators} shows what three of the operators return, on scenes chosen for illustration.
 \emph{Neighbours.}
 For the target, and in a crowded room for each distractor, the operator lists the nearest objects of other classes with the gap between the two surfaces in metres, and for each such landmark the candidate nearest to it.
 It gives measurements and no judgement: whether a gap counts as \emph{next to} is left to the writer, who sees the room.
@@ -712,6 +714,12 @@ A stack counts as one seat in a row, and a horizontal relation is answered for t
 From the outline of the room the operator gives the wall, the corner or the end of the room that a candidate belongs to.
 
 \emph{Rows} are described next.
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\linewidth]{fig/supp_operators.pdf}
+\caption{\textbf{Three operators on validation scenes}, chosen for illustration. \emph{Rows}: each row has a colour and a line through its seats in order, with its number at the first seat; chairs in no row are grey. \emph{Furniture faces}: the chairs at a long side (L) or a short end (S) of a table; the digit tells the two faces of a kind apart. \emph{Stacks}: the upper member, in orange, rests on the lower, in blue; the digit numbers the stacks. The left and middle panels of the lower row are the same room.}
+\label{fig:supp_operators}
+\end{figure*}
 Before these operators existed the writer named such relations itself, with names such as \texttt{corner\_of}, \texttt{head\_of\_table} and \texttt{ends\_of\_row}, which the verifier could not evaluate.
 
 \paragraph{Procedure 3: rows,} for the candidates of one class.
