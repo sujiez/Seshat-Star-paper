@@ -34,6 +34,7 @@
 \Cref{tab:supp_map} takes the points on which this supplement adds something and says what is added and where.
 Two corrections to the paper are stated at the start of \cref{supp:models}; further results follow, and then the details of the system.
 Throughout, \emph{the benchmark} is the paper's set of 621 validation items with same-class distractors (\emph{Hard} in \cref{tab:model}), each asked with a rewrite from which the target's attribute words are removed.
+Reference numbers are those of the paper's list of references.
 \begin{table}[!ht]
 \centering
 \small
@@ -283,6 +284,8 @@ The paper reports how often GPT-6 resolves sentences the scorer certifies strict
 The sample is the single-target candidates from which the benchmark was drawn, each a rewrite with the target's attribute words removed.
 The strictly certified ones are the benchmark's 546 single-target items, for 536 of which GPT-6 returned an answer; 248 further candidates are certified only leniently and 349 not at all.
 Given every object's label and position, GPT-6 resolves 98.1\%, 95.6\% and 89.7\% of the three groups; given unlabelled renderings instead, 76.3\%, 75.4\% and 69.1\%.
+% E5-fail (docs/PAPER_FRAMING.md §5b, 11-15): the strict group had 536 answers, 10 calls having failed; tab/gpt6.tex is over all 546.
+The rates of the first group are over the items answered; \cref{tab:gpt6}, over all 546 items (533 of them with renderings), gives 98.2\% and 75.6\%.
 The groups differ in difficulty: a choice at random among the target and its distractors would be right in 21.2\%, 18.2\% and 13.4\% of cases. The fall from 98 to 90 therefore mixes the scorer's verdict with the number of distractors.
 Within one tier the order holds more weakly: 98.8\%, 96.0\% and 96.0\% at two to four distractors, 96.8\%, 95.1\% and 87.1\% at five or more.
 We claim the order, not the size of the gap.
@@ -458,6 +461,7 @@ Without an original sentence the writer's prompt loses the paragraphs that menti
 \paragraph{Conventions.}
 In this supplement a difference between two versions of the same items is tested on the items on which the two disagree, with an exact two-sided sign test.
 Intervals are 95\% Wilson intervals.
+Differences are computed before rounding, and so can be 0.1 away from the difference of two entries of a table.
 Where two columns hold different items we give the two shares and no test.
 A sentence in which the reader binds no relation that the verifier can evaluate stays in the denominator and counts as not certified under both scores.
 
@@ -542,6 +546,10 @@ A judgement \emph{resolves} the sentence when the letters selected are exactly t
 ``Cannot tell'' was the answer in 70 of the 271 judgements of originals and in 25 of the 265 of rewrites.
 Annotation closed with 380 of the 400 item--version pairs judged, 156 of them by two annotators; the two give the same verdict, resolved or not, for 116 of these (74\%).
 \Cref{tab:supp_human} gives the counts behind \cref{tab:human} and their intervals.
+% _e7_snapshot.py: certified, both versions 129/173 = 74.6; judged twice 156: both resolve 73, one 40, neither 43; 146/186 = 78.5.
+The 75\% of the paper's scorer section pools the two versions: 129 of the 173 judgements of certified sentences.
+The 79\% beside it is taken over the 156 pairs judged twice: both annotators resolve the sentence in 73 and one of them in 40, so that 146 of the 186 resolving judgements have a second that resolves as well.
+It is not the 74\% above, which counts the pairs with the same verdict, resolved or not.
 With several targets the rewrite is resolved less often than with one (59\% against 72\%), and so is the original (43\% against 48\%); there are fewer than fifty judgements of each.
 \input{tab/supp_human}
 
@@ -869,6 +877,9 @@ The verifier is plain code, and its one random step, a subsample of points from 
 We recomputed the verdicts offline from the predicates stored with 9,738 rewrites: 9,719 records were identical in every field, the other 19 differed only in the number of predicates evaluated, and no verdict changed.
 % OUTLINE (11-24).  One page, most of it the table.
 \Cref{tab:supp_vocab} lists the predicates by family.
+% RESULTS §7.5: the verifier had 42 predicates at the count of 10-24 behind the 87% of sec/5; PREDICATE_SPEC now has 46 names.
+It has 46 names, \texttt{middle} standing in two families.
+The paper counts 42, the size of the vocabulary when the coverage reported in its data section was measured; a few names have been added since.
 The verifier also accepts a few other spellings of the same relations, such as \texttt{beside} for \texttt{next\_to}.
 What the vocabulary lacks is counted in \cref{supp:data}: the faces and ends of furniture beyond those in the table, \emph{facing}, and \emph{across from}.
 \input{tab/supp_vocab}
