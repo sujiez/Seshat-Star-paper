@@ -32,7 +32,7 @@
 % added are listed (not: three architectures, instance labels and a frontier reader, zero-target and question answering).
 \noindent The paper lists what its evidence leaves open (\cref{sec:discussion}).
 \Cref{tab:supp_map} takes the points on which this supplement adds something and says what is added and where.
-Two corrections to the paper are stated at the start of \cref{supp:models}; further results follow, and then the details of the system.
+Two notes on the paper, a disclosure and a qualification, are at the start of \cref{supp:models}; further results follow, and then the details of the system.
 Throughout, \emph{the benchmark} is the paper's set of 621 validation items with same-class distractors (\emph{Hard} in \cref{tab:model}), each asked with a rewrite from which the target's attribute words are removed.
 Reference numbers are those of the paper's list of references.
 \begin{table}[!ht]
@@ -44,7 +44,7 @@ Reference numbers are those of the paper's list of references.
 \toprule
 The paper & Added here \\
 \midrule
-3DRS is tested on fewer sets than the other two. & Its rewrite arm at the final weights, on the full validation sets and on every tier of the benchmark (\cref{tab:supp_val,tab:supp_hard}), so that the three models can be compared set by set. \\
+3DRS is tested on fewer sets than the other two. & Its rewrite arm at the final weights (the same run at its end), on the full validation sets and on every tier of the benchmark (\cref{tab:supp_val,tab:supp_hard}), so that the three models can be compared set by set. \\
 \addlinespace
 Each model is trained once per arm; no variance is reported. & Paired tests item by item within each model, which separate a difference from the draw of items. The comparison is also made three times over, on three architectures, and comes out alike in the respects listed in \cref{supp:models}. \\
 \addlinespace
@@ -91,17 +91,26 @@ And on Multi3DRefer's original multi-target sentences, the rewrite-trained model
 The models part in two places, both set out below: only 3D-LLaVA gains on the original sentences in crowded rooms; and only 3DRS does not gain on multi-target items when it is both trained on the rewrites and asked with them, because of the rule by which its released code decides how many boxes to return.
 Each arm of each model was trained once. The replication we have is across models: three pairs of runs that agree.
 
-\paragraph{Corrections to the paper.}
+\paragraph{Two notes on the paper.}
 % Where each figure is in the paper: tab/model.tex (3DRS, hard, rew.: 62.1, 60.5); sec/6 "5 and 7 (3DRS)"; abstract and sec/1 "5 to 24".
 % Final weights: tab/supp_hard.tex (60.2, 61.6; 154 against 145 of 256 = 3.5 points; 61.6 - 53.3 = 8.3).
-Two things in the paper change with these results.
-First, the paper's figures for the rewrite-trained 3DRS come from the checkpoint at step 13,000 of 16,266, the latest that existed when the paper was due, and the paper does not say so.
-With the final weights its two figures on the benchmark in \cref{tab:model}, 62.1 and 60.5, become 60.2 and 61.6; its lead there, given in \cref{sec:model} as 5 and 7 points, becomes 4 and 8; and the range over the three models, given in the abstract and the introduction as 5 to 24 points, becomes 4 to 24.
-All three rewrite-trained models still lead on the benchmark, and no other figure of the paper depends on this checkpoint; the cells that \cref{tab:model} leaves empty for 3DRS are filled in \cref{tab:supp_val}.
-Second, the paper says (\cref{sec:model}) that training on the rewrites ``changes not how often the right object is found from an original sentence, but what a model does when the sentence fits several''.
-The first half is too strong: asked with the original ScanRefer validation sentences, the rewrite-trained models find the target 0.5 (3D-LLaVA), 1.2 (QuatRoPE) and 1.5 (3DRS) points less often than the original-trained ones, at Acc@0.25.
+% WORDING (11-24, Reviewer Guidelines FAQ, RED_FILE §3): the supplement may not hold `results obtained with an improved version of
+% the method (e.g., following additional parameter tuning or training), or an updated or corrected version of the submission PDF'.
+% So: a disclosure and a qualification, not corrections; the paper's figures stand for their checkpoint; nothing `becomes' or
+% `should read'.  The content and every number are those of the earlier wording.  Do not delete the disclosure (user).
+Two statements of the paper are to be read with what follows.
+First, a disclosure.
+The paper's figures for the rewrite-trained 3DRS are from the checkpoint at step 13,000 of the 16,266 steps of its one epoch, the latest that existed when the paper was due, and the paper does not say so.
+Its figures stand as reported for that checkpoint.
+The same run has since reached its end, with code, data and settings unchanged and no checkpoint chosen by a validation score, and \cref{tab:supp_hard} gives the two checkpoints side by side.
+On the benchmark the two figures of \cref{tab:model}, 62.1 and 60.5, are 60.2 and 61.6 at the end of the run; the lead given in \cref{sec:model} as 5 and 7 points is 4 and 8; and the range over the three models, given in the abstract and the introduction as 5 to 24 points, is 4 to 24.
+The rewrite arm leads on the benchmark at both checkpoints, and no other figure of the paper depends on this one.
+The figures for 3DRS on the full validation sets, which the paper does not report, are from the end of the run (\cref{tab:supp_val}).
+Second, a qualification.
+The paper says (\cref{sec:model}) that training on the rewrites ``changes not how often the right object is found from an original sentence, but what a model does when the sentence fits several''.
+The full validation sets qualify the first half: asked with the original ScanRefer validation sentences, the rewrite-trained models find the target 0.5 (3D-LLaVA), 1.2 (QuatRoPE) and 1.5 (3DRS) points less often than the original-trained ones, at Acc@0.25.
 For 3D-LLaVA the small difference is the sum of two opposite ones: it finds 3.5 points fewer of the targets that have exactly one same-class distractor and 2.8 points more of those that have five or more.
-The sentence should read: training on the rewrites leaves the share of targets found from an original sentence level or slightly lower, and changes what a model does when the sentence fits several.
+Read with these figures, the first half holds in a weaker form: training on the rewrites leaves the share of targets found from an original sentence level or slightly lower.
 The second half stands, and the paragraphs below add to its evidence; the abstract's statement, which is about 3D-LLaVA on ScanRefer alone, is not affected.
 
 \paragraph{Training.}
@@ -945,7 +954,7 @@ These figures are computed on the relations stored with each rewrite, the writer
 For $q$ the human check gives a loose guide, and only for rows, furniture faces and stacks: of the statements about them that the verifier rejects, annotators judged true 4 of 30 clear cases and 13 of 41 near misses (\cref{tab:supp_human_b}).
 Near misses were sampled on purpose and an annotator can be wrong, so these shares are above what $q$ would be on the statements a rewrite makes; for the other predicates $q$ is not measured.
 
-\subsection{Corrections to the verifier}
+\subsection{Errors of the verifier corrected before the paper}
 \label{supp:ruler}
 % RESULTS §4.5: above / below with a same-class reference (405 stacked pairs returned the empty set); the stack criterion;
 % 11-12 surface gap (boxes vs points: scene0671 chair, 0.41 m by boxes, 1.04 m on the points; 9.5% of 444 closest / farthest claims

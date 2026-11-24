@@ -41,6 +41,12 @@
 - 补充 11-23 AoE；格式自由（可单栏），要整洁；鼓励附代码；**论文必须自足**，不能 "require" 审稿人去看补充；正文要恰当指向补充内容。
 - Rebuttal 一页，模板给定；不加新贡献 / 新实验（除非审稿人点名要）；不放链接；匿名。
 - **补充材料可放什么（11-23 重抓 2027 Author Guidelines 原文核对）**："Supplementary material may include videos, proofs, additional figures or tables, more detailed analysis of the experiments in the paper, or a concurrent submission to another conference." 往年指南里的那句禁止语（不得含新数据集上的结果、方法改进或继续训练后的结果、更正版 PDF）**今年的原文里没有**。但允许清单写的是"对正文实验的更细分析"：新数据集（Beacon3D）和训完权重的数属于清单没点名的内容，审稿人可以不看、也可能按往年习惯不认；写法上挂在正文已有的实验和已点名的局限上，不当作新贡献。
+- **11-24 更正（抓 2027 Reviewer Guidelines 原文，cvpr.thecvf.com/Conferences/2027/ReviewerGuidelines，FAQ "How should I treat the supplementary material?"）**：上一条说"禁止语今年没有"只对 Author Guidelines 成立。**审稿人指南里这句话还在**，而且写的是 "According to the Author Guidelines"："the supplementary material MAY NOT include results obtained with an improved version of the method (e.g., following additional parameter tuning or training), or an updated or corrected version of the submission PDF. If you find that the supplementary material violates these guidelines, please contact the Area Chair." 审稿人按这句判，所以补充材料按这句写：
+  - 不出现"更正正文"的写法（"Corrections to the paper"、"become"、"The sentence should read"）；写成披露（disclosure）和限定（qualification），正文的数"stand as reported"。
+  - 3DRS 训完权重：是同一次训练跑到头，代码 / 数据 / 设置不变、不按验证分数挑权重，两个 checkpoint 并排给；这是全篇最贴近"additional training"的地方，**风险降不到零**，最坏情况是审稿人被要求忽略这些行。披露本身不许删（用户）。
+  - 不写任何"交稿后又改进了方法 / 词表 / 尺子"的话；尺子的几次修正都在交稿前，节标题写明 "corrected before the paper"。
+  - 新数据集（Beacon3D）不在这句禁止语里。
+  - 外链（同页 FAQ）：匿名仓库、网盘、追加视频或结果的链接、tracker 都不行；代码和视频只能放进补充文件。与 §1.5 一致。
 
 ## §4 我们自己的写作纪律（PAPER_FRAMING / CLAIMS）
 
@@ -85,6 +91,15 @@
 | 补充页 | `\withsuppfalse`，不随正文提交 ✓ |
 | 人核的 IRB / consent 说明 | 未写 → 补充材料补一句（见 1.12） |
 | 数据集作为贡献（1.9） | 11-17 用户定：不逐个列语料名，摘要只写 "The scorer, the benchmark and rewritten data will be released"；贡献 (iii) 与 LLM 声明同步改。camera-ready 时这三样必须可用 |
+
+### 11-24 补充材料提交前复核（Reviewer Guidelines 的补充材料条款，见 §3）
+
+| 项 | 结果 |
+|----|------|
+| "更正版投稿"的写法 | 段名 "Corrections to the paper" → "Two notes on the paper"；"become / should read / too strong" 改为披露 + 限定；开头一句同步 ✓ |
+| 3DRS 训完权重 | 保留并标明 "the same run at its end"；13,000 步与训完两行并排（`tab/supp_hard.tex`）；残余风险已告知用户 |
+| 尺子修正的节标题 | "Corrections to the verifier" → "Errors of the verifier corrected before the paper" ✓ |
+| 交稿后改进方法的措辞 | 无；谓词数那句写的是"词表在打分之前就是 46 个"，不是"之后加的" ✓ |
 
 ## §6 动笔后扫描命令（在 `Seshat-Paper/` 下）
 
