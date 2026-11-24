@@ -307,13 +307,13 @@ It lies on objects other than the target, as in six of the seventeen failures of
 Or it covers the target and other objects with it, as in ten failures of the original arm and three of the rewrite arm; in item 2 of \cref{fig:supp_masks_a} the rewrite arm's mask covers both of two vending machines that stand side by side.
 The one remaining failure of each arm covers less than half of the target.
 A mask that passes is not always of the target alone: in item 3 of \cref{fig:supp_masks_a} the rewrite arm's mask covers the target and the chair beside it, and passes with an IoU of 0.52.
-\begin{figure*}[p]
+\begin{figure*}[t]
 \centering
 \includegraphics[width=\linewidth]{fig/supp_masks_a.pdf}
 \caption{\textbf{The same original sentence, the two arms of 3D-LLaVA.} Eleven ScanRefer validation items drawn at random from those on which the two arms' verdicts at Acc@0.5 differ. White outline: the target. Amber: the predicted mask.}
 \label{fig:supp_masks_a}
 \end{figure*}
-\begin{figure*}[p]
+\begin{figure*}[t]
 \centering
 \includegraphics[width=\linewidth]{fig/supp_masks_b.pdf}
 \caption{\textbf{The same rewrite, the two arms of 3D-LLaVA.} Twelve items drawn in the same way from those on which the verdicts differ when both arms are asked with the rewrite. Outline and colour as in \cref{fig:supp_masks_a}.}
