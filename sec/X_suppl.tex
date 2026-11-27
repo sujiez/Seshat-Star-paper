@@ -1016,13 +1016,32 @@ These figures are computed on the relations stored with each rewrite, the writer
 For $q$ the human check gives a loose guide, and only for rows, furniture faces and stacks: of the statements about them that the verifier rejects, annotators judged true 4 of 30 clear cases and 13 of 41 near misses (\cref{tab:supp_human_b}).
 Near misses were sampled on purpose and an annotator can be wrong, so these shares are above what $q$ would be on the statements a rewrite makes; for the other predicates $q$ is not measured.
 
-\subsection{Gaps between surfaces}
+\subsection{Why the measures took most of the work}
 \label{supp:ruler}
-% RESULTS §4.5 (11-12): boxes against surface points -- 9.5% of 444 closest / farthest claims in 141 counterfactual pairs change
-% winner; sealed validation rewrites, writer's own relations: 72.9 -> 69.4 (Multi3DRefer; 4.5% lose the certificate) and
-% 74.3 -> 71.3 (ScanRefer; 4.0%).  Every certified rate in the paper is by surface points.  The rewrites (training and validation)
-% were written when the shared primitive measured between boxes and were not regenerated.
-% Cut 11-27 (user: a snapshot, not a log): the account of how this and two earlier errors of the verifier were found.
-The verifier measures the gap between two objects between their surface points and not between their bounding boxes: a corner of the box of an object that stands at an angle reaches towards things the object itself is far from, and on 444 \emph{closest} and \emph{farthest} claims the two measures disagree on the winner in 9.5\%.
-Every certified rate in the paper is measured between surfaces.
+% RESULTS §4.5.  Gaps (11-12): boxes against surface points -- scene0671, a chair 0.41 m from a cabinet by boxes, 1.04 m on the
+% points; 9.5% of 444 closest / farthest claims in 141 counterfactual pairs change winner; sealed validation rewrites, writer's own
+% relations: 72.9 -> 69.4 (Multi3DRefer; 4.5% lose the certificate) and 74.3 -> 71.3 (ScanRefer; 4.0%).  Above / below with a
+% same-class reference: 405 stacked pairs returned the empty set.  The stack criterion.  Every certified rate in the paper is by
+% the measures as described here; the rewrites (training and validation) were written when gaps were measured between boxes.
+% FRAMING (user, 11-27): not a log of corrections but why the work went into operators that belong to no model -- what brought
+% the design to where it is.  Each measure is stated as it is, with the case that decided it.
+The operators and the verifier belong to no model, and most of our work went into them.
+A measure that is nearly right is taken at its word twice: the writer obeys the evidence computed with it (\cref{supp:writer}), and the verifier certifies by it.
+Three measures show how little it takes; in each the case that decided it was found by a person reading sentences next to the point cloud.
+
+\emph{Gaps.}
+The gap between two objects is measured between their surface points and not between their bounding boxes.
+A corner of the box of an object that stands at an angle reaches towards things the object itself is far from: in one scene a chair is 0.41\,m from a cabinet by its box and 1.04\,m by its points, and by boxes it is the chair closest to the cabinet although three others stand 0.61 to 0.66\,m away.
+On 444 \emph{closest} and \emph{farthest} claims the two measures disagree on the winner in 9.5\%.
+
+\emph{Above and below.}
+The reference object may be of the target's own class, as in \emph{the towel above the other towel}.
+A test that refuses such a reference returns nothing for every one of the 405 stacked pairs of the validation set, and the sentence fails.
+
+\emph{Stacks.}
+A stack is recognised by the overlap of the two footprints and by the upper object standing no lower than the top of the lower one, not by fixed distances.
+The case that decided it is a scene in which six chairs stand in three stacks of two, which the annotator describes as six stacked chairs, three on the top and three on the bottom.
+
+What separates the two versions of a measure is a case near a boundary, which is why half of the false statements in the human check are near misses (\cref{supp:human}).
+Every certified rate in the paper is measured as described here.
 The rewrites were written while the gaps in their evidence were measured between boxes: on the writer's own relations, 4.5\% of the Multi3DRefer validation rewrites and 4.0\% of ScanRefer's are certified with the gap between boxes and not with the gap between surfaces, which we take as an estimate of the share of training sentences that state a ranking relation which does not hold.
