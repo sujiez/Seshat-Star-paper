@@ -30,14 +30,31 @@
 % corrections are a labelled paragraph at the start of the Models section (user: a section and a table of their own were too loud);
 % each still says where / was / is / why and what it changes -- do not thin that out.  Only limits on which something IS
 % added are listed (not: three architectures, instance labels and a frontier reader, zero-target and question answering).
+% FRAMES (11-27, fix list B1): excerpts of prompts and one evidence block, set in a frame with a numbered line under it.  Defined
+% here and not in preamble.tex, which the submitted paper shares.  Used inside a float (figure / figure* WITHOUT \caption, so that
+% no figure number is consumed) or in the running text.  Roman type inside the frame: the prompts use dashes that the typewriter
+% font of OT1 does not have.
+\newcounter{promptbox}
+\newsavebox{\promptsavebox}
+\newenvironment{promptframe}{\begin{lrbox}{\promptsavebox}\begin{minipage}{\dimexpr\linewidth-2\fboxsep-2\fboxrule\relax}\footnotesize\setlength{\parskip}{3pt}\raggedright}{\end{minipage}\end{lrbox}\noindent\fbox{\usebox{\promptsavebox}}}
+\newcommand{\boxref}[1]{Box~\ref{#1}}% not \cref: cleveref has no name for this counter, and preamble.tex stays as submitted
+\newcommand{\promptcaption}[2]{\par\vspace{4pt}\refstepcounter{promptbox}\label{#1}{\small\textbf{Box \thepromptbox.} #2 Text inside the frame is input to the model, reproduced verbatim; [\ldots] marks an omission.\par}}
 \noindent The paper lists what its evidence leaves open (\cref{sec:discussion}).
 \Cref{tab:supp_map} takes the points on which this supplement adds something and says what is added and where.
-Two notes on the paper, a disclosure and a qualification, are at the start of \cref{supp:models}; further results follow, and then the details of the system.
+Two notes on the paper, a disclosure and a qualification, are in \cref{supp:models}; further results follow, and then the details of the system.
 % Checked 11-24: spatial/ (operators, verifier) last changed 11-13; after the paper's deadline rewrite/ and reader/ changed only in
 % 51fa265 (connection retries and a token ledger; no prompt, vocabulary or rule).  Training data not regenerated.
 The method is that of the paper throughout: the operators, the scorer, the rewriting pipeline and the rewritten data were not changed after submission.
 Throughout, \emph{the benchmark} is the paper's set of 621 validation items with same-class distractors (\emph{Hard} in \cref{tab:model}), each asked with a rewrite from which the target's attribute words are removed.
 Reference numbers are those of the paper's list of references.
+
+% Moved here from the Data section (11-27, fix list A24): the conventions hold from the first section on.
+\paragraph{Conventions.}
+In this supplement a difference between two versions of the same items is tested with an exact McNemar test, that is, a two-sided sign test on the items on which the two disagree.
+Intervals are 95\% Wilson intervals.
+Differences are computed before rounding, and so can be 0.1 away from the difference of two entries of a table.
+Where two columns hold different items we give the two shares and no test.
+A sentence in which the reader binds no relation that the verifier can evaluate stays in the denominator and counts as not certified under both scores.
 \begin{table}[!ht]
 \centering
 \small
@@ -49,13 +66,13 @@ The paper & Added here \\
 \midrule
 3DRS is tested on fewer sets than the other two. & Its rewrite arm at the final weights (the same run at its end), on the full validation sets and on every tier of the benchmark (\cref{tab:supp_val,tab:supp_hard}), so that the three models can be compared set by set. \\
 \addlinespace
-Each model is trained once per arm; no variance is reported. & Paired tests item by item within each model, which separate a difference from the draw of items. The comparison is also made three times over, on three architectures, and comes out alike in the respects listed in \cref{supp:models}. \\
+Each model is trained once per arm; no variance is reported. & Paired tests item by item within each model, which separate a difference from the draw of items but not from the draw of a training run. For the latter the comparison is made three times over, on three architectures, and comes out alike in the respects listed in \cref{supp:models}. \\
 \addlinespace
 The benchmark is filtered by our own scorer. & How often GPT-6, which is given nothing from the scorer, resolves the sentences the scorer certifies strictly, only leniently or not at all (98, 96 and 90\% in the paper): the sample behind these rates, and the same comparison within tiers of difficulty (\cref{supp:models}). \\
 \addlinespace
-Writer, reader and GPT-6 are one model family; only the annotators stand outside it. & The human check in full (\cref{supp:human}). The trained models are a second check from outside: scored on the original sentences against the original labels, no model of that family takes part in the test (\cref{tab:supp_val}). \\
+Writer, reader and GPT-6 are one model family; only the annotators stand outside it. & The human check in full (\cref{supp:human}). The trained models are a second check from outside: when they are scored on the original sentences against the original labels, no model of that family takes part in the test (\cref{tab:supp_val}). \\
 \addlinespace
-Whether the lead extends to human-written sentences that say where is left open. & Beacon3D's sentences under the scorer, before GPT-6 and as questions to the trained models (\cref{supp:external}). On them the two arms of 3DRS and of QuatRoPE are level, and 3D-LLaVA's rewrite arm leads at Acc@0.5 only. \\
+Whether the lead extends to human-written sentences that say where is left open. & Beacon3D's sentences scored by the scorer, given to GPT-6 and put to the trained models (\cref{supp:external}). For the same objects, a sentence written by the pipeline from the scene alone is certified more often than Beacon3D's (71.8\% against 44.6\%) and resolved more often by GPT-6 from unlabelled renderings (80.2\% against 66.8\%). On Beacon3D's own sentences, which bind 0.7 relations each, the two arms of 3DRS and of QuatRoPE are level and 3D-LLaVA's rewrite arm leads at Acc@0.5 only, as on the original ScanRefer sentences. \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -71,6 +88,11 @@ Whether the lead extends to human-written sentences that say where is left open.
 % val_rw; 11-24 05:17 Beijing) and every 3DRS figure below is from them.  Open: the figure of masks.
 \paragraph{Terms.}
 A \emph{distractor} is an object of the target's class in the same scene, other than the target; classes are matched by the head noun of the label.
+% analysis/_transfer_strata.py: by head noun 2,967 / 6,541; ScanRefer's eval_type (README of the per-sample package: the official
+% split) 1,759 / 7,749; 1,378 of the 7,749 have no distractor by head noun and 170 of the 1,759 have one.
+Two splits by distractors appear.
+\Cref{tab:supp_hard,tab:supp_swap,tab:supp_strata} count distractors by head noun, as defined here: 2,967 ScanRefer validation items have none and 6,541 have at least one.
+\Cref{tab:supp_val,tab:supp_diag} and the paragraphs that cite them keep ScanRefer's own split into unique and multiple targets (1,759 and 7,749 items), and Multi3DRefer's own tags where its items are split (\cref{tab:supp_val,tab:supp_count}).
 Each model is trained twice on the same items: once with the original sentences of the training corpora, which we call the \emph{original arm} or the original-trained model, and once with our rewrites of those sentences, the \emph{rewrite arm} or the rewrite-trained model.
 Either arm can be asked with the original validation sentences or with their rewrites; the items and their labels are the same in both cases, so each model has four cells.
 Acc@0.25 and Acc@0.5 are the shares of items whose predicted mask or box has an IoU of at least 0.25 or 0.5 with the target, and we say that a target is \emph{found} at 0.25.
@@ -80,17 +102,17 @@ Where three figures are given in a row without names, they are for 3D-LLaVA, Qua
 \paragraph{What this section adds.}
 The paper trains three models twice each and reports their overall figures.
 This section says how they were trained and scored, and gives every tier of the benchmark and every cell of the full validation sets; these now include the rewrite-trained 3DRS, which the paper could test on the benchmark only.
-It then gives the swap test in full; the same results split by the number of distractors and by the number of targets, with paired tests item by item; the number of boxes returned by the two models that choose among boxes; and, for 3D-LLaVA, how much of the rise at Acc@0.5 is finding the target and how much is fitting it.
+It then gives the swap test in full; the full-validation results split by the number of distractors and by the number of targets, with paired tests item by item; the number of boxes returned by the two models that choose among boxes; and, for 3D-LLaVA, how much of the rise at Acc@0.5 is finding the target and how much is fitting it.
 
 \paragraph{What the three models share.}
 % Every figure here is repeated, with its table, in the paragraphs below (analysis/_transfer_strata.py; tab/supp_hard, supp_val, supp_strata).
-The three models take in the scene as a point cloud, as object tokens and as posed video; one answers with a mask and two choose among boxes; two are tuned with LoRA and one in full.
+The three models take in the scene as a point cloud, as object tokens and as posed video (3D-LLaVA, QuatRoPE and 3DRS); one answers with a mask and two choose among boxes; two are tuned with LoRA and one in full.
 With 3DRS now run on the full sets, the comparison of the two arms comes out alike in all three, in five respects.
-Given the rewrites in place of the originals, the original-trained models find more targets with no retraining, at every number of distractors (by 6.0, 4.7 and 8.1 points of Acc@0.25 over all ScanRefer validation items).
-The rewrite-trained models, asked with the same rewrites, find more again (by a further 8.8, 4.4 and 4.6 points), and their lead over the original-trained models is larger in crowded rooms than with a single distractor.
-On the benchmark the rewrite-trained model leads in every single-target tier and in the two-target tier.
-Asked with the original sentences, the rewrite-trained model finds the target as often as the original-trained one or slightly less often (by 0.5, 1.2 and 1.5 points).
-And on Multi3DRefer's original multi-target sentences, the rewrite-trained model loses more the more targets a sentence has.
+(i) Given the rewrites in place of the originals, the original-trained models find more targets with no retraining, at every number of distractors (by 6.0, 4.7 and 8.1 points of Acc@0.25 over all ScanRefer validation items).
+(ii) The rewrite-trained models, asked with the same rewrites, find more again (by a further 8.8, 4.4 and 4.6 points), and their lead over the original-trained models is larger in crowded rooms than with a single distractor.
+(iii) On the benchmark the rewrite-trained model leads in every single-target tier and in the two-target tier, one cell at F1@0.5 excepted (\cref{tab:supp_hard}).
+(iv) Asked with the original ScanRefer validation sentences, the rewrite-trained model finds the target as often as the original-trained one or slightly less often (by 0.5, 1.2 and 1.5 points).
+(v) On Multi3DRefer's original multi-target sentences, the rewrite-trained model loses more the more targets a sentence has.
 The models part in two places, both set out below: only 3D-LLaVA gains on the original sentences in crowded rooms; and only 3DRS does not gain on multi-target items when it is both trained on the rewrites and asked with them, because of the rule by which its released code decides how many boxes to return.
 Each arm of each model was trained once. The replication we have is across models: three pairs of runs that agree.
 
@@ -113,9 +135,11 @@ The figures for 3DRS on the full validation sets, which the paper does not repor
 Second, a qualification.
 The paper says (\cref{sec:model}) that training on the rewrites ``changes not how often the right object is found from an original sentence, but what a model does when the sentence fits several''.
 The full validation sets qualify the first half: asked with the original ScanRefer validation sentences, the rewrite-trained models find the target 0.5 (3D-LLaVA), 1.2 (QuatRoPE) and 1.5 (3DRS) points less often than the original-trained ones, at Acc@0.25.
-For 3D-LLaVA the small difference is the sum of two opposite ones: it finds 3.5 points fewer of the targets that have exactly one same-class distractor and 2.8 points more of those that have five or more.
+For 3D-LLaVA the small difference hides two opposite ones: it finds 3.5 points fewer of the targets that have exactly one same-class distractor and 2.8 points more of those that have five or more.
 Read with these figures, the first half holds in a weaker form: training on the rewrites leaves the share of targets found from an original sentence level or slightly lower.
 The second half stands, and the paragraphs below add to its evidence; the abstract's statement, which is about 3D-LLaVA on ScanRefer alone, is not affected.
+% 11-27 (fix list V1): worded as a difference of counts, not as `should read' (RED_FILE §3).
+A smaller point: the paper counts 42 predicates where the list of \cref{tab:supp_vocab} has 46 names (\cref{supp:vocab}); no result depends on the count.
 
 \paragraph{Training.}
 Each model is trained twice from the same public initialisation with its authors' released code and one seed.
@@ -125,7 +149,7 @@ We changed the code only where a run would otherwise not start or not finish on 
 None of these touches the model, the loss or the data.
 Two settings differ from the released recipes, again identically in both arms: the number of GPUs, and the list of training corpora, so that the three models train on the same ones---ScanRefer, Multi3DRefer, Nr3D and Sr3D for grounding, Scan2Cap and Nr3D for captioning.
 The two arms read the same files, row for row, and differ only in the sentence.
-In the rewrite arm every row but four has our rewrite in place of the original sentence, as the question in the grounding corpora and as the answer in the captioning corpora.
+In the rewrite arm every row but four has our rewrite in place of the original sentence, as the question in the grounding corpora and as the answer in the captioning corpora (the four are the Multi3DRefer sentences of one pair of targets, for which the writer's call returned no sentence; they keep the original).
 % REWRITE_ARM_REPORT.md: six training files, 240,444 rows, 240,440 replaced; kept_ids.json m3drefer_{3480,8926,28384,29953}, scene0305_00 objects [1,2], not zero-target.
 Multi3DRefer's zero-target items are removed from the training set of both arms, and no score we report includes them.
 3D-LLaVA is tuned with LoRA for one epoch (4,826 steps).
@@ -148,10 +172,14 @@ A mask can therefore hedge, by spreading over several objects of the class, wher
 \input{tab/supp_val}
 
 \paragraph{The benchmark by tier.}
-On the benchmark's sentences the rewrite-trained model leads in every single-target tier and in the two-target tier, for all three models (\cref{tab:supp_hard}).
+On the benchmark's sentences the rewrite-trained model leads in every single-target tier and in the two-target tier, for all three models (\cref{tab:supp_hard}), with one cell excepted: QuatRoPE on the Multi3DRefer items with two to four distractors, where the arms are level at F1@0.5 (53.4 against 53.8).
 The tier with three or more targets has 22 items: there 3D-LLaVA and QuatRoPE lead and 3DRS trails.
 Asked with the original sentences of the same items, the rewrite-trained model's lead shrinks or reverses.
-For 3D-LLaVA it is 6 points on the ScanRefer items and 3 on the Multi3DRefer items at Acc@0.5, against 24 and 23 with the benchmark's sentences; QuatRoPE's rewrite arm falls 1 and 3 points behind its original arm.
+% 3DRS on the original sentences of the benchmark's items: Seshat-Star/analysis/_hard_orig_from_val.py (11-27): the 621 items
+% filtered from the full-validation runs with the original sentences, final weights of both arms; the same filter reproduces
+% QuatRoPE's two rows of the table.  ScanRefer items 45.7 against 47.3 at Acc@0.5, Multi3DRefer items 51.4 against 51.1 at F1@0.5.
+For 3D-LLaVA it is 6 points on the ScanRefer items and 3 on the Multi3DRefer items at Acc@0.5, against 24 and 23 with the benchmark's sentences; QuatRoPE's rewrite arm falls 1 and 3 points behind its original arm, and that of 3DRS is 2 points behind on the ScanRefer items and level on the Multi3DRefer items (51.4 against 51.1).
+The rows of 3DRS with the original sentences are the benchmark's items taken from its runs on the full validation sets.
 The lead on the benchmark thus needs the rewritten sentence as well as the model trained on rewrites.
 
 \paragraph{3DRS: which checkpoint the paper reports.}
@@ -173,7 +201,7 @@ A swapped sentence thus names the right class and, except by chance, says nothin
 Since a swapped sentence still names the class, most targets without a distractor are still found (76 to 86\% at Acc@0.25); with distractors, both arms of all three models fall to between 32 and 41\%.
 
 \emph{Chance.}
-A choice at random among the objects of the target's class would find 41.0\% of the targets with distractors.
+A choice at random among the target and its distractors by head noun would find 41.0\% of the 7,749 targets in the with-distractors column of \cref{tab:supp_val}; 1,378 of them have no distractor by head noun, and for these the choice is certain.
 Every swapped cell is at or below that figure: given a sentence about another scene, the models do no better than chance within the class, so whatever they find above chance comes from what the sentence says.
 For 3DRS we have the results under the swap item by item, and \cref{tab:supp_swap} splits them by number of distractors.
 Its four swapped cells stay within a few points of chance in every tier: they find 43 to 46\% of the targets with one distractor, where chance is 50\%, 24 to 26\% of those with two to four (chance 27.6\%) and 10 to 11\% of those with five or more (chance 9.4\%).
@@ -191,15 +219,15 @@ For 3DRS the gap widens with crowding: with five or more distractors the origina
 \emph{Style.}
 Swapped rewrites have the length and the style of rewrites but describe another scene.
 If the rewrite arm did better on rewrites merely because they look like the sentences it was trained on, it would do better on swapped rewrites too.
-It does not.
+In five comparisons of six it does not.
 Against the original arm on the same swapped rewrites, Acc@0.25 on ScanRefer targets with distractors is 35.1 against 39.5 for 3D-LLaVA, 35.3 against 35.5 for QuatRoPE and 31.8 against 32.5 for 3DRS.
-Against its own score on swapped originals, which are not in its training style, it is 35.1 against 37.0, 35.3 against 34.2 and 31.8 against 33.2.
+Against its own score on swapped originals, which are not in its training style, it is 35.1 against 37.0, 35.3 against 34.2 and 31.8 against 33.2: lower for two models and 1.1 points higher for QuatRoPE.
 At Acc@0.5 the rewrite-trained 3DRS falls from 65.5 on the rewrites to 28.1 on swapped rewrites; the paper reports 59.8 to 27.6 for 3D-LLaVA and 54.7 to 31.6 for QuatRoPE.
 Without the content, then, the style is worth nothing, and the rewrite arm's lead on the rewrites cannot be a shift in style alone.
-The test does not separate the two when the content is right: a model trained on rewrites may read what a rewrite says more readily than a model that was not, and the paper's remark that the benchmark's style favours the models trained on it stands.
+The test does not separate style from content when the content is right: a model trained on rewrites may read what a rewrite says more readily than a model that was not, and the paper's remark that the benchmark's style favours the models trained on it stands.
 
 \emph{Targets without a distractor.}
-These lose 5 to 18 points under the swap although the class word alone would find them, and most in the rewrite arm asked with swapped rewrites (17.5, 11.1 and 13.5 points).
+These lose 5 to 18 points under the swap although the class word alone would find them, and they lose most in the rewrite arm asked with swapped rewrites (17.5, 11.1 and 13.5 points).
 This is what one would expect if a sentence about another room misleads a model, and misleads most the model that relies most on the sentence; we have not examined these items.
 \input{tab/supp_swap}
 
@@ -213,7 +241,7 @@ The upper panel of \cref{tab:supp_strata} splits the same items by the number of
 
 First, when the target has exactly one distractor, all three models find it less often after training on the rewrites: by 3.5 points for 3D-LLaVA, 2.4 for QuatRoPE and 1.7 for 3DRS.
 Counting only the items that one arm of a model finds and the other does not, the rewrite arm loses 272 and gains 197 (3D-LLaVA), loses 243 and gains 192 (QuatRoPE), and loses 189 and gains 153 (3DRS).
-A two-sided sign test asks how likely so uneven a split would be if each of these items were as likely to go one way as the other; it gives $p < 0.001$, $p = 0.016$ and $p = 0.058$, so for 3DRS this loss is not established on its own.
+The exact McNemar test asks how likely so uneven a split would be if each of these items were as likely to go one way as the other; it gives $p < 0.001$, $p = 0.016$ and $p = 0.058$, so for 3DRS this loss is not established on its own.
 
 Second, in crowded rooms the three models part.
 With five or more distractors 3D-LLaVA finds the target more often after training on the rewrites (Acc@0.25 of 29.1 against 26.3; it gains 307 items and loses 244, $p = 0.008$).
@@ -239,18 +267,18 @@ The paper reports that on Multi3DRefer's original multi-target sentences the rew
 The lower panel of \cref{tab:supp_strata} splits those items by the number of targets.
 The loss grows with the number of targets in all three models: for 3D-LLaVA from 4 points at two targets to 42 at five or more, for QuatRoPE from 7 to 17, for 3DRS from 1 to 11.
 An original sentence seldom says how many objects are meant, and a model trained on the rewrites then answers with one: for these sentences the rewrite-trained QuatRoPE returns a single box in 96\% of cases, the original-trained one in 47\%.
-Given the rewrite, which states the number, the same model returns 2.0 boxes on average at two targets, 3.4 at three or four (the labels average 3.4) and 8.0 at five or more (8.4); \cref{tab:supp_count} gives every cell.
+Given the rewrite, which states the number, the rewrite-trained QuatRoPE returns 2.0 boxes on average at two targets, 3.4 at three or four (the labels average 3.4) and 8.0 at five or more (8.4); \cref{tab:supp_count} gives every cell.
 The original-trained models err in both directions: too many boxes when there is one target, too few when there are many.
-For an original sentence with one target and at least one distractor, QuatRoPE returns more than one box in 13\% of cases and 3DRS in 32\%; for one with five or more targets they return 3.3 and 2.9 boxes on average, where the labels have 8.4.
+For an original sentence with one target and at least one distractor, the original-trained QuatRoPE returns more than one box in 13\% of cases and the original-trained 3DRS in 32\%; for one with five or more targets they return 3.3 and 2.9 boxes on average, where the labels have 8.4.
 
-The converse holds as well.
-The rewrite of such an item does say how many are meant, yet the original-trained models gain nothing from it: over all multi-target items their score at the 0.25 threshold goes from 72.3 to 67.0 (3D-LLaVA), from 47.6 to 42.3 (QuatRoPE) and from 43.5 to 42.7 (3DRS).
+The mismatch runs the other way as well.
+The rewrite of a multi-target item does say how many are meant, yet the original-trained models gain nothing from it: over all multi-target items their score at the 0.25 threshold goes from 72.3 to 67.0 (3D-LLaVA), from 47.6 to 42.3 (QuatRoPE) and from 43.5 to 42.7 (3DRS).
 They lose most where the targets are many: at five or more, 3D-LLaVA falls from 78.4 to 45.9, QuatRoPE from 36.4 to 26.6 and 3DRS from 31.8 to 25.7.
-The counts show how: given a rewrite, the original-trained QuatRoPE answers with a single box for 76\% of these items, against 47\% for the original sentence.
+The counts show how: given a rewrite, the original-trained QuatRoPE answers with a single box for 76\% of the multi-target items, against 47\% when given their original sentences.
 On multi-target items neither the sentence nor the training is enough alone.
 Trained on the rewrites and asked with them, 3D-LLaVA and QuatRoPE score higher at every number of targets than the same model trained on and asked with the originals, by 9 to 12 and by 13 to 21 points.
 3DRS does not: it gains 6 points at two targets, loses 1 at three or four (35.3 against 36.6) and loses 9 at five or more (22.4 against 31.8).
-Unlike QuatRoPE, its rewrite arm does not return as many objects as the rewrite states: it returns a single box for 74\% of these rewrites, as for 70\% of the originals, and 1.4 boxes on average where the labels have 3.3.
+Unlike QuatRoPE, its rewrite arm does not return as many objects as the rewrite states: it returns a single box for 74\% of the multi-target rewrites, as for 70\% of their originals, and 1.4 boxes on average where the labels have 3.3.
 The same holds on the benchmark (1.6 boxes on the items with three or more targets, whose labels average 4.8), which is why that is the one tier in which the rewrite arm trails.
 Nor does the number follow the sentence in the original arm, which returns 2.1 boxes on average for the multi-target originals and 2.0 for their rewrites.
 
@@ -261,7 +289,7 @@ A proposal whose probability is 0.4 or more is therefore returned alone, whateve
 The training loss is the negative logarithm of the total probability that falls on the targets.
 It does not ask that each target receive a share, so it is as small when one target holds all the probability as when the targets divide it.
 The number of boxes therefore measures how peaked the scores are, and the rewrite arm's are more peaked.
-Peaked scores lose boxes where several are wanted and avoid surplus boxes where one is wanted: for an original sentence with one target and a distractor it returns more than one box in 21\% of cases, where the original arm does in 32\%.
+Peaked scores lose boxes where several are wanted and avoid surplus boxes where one is wanted: for an original sentence with one target and a distractor the rewrite arm returns more than one box in 21\% of cases, where the original arm does in 32\%.
 We ran the released code unchanged in both arms and report what it returns; why the rewrite arm's scores are more peaked we have not tested.
 % Source: nozt_v2_per_sample_1124/CHECK_3drs_m3d_train_targets_1124.md (cluster, 11-24 04:40 Beijing).  Code facts, checked by the
 % cluster against the official repository Visual-AI/3DRS at commit 0401f547 (identical; relayed by the user 11-23 17:48 local):
@@ -292,7 +320,7 @@ A target is \emph{missed} when the IoU is below 0.05, that is, when the mask is 
 Asked with the originals, the rewrite arm misses more often than the original arm (39.1\% against 33.1\%): a mask that commits to one object is wholly wrong when the object is the wrong one.
 \input{tab/supp_diag}
 
-\paragraph{The sample behind the three rates of the scorer section.}
+\paragraph{The sample behind the three rates of \cref{sec:scorer}.}
 The paper reports how often GPT-6 resolves sentences the scorer certifies strictly, only leniently, or not at all.
 The sample comes from the single-target candidates from which the benchmark was drawn, each a rewrite with the target's attribute words removed.
 % Seshat-Star/analysis/_e5_groups_recheck.py (11-24): hard/e5_fail/REPORT.md formed its groups with the verdicts BEFORE the 11-12
@@ -303,6 +331,10 @@ The sample comes from the single-target candidates from which the benchmark was 
 % verdicts (98.2 / 96.6 / 88.9) are in CAMERA_READY.md, for the main text.
 The three groups were formed with the verifier's verdicts before its last correction (\cref{supp:ruler}): 536 of the benchmark's 546 single-target items, strictly certified then as now, 248 candidates certified only leniently and 349 not certified at all.
 Given every object's label and position, GPT-6 resolves 98.1\%, 95.6\% and 89.7\% of the three groups; given unlabelled renderings instead, 76.3\%, 75.4\% and 69.1\%.
+% hard/e5_fail/REPORT.md: strict group n = 536, from renderings n = 524; RESULTS \S1.5 and tab/gpt6.tex: 546, from renderings 533
+% (the images of scene0663 were refused by the provider's content filter).
+The first group has 536 items (items, not the 536 judgements of \cref{supp:human}); for all 546 single-target items of the benchmark, \cref{tab:gpt6} gives 98.2 and, from unlabelled renderings, 75.6.
+The renderings of one scene were refused by the provider's content filter, so the two figures from renderings are over 524 of the 536 items and 533 of the 546.
 The groups differ in difficulty: a choice at random among the target and its distractors would be right in 21.2\%, 18.2\% and 13.4\% of cases. The fall from 98 to 90 therefore mixes the scorer's verdict with the number of distractors.
 Within one tier the order holds more weakly: 98.8\%, 96.0\% and 96.0\% at two to four distractors, 96.8\%, 95.1\% and 87.1\% at five or more.
 We claim the order, not the size of the gap.
@@ -320,8 +352,9 @@ We claim the order, not the size of the gap.
 The paper shows the masks of the two arms of 3D-LLaVA for two chosen sentences.
 \Cref{fig:supp_masks_a,fig:supp_masks_b} show them for items drawn at random, with a fixed seed, from the ScanRefer targets with distractors on which the verdicts of the two arms at Acc@0.5 differ.
 There are 1,488 such items when both arms are asked with the original sentence, the rewrite arm alone being right for 1,024 of them, and 2,091 when both are asked with the rewrite, with 1,765 for the rewrite arm; twelve were drawn from each.
-Two of the first twelve are not shown: one because the rewrite arm's mask for it changes from one run of the same weights to the next, the other because its sentence gives a compass direction (\emph{south of the leftmost bed}).
-The writer's prompt forbids compass words (\cref{supp:writer}) and no rewrite of the ScanRefer validation set contains one, so we show no sentence that does.
+Two of the twelve drawn with the original sentence are not shown: one because the rewrite arm's mask for it changes from one run of the same weights to the next, the other because its sentence gives a compass direction (\emph{south of the leftmost bed}).
+% 11-27 (fix list V9): the reason as it was decided (user, 11-23/24), in the prompt's own terms (m3d_run.py, HUMAN & NATURAL).
+The second exclusion is a rule of ours and no property of the item: a compass direction is something that nobody standing in the room can see, which is why the writer's prompt forbids such words (\boxref{box:writer}) and no rewrite of the ScanRefer validation set contains one, and we show no sentence that depends on one.
 The first item had counted for the rewrite arm and the second for the original arm.
 Of the items shown, the rewrite arm alone is right for 8 of 10 and for 9 of 12.
 % What each mask covers, by ScanNet instance: `python analysis/supp_mask_fig.py kinds' (rule in its docstring).
@@ -329,14 +362,14 @@ Of the items shown, the rewrite arm alone is right for 8 of 10 and for 9 of 12.
 %   rewrite arm, 5 failures: 1 (b12), 3 (a2 b6 b11), 1 (a10).  Passing, yet covering at least half of another object:
 %   rewrite arm a1 a3 a5 b5 b7, original arm b6 b11 b12.  a2: scene0678_00 has two vending machines side by side (objects 0 and 34).
 A mask that fails does so in one of two ways in either arm.
-It lies on objects other than the target, as in six of the seventeen failures of the original arm (items 3, 4 and 5 of \cref{fig:supp_masks_a}; 2, 4 and 5 of \cref{fig:supp_masks_b}) and one of the five of the rewrite arm (item 12 of the second figure).
+It lies on objects other than the target, as in six of the seventeen failures of the original arm (items 3, 4 and 5 of \cref{fig:supp_masks_a}; 2, 4 and 5 of \cref{fig:supp_masks_b}) and one of the five of the rewrite arm (item 12 of \cref{fig:supp_masks_b}).
 Or it covers the target and other objects with it, as in ten failures of the original arm and three of the rewrite arm; in item 2 of \cref{fig:supp_masks_a} the rewrite arm's mask covers both of two vending machines that stand side by side.
 The one remaining failure of each arm covers less than half of the target.
 A mask that passes is not always of the target alone: in item 3 of \cref{fig:supp_masks_a} the rewrite arm's mask covers the target and the chair beside it, and passes with an IoU of 0.52.
 \begin{figure*}[t]
 \centering
 \includegraphics[width=\linewidth]{fig/supp_masks_a.pdf}
-\caption{\textbf{The same original sentence, the two arms of 3D-LLaVA.} Ten ScanRefer validation items drawn at random from those on which the two arms' verdicts at Acc@0.5 differ. White outline: the target. Amber: the predicted mask.}
+\caption{\textbf{The same original sentence, the two arms of 3D-LLaVA.} Ten ScanRefer validation items drawn at random from those on which the two arms' verdicts at Acc@0.5 differ. White outline: the target. Amber: the predicted mask. Original sentences are shown as in ScanRefer, misspellings included.}
 \label{fig:supp_masks_a}
 \end{figure*}
 \begin{figure*}[t]
@@ -360,11 +393,18 @@ Beacon3D~\cite{beacon3d} is a test set whose sentences were written by annotator
 This section scores them with our scorer and gives them to GPT-6, next to sentences of ours for the same objects, and then asks the trained models with them.
 We set figures side by side and pass no judgement on Beacon3D.
 
+% 11-27 (fix list N2).  Every figure is in tab/supp_b3d_sent.tex and tab/supp_b3d_models.tex.  Last sentence: the question stays
+% open; no conclusion is drawn about Beacon3D (user, 11-23) nor about crowded rooms (7 of the 202 objects).
+\paragraph{What this section finds.}
+For the same 202 objects, a sentence written by the pipeline from the scene alone is certified more often than Beacon3D's (71.8\% against 44.6\%), and GPT-6 finds the target from it more often in unlabelled renderings (80.2\% against 66.8\%).
+Asked with Beacon3D's own sentences, the two arms of the trained models behave as they do on the original ScanRefer sentences: level for the two models that choose among boxes, and for 3D-LLaVA level at Acc@0.25 with tighter masks at Acc@0.5.
+In Beacon3D's sentences the reader binds 0.7 relations each, about as many as in the originals, so the question the paper leaves open, which is about sentences that say where, stays open.
+
 \paragraph{The sentences and the subset.}
 Beacon3D's ScanNet part has 1,611 sentences on 16 validation scenes, none of which is in our training files.
 For each object its annotators wrote chains of sentences, from the most specific to the least, and tagged each sentence with what it uses: the class, appearance, a spatial relation.
-For 68 sentences the target has no label in our vocabulary, so that the number of distractors is not defined; these are left out.
-Of the other 1,543, 842 have a target without a distractor, 677 one with one to four and 24 one with five or more.
+For 68 sentences the target's class is not in our label set, so that the number of distractors is not defined; these are left out.
+Of the other 1,543, 842 have a target without a distractor, 677 have a target with one to four distractors and 24 a target with five or more.
 Before any model was called we fixed a subset: the single-target sentences whose target has a distractor and which carry the spatial tag, 528 sentences on 202 objects.
 For each object one of its sentences was drawn at random, and these 202 sentences are used wherever two sentences or two arms are compared object by object.
 For the same 202 objects the writer wrote one sentence each from the scene and the target alone, as in \cref{tab:gen}; it did not see Beacon3D's sentence.
@@ -378,7 +418,7 @@ Over all 1,543 sentences that can be scored the certified rate is 29.9\%, and 61
 These rates count spatial relations only.
 A sentence that singles out its target by colour or shape is not certified, so the rate says how often the spatial content of a sentence suffices, not how often the sentence is ambiguous to a person.
 
-\paragraph{Before GPT-6.}
+\paragraph{Given to GPT-6.}
 GPT-6 is given four unlabelled renderings of the scene and the sentence, and marks a point; the point is mapped to an object, and the answer is right when that object's box has an IoU of at least 0.5 with the target's.
 It is right for 66.8\% of Beacon3D's sentences and 80.2\% of ours; where the two differ, ours is the one resolved for 42 objects and Beacon3D's for 15 ($p < 0.001$).
 A choice at random among the target and its distractors would be right for 39.4\%.
@@ -415,7 +455,7 @@ By object, with distractors, the rewrite arm of 3DRS is right for 46.0\% against
 On the drawn sentences the rewrite arm of 3DRS is 3.9 and 4.4 points lower than the original arm, and that of QuatRoPE 4.0 and 4.9 points higher.
 None of these differences passes a test ($p$ between 0.11 and 1).
 For these two models, then, the lead of the rewrite arm does not extend to Beacon3D's sentences.
-Both choose among proposals, 50 a scene for 3DRS and 100 for QuatRoPE; on Beacon3D one of them reaches an IoU of 0.25 with the target for 83.7\% and 89.4\% of the sentences and 0.5 for 73.0\% and 79.5\%, and the ceiling is the same for both arms.
+Both choose among proposals, 50 a scene for 3DRS and 100 for QuatRoPE; on Beacon3D one of the proposals reaches an IoU of 0.25 with the target for 83.7\% (3DRS) and 89.4\% (QuatRoPE) of the sentences, and of 0.5 for 73.0\% and 79.5\%, and the ceiling is the same for both arms.
 % QuatRoPE: EVAL_INFO.txt of quatrope_{orig,rw} (100 Mask3D proposals a scene; proposal_upper_bound in scores.json).
 
 For 3D-LLaVA the rewrite arm leads at Acc@0.5 and not at Acc@0.25.
@@ -444,10 +484,10 @@ The table is restricted to targets with one to four distractors, the one tier in
 Three things can be read from it.
 First, the scorer credits our sentences with fewer relations than their writer claims.
 The writer lists 5.0 to 5.8 relations a sentence.
-The verifier has a predicate for 3.9 to 5.2 of them (averages over all tiers of each sample); the rest are attributes, comparisons and spatial relations outside its vocabulary.
+The verifier has a predicate for 3.9 to 5.2 of them (averages over all tiers of each sample, which are not in the table); the rest are attributes, comparisons and spatial relations outside its vocabulary.
 The blind reader, which sees the sentence and neither the list nor the target, binds 3.1 to 4.5 relations to objects, and only these are scored.
 Second, an original sentence of ScanRefer or Multi3DRefer has 15 to 17 words and about half a relation that the reader can bind; in six of ten it binds none.
-Third, Beacon3D's sentences are shorter still, about six words, and carry about as many relations as the originals, yet they are certified two to three times as often (38 and 46\% against 13 and 15\%): they say little, and the little they say more often suffices to single out the target.
+Third, Beacon3D's sentences are shorter still, about six words, and carry about as many relations as the originals, yet they are certified two to three times as often (38\% of all its single-target sentences and 46\% of those tagged spatial, against 13\% of ScanRefer's originals and 15\% of Multi3DRefer's): they say little, and the little they say more often suffices to single out the target.
 Our sentences for the same objects are certified more often again and are seven times as long (44 words against 6).
 The length is where the relations are: the reader binds 4.5 a sentence against 0.7.
 With several relations a distractor is usually ruled out more than once (\cref{supp:proof} counts this on the validation rewrites), and GPT-6, shown unlabelled renderings, finds the target from our sentence more often than from Beacon3D's (\cref{supp:external}).
@@ -461,7 +501,10 @@ For the 95 of these objects that ScanRefer also describes, \cref{tab:supp_b3d_se
 \paragraph{Beyond the vocabulary.}
 The list of relations that the writer returns with each rewrite also shows what the verifier's vocabulary lacks.
 In a count over 15,108 validation rewrites of Multi3DRefer and ScanRefer these lists hold 68,177 relations.
-Of them 13.1\% are unknown to the verifier: 6.2\% are attributes and comparisons, which we leave unscored on purpose, and 6.9\% are spatial relations it has no predicate for, chiefly the faces and ends of furniture, \emph{facing} and \emph{across from}.
+% 11-27 (fix list V1): the count of 10-24 took as known the names of tab:supp_vocab with their other spellings (49 names and 8
+% aliases; chat archive 2026-10-24, the script of 03:58), which are the names the verifier evaluates today (spatial/compose.py).
+% Commonest unknown spatial names: facing 219, across_from 136, faces 68, at_end_of 64, on_side_nearest 58, at_short_end_of 57.
+Of them 13.1\% are unknown to the verifier, counted against the names of \cref{tab:supp_vocab} and their other spellings: 6.2\% are attributes and comparisons, which we leave unscored on purpose, and 6.9\% are spatial relations it has no predicate for, chiefly names that the writer coins for faces and ends of furniture beyond those of the table (for example \texttt{at\_short\_end\_of}), \emph{facing} and \emph{across from}.
 Whether a rewrite contains such a relation does not decide whether it is certified: 56\% of the rewrites that the writer's own relations certify contain one, and 58\% of those they do not certify.
 % RESULTS \S7.5 (10-24 recomputation over both validation sets): 56.1\% against 57.6\%.
 
@@ -474,22 +517,15 @@ Without an original sentence the writer's prompt loses the paragraphs that menti
 \Cref{tab:gen} gives the certified rates by scene source; the Matterport3D sample is a single house and stands only as an existence proof.
 \input{tab/gen}
 
-% OUTLINE (11-24).  Half a page beyond what is written.
-\paragraph{Conventions.}
-In this supplement a difference between two versions of the same items is tested on the items on which the two disagree, with an exact two-sided sign test.
-Intervals are 95\% Wilson intervals.
-Differences are computed before rounding, and so can be 0.1 away from the difference of two entries of a table.
-Where two columns hold different items we give the two shares and no test.
-A sentence in which the reader binds no relation that the verifier can evaluate stays in the denominator and counts as not certified under both scores.
-
-\paragraph{The data table with intervals.}
+% (The Conventions paragraph moved to the opening, 11-27.)
+\paragraph{\Cref{tab:data} with intervals.}
 % Seshat-Star/analysis/supp_data_tables.py (recomputed from judge600_g with the scorer of tab:data; reproduces every cell of tab:data
 % and the paired counts quoted in sec. 5).
 \Cref{tab:supp_data_ci} repeats \cref{tab:data} with intervals, and adds the items on which the two sentences differ and the multi-target sample that the paper gives in its text.
 With 200 items in a tier an interval reaches at most seven points to either side.
 In every tier the rewrite alone is certified for several times as many items as the original alone: over the three tiers, for 247 against 36 on Multi3DRefer and for 248 against 33 on ScanRefer.
-The original alone is certified most often where there is no distractor (22 and 24 items of 200).
-There a sentence is certified as soon as every relation read holds of the target, and the rewrite, which states more relations, has more that can fail: its strict rate (57.5\% and 71.0\%) lies well below its lenient rate (93.0\% and 96.0\%).
+The original alone is certified most often where there is no distractor (22 items of 200 on Multi3DRefer and 24 on ScanRefer).
+There a sentence is certified as soon as every relation read holds of the target, and the rewrite, which states more relations, has more that can fail: its strict rate (57.5\% on Multi3DRefer and 71.0\% on ScanRefer) lies well below its lenient rate (93.0\% and 96.0\%, in the same order).
 \input{tab/supp_data_ci}
 
 \paragraph{Several targets, by their number.}
@@ -544,6 +580,7 @@ In the third task one statement is shown about objects that are boxed and tinted
 The annotators' first language is not English.
 The statements of the third task were written in their language.
 The sentences of the first two tasks could be displayed in a translation, made one sentence at a time by GPT-5.5 under the instruction to keep every relation, count and ambiguity as it stands, and 514 of the 536 judgements of the first task were given with the translation displayed.
+This use of GPT-5.5 is additional to those listed in the paper's LLM Usage Statement.
 \begin{figure*}[t]
 \centering
 \includegraphics[width=\linewidth]{fig/supp_ui_a.jpg}\\[3pt]
@@ -564,22 +601,28 @@ A judgement \emph{resolves} the sentence when the letters selected are exactly t
 Annotation closed with 380 of the 400 item--version pairs judged, 156 of them by two annotators; the two give the same verdict, resolved or not, for 116 of these (74\%).
 \Cref{tab:supp_human} gives the counts behind \cref{tab:human} and their intervals.
 % _e7_snapshot.py: certified, both versions 129/173 = 74.6; judged twice 156: both resolve 73, one 40, neither 43; 146/186 = 78.5.
-The 75\% of the paper's scorer section pools the two versions: 129 of the 173 judgements of certified sentences.
+The 75\% of \cref{sec:scorer} pools the two versions: 129 of the 173 judgements of certified sentences.
 The 79\% beside it is taken over the 156 pairs judged twice: both annotators resolve the sentence in 73 and one of them in 40, so that 146 of the 186 resolving judgements have a second that resolves as well.
 It is not the 74\% above, which counts the pairs with the same verdict, resolved or not.
 With several targets the rewrite is resolved less often than with one (59\% against 72\%), and so is the original (43\% against 48\%); there are fewer than fifty judgements of each.
 \input{tab/supp_human}
 
 \paragraph{Predicate by predicate.}
-We also checked the verifier on the structures we define ourselves: rows, furniture faces and stacks, with plain adjacency as a control.
+We also checked the geometry on the structures we define ourselves: rows, furniture faces and stacks, with plain adjacency as a control.
 Annotators judged single statements with the objects marked.
+% 11-27 (fix list V6).  /data/sujie/horus/_rerun/scripts/e7_build_b.py: rows from compose._row_decomposition, stacks from
+% _stacks / _rests_on, adjacency from _aabb_gap <= 0.5 m (the three are primitives shared by the verifier and the operators); faces
+% from the face assignment of compose.structure_facts, the furniture-face operator, re-implemented in the builder.  No predicate of
+% PREDICATE_SPEC names a long side or a short end.  The paper's sentence (sec/4) says `agree with the verifier' of all three
+% structures: noted in CAMERA_READY.md.
+The statements about rows, stacks and adjacency are computed by primitives that the verifier shares with the operators (\cref{supp:operators}), and these rows of \cref{tab:supp_human_b} check the verifier.
+The statements about furniture faces are computed by the furniture-face operator: the verifier has no predicate for a long side or a short end (\cref{tab:supp_vocab}), so that row checks the evidence given to the writer and not the scorer.
 The statements about the three structures were drawn from targets with five or more distractors, the only ones for which the writer is given these structures.
-Half of the statements were made false by pointing at an object the verifier excludes, and half of those were near misses: a seat off by one, an object at the corner of the furniture, a gap just over the adjacency threshold.
+Half of the statements were made false by pointing at an object that the computation excludes, and half of those were near misses: a seat off by one, an object at the corner of the furniture, a gap just over the adjacency threshold.
 Of the 350 statements prepared, 203 had been judged when annotation closed, 15 of them twice, with the same answer for 14.
-Annotators agree with the verifier on 78\% of the statements they could decide for the three structures and on 84\% for the control; for the three structures, agreement is 87\% on clearly false statements and 68\% on near misses (\cref{tab:supp_human_b}).
+Annotators agree with the computed answer on 78\% of the statements they could decide for the three structures and on 84\% for the control; for the three structures, agreement is 87\% on clearly false statements and 68\% on near misses (\cref{tab:supp_human_b}).
 Rows are where the annotators could least often decide: ``cannot tell'' is the answer to 25 of 60 row statements, and to 3 of the 158 others.
 With 35 to 61 decided statements for each structure, the table cannot tell the structures apart.
-The strict and the lenient score differ where the verifier finds that a predicate does not hold for the target; such a predicate may be the writer's mistake, the reader's over-translation (\emph{along the wall} read as \emph{against the wall}) or the verifier's rigidity (a wall test in a room that is not a rectangle).
 \input{tab/supp_human_b}
 
 \paragraph{Sentences with no target.}
@@ -599,7 +642,7 @@ The pipeline does not rewrite these sentences (\cref{sec:pipeline}), and the pap
 % no relation bound, rewrite certified under the lenient score only), and the ninth drawn took its place.  Nothing else dropped.
 The examples in the paper are chosen.
 \Cref{fig:supp_examples,fig:supp_examples_b} show eight items drawn at random, with a fixed seed, from the 800 items with distractors of \cref{tab:data}, and the scorer's verdict on both sentences of each.
-Items whose original sentence gives a compass direction were passed over, as in \cref{supp:models}; there are 32 among the 800, and one was drawn.
+Items whose original sentence gives a compass direction were passed over, by the rule and for the reason given in \cref{supp:models}; there are 32 among the 800, and one was drawn.
 None of the eight originals is certified.
 In four the reader binds no relation: a side word or a seat in a row comes without a place to stand (items 1, 4 and 6), or the anchors fit several objects (item 3).
 In the other four it binds one relation, \emph{against the wall}, which every candidate satisfies.
@@ -660,7 +703,9 @@ When a corpus has several sentences for the same targets, they are rewritten in 
 \EndFor
 \State $B \gets \bigcap_{p \in P_0} \hat{E}_p$;\ \ $S_j \gets B \cap \bigcap_{p \in P_j} \hat{E}_p$
 \State $R \gets \bigcup_j S_j$, or $B$ if there are no parts \Comment{\cref{eq:parts}}
-\State \Return certified iff a predicate was evaluated and $R = T$
+\State \emph{strict}: certified iff a predicate was evaluated, $R = T$ and every stated count equals the size of its part
+\State \emph{lenient}: the same after dropping the predicates that hold for no target, without the counts
+\State \Return the strict and the lenient verdict
 \end{algorithmic}
 \end{algorithm}
 
@@ -671,31 +716,52 @@ The reader sees no image and is told neither the target, the candidates, the evi
 The verifier sees predicates and geometry and no text.
 Nothing passes from the scorer back to the writer.
 
-\subsection{Prompts and configuration}
+\subsection{Prompts and models}
 \label{supp:prompts}
 % OUTLINE (11-24).  The LLM Usage Statement says the prompts are "described in the paper and its supplement": describe, section
 % by section; the reader prompt may be given in full (it is short and defines the measurement).  One page.
 % Reader prompt: Seshat-Star/reader/_extract_skills.py (OPEN, BLIND, RULES, OUT; inventory_blind; compose.PREDICATE_SPEC).
 The writer, the reader and the translator used in the human check (\cref{supp:human}) are GPT-5.5; GPT-6 appears only as a test subject.
-The writer's prompt is described in \cref{supp:writer}, where the passage that makes exclusion a requirement is quoted; when there is no original sentence the same prompt runs without the paragraphs that mention one (\cref{supp:data}).
+The paper says that the writer's prompt is given in this supplement.
+We reproduce verbatim the passages that decide what is written (\boxref{box:writer} in \cref{supp:writer}) and summarise the rest; when there is no original sentence the same prompt runs without the paragraphs that mention one (\cref{supp:data}).
 
 The reader's prompt has three parts: its rules, the list of the room's objects, and the vocabulary of \cref{tab:supp_vocab}.
-The rules that decide what is measured are these.
+\boxref{box:reader} reproduces the rules that decide what is measured.
 The reader records what the sentence claims and not what is true of the room, and does not repair a claim it believes wrong.
-It binds a phrase to an object id only when the sentence names that object unambiguously; a phrase that could be several of the listed objects, or none, is left unbound.
+It binds a phrase to an object id only when the sentence names that object unambiguously.
 A side word needs a viewpoint that the sentence itself gives.
-Every relation the sentence states must appear in the answer, bound or unbound with a reason, and the reader reports how many relations the sentence states, which must equal the number it lists; a relation dropped in silence is the one failure that cannot be seen afterwards.
+Every relation the sentence states must appear in the answer, bound or unbound with one of four reasons, and their number must equal the number the reader reports; a relation dropped in silence is the one failure that cannot be seen afterwards.
+% Seshat-Star/reader/_extract_skills.py: BLIND, RULES (first, second and fourth passage of the frame, and the rule on viewpoints), OUT.
+\begin{figure}[t]
+\begin{promptframe}
+You are NOT told which object it means and you must not try to work it out --- record what the sentence CLAIMS, not what its answer is.
+
+[\ldots] Bind each thing the sentence names to an id when the sentence names it unambiguously. When it names something that could be several of the listed objects (``the chair'', where there are nine), or something not in the list at all (``the window'', which our labels often omit), do NOT guess an id: leave that relation out and say so in ``unbound''.
+
+EVERY RELATION THE SENTENCE STATES MUST APPEAR SOMEWHERE IN YOUR ANSWER --- bound in ``skills'' or listed in ``unbound'' with a reason. A relation that is simply missing from both is the one failure this task cannot recover from [\ldots] Count them: the number of relations you list, across the two fields, should equal ``n\_stated''.
+
+[\ldots] Record only relations the sentence actually states. Do not add what is merely true of the room, and do not repair a relation you think is wrong --- a wrong claim recorded faithfully is the correct output here.
+
+A left/right/front/behind claim needs a viewpoint. If the sentence gives one, bind it. If it does not, put the relation in ``unbound'' with reason ``no viewpoint'' rather than assuming one. [\ldots]
+
+[\ldots] ``unbound'': [\{``text'': ``$<$the phrase$>$'', ``reason'': ``$<$ambiguous anchor $|$ not in list $|$ no viewpoint $|$ not spatial$>$''\}]
+\end{promptframe}
+\promptcaption{box:reader}{Passages of the reader's prompt.}
+\end{figure}
 
 GPT-6 is given the sentence and four renderings of the scene with no labels or marks, and answers with a point (\cref{supp:external}); in the setting with labels it is given every object's label and position.
 
-\subsection{Earlier attempts that failed}
+\subsection{Earlier designs, and an option left off}
 \label{supp:failed}
 % CLAIMS §3.3: relation menu + set cover + a small model to phrase the result (templated, relation-stuffed, little worth keeping);
 % the feedback loop (scorer verdict returned to the writer), abandoned for the reason given in the pipeline section; "rich" evidence
 % in uncrowded rooms (over-description) -> gating; two-pass writing.
 % OUTLINE (11-24).  Half a column, text only.
-We tried three other designs, and describe them briefly.
-None was scored with the present scorer; what we report of them is what we saw on reading their sentences.
+% 11-27 (fix list V4).  The verifier's verdict was never returned to the writer for any sentence of our data: --geom-loop-frac is 0
+% by default (rewrite/m3d_run.py) and the field geom_feedback_used is false in every record of the five rewrite files
+% (_rerun/{m3dval,m3dtrain,srval,srtrain,nr3d}/m3d_rewrite.jsonl; `revised' is false in all of them as well).
+Two earlier designs were tried and dropped, and one option was built and never used.
+None was scored with the present scorer; what we report of the two designs is what we saw on reading their sentences.
 
 \paragraph{A menu, a set cover and a small model.}
 The first design let geometry decide what is said.
@@ -706,14 +772,14 @@ What followed taught us that a sentence is as good as its evidence.
 The writer repeats what the operators tell it, right or wrong: when the row operator drew a row through the corner of a room, the sentence counted seats along that row (\cref{supp:operators,supp:writer}).
 Most of the later work therefore went into the operators.
 
+\paragraph{All the evidence for every target.}
+Given rows, furniture faces and the neighbours of every distractor for a target with one or two distractors, the writer described more than was needed and the sentences grew clumsy; reading the two side by side on the development set, we preferred the leaner evidence.
+These blocks are now given only when the target has five or more distractors.
+
 \paragraph{Returning the verdict to the writer.}
 The pipeline can pass the verifier's verdict on a draft back to the writer for a second attempt.
-We leave it switched off; no validation rewrite was written with it.
-A sentence revised until the verifier accepts it tells us nothing further about the sentence, since the writer obeys what it is told (\cref{supp:writer}), and the verifier's score would cease to be independent of the text it scores.
-
-\paragraph{All the evidence for every target.}
-Given rows, furniture faces and the neighbours of every distractor for a target with one or two distractors, the writer described more than was needed and the sentences grew clumsy; read side by side on the development set, the leaner evidence was preferred.
-These blocks are now given only when the target has five or more distractors.
+The option is off: no sentence of our training or validation data was written with it, and we report no result obtained with it.
+We left it off on principle: a sentence revised until the verifier accepts it tells us nothing further about the sentence, since the writer obeys what it is told (\cref{supp:writer}), and the verifier's score would cease to be independent of the text it scores.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Operators}
@@ -739,7 +805,8 @@ A development set of 49 scene--target units from the Multi3DRefer training split
 
 \paragraph{What the verifier shares with the operators.}
 The verifier and the operators that produce the writer's evidence share four measuring primitives---surface gap, support, collinearity and row decomposition---and a cache of surface samples; above these, neither calls the other.
-An error in a primitive therefore shows on both sides, while an error above them stays on one, which is why the human check audits the verifier's output on its own.
+An error in a primitive is therefore made on both sides, where the scorer cannot see it, while an error above the primitives is made on one side only.
+This is why the human check puts the computed statements themselves before annotators (\cref{supp:human}).
 Three of the four are textbook geometry; only the row decomposition involves judgement, which is why rows are the structure we test hardest.
 
 % OUTLINE (11-24).  One and a half pages.
@@ -792,25 +859,28 @@ The score of a chain is a product of how straight it is, how even its spacing an
 \State \Return the rows, and the seats in no row as loose groups
 \end{algorithmic}
 \end{algorithm}
-The block that results has this form:
+\boxref{box:rows} gives the block that results for one target.
+It names each row and each end of a row by a landmark, so that no standpoint is needed, and it says what it cannot know: whether the line reads as a row to someone looking at the room.
+% Seshat-Star/analysis/_supp_row_block.py scene0575_00 "office chair" 2 (spatial.compose.grid_facts, the operator's present
+% output; the room is that of the lower left panel of fig:supp_operators).  Reproduced whole.
+\begin{figure*}[t]
+\begin{promptframe}
+ROW LAYOUT: of the 10 office chairs, 8 stand in 2 straight rows, listed in order across the room --- row 1 is the one nearest the table \#14, row 2 the one nearest the window \#16. Rows and in-row order are geometry, not a viewpoint; the ends are named by what they are nearest, so you can refer to them without stating where you stand. This is measured from footprint centres alone: it can say what lines up and in what order, and it cannot say whether the run reads as a run to someone looking at the room. Find the row in the renders before you count along it --- the top-down for the shape of the layout, the oblique views for whether it reads as one line from where a person would stand --- and if no view shows it, reach for what the target sits beside instead.
 
-\smallskip\noindent\begin{minipage}{\linewidth}\footnotesize
-\begin{verbatim}
-ROW LAYOUT: of the 9 chairs, 7 stand in 2
- straight rows, listed in order across the room
- - row 1 is the one nearest the whiteboard #3,
-   row 2 the one nearest the door #8
- the target sits in the 2nd row of 2, counting
- from the end nearest the whiteboard #3
- row 1 of 2: #4=exclude, #5=exclude, #6=exclude
- row 2 of 2: #7=exclude, #12=IN-SET, #9=exclude,
-   #10=exclude - the target is 2nd of 4
- a loose group of 2, not in any row,
-   beside the table #1: #13=exclude, #14=exclude
-\end{verbatim}
-\end{minipage}
+\hspace*{1em}the target sits in the second row of 2, counting from the end nearest the table \#14 (that row still holds 3 others, so the row alone does not pin it)
 
-\smallskip\noindent The block also says what it cannot know: it is computed from the centres of footprints and can say which objects line up and in what order, not whether the line reads as a row in the picture, and it asks the writer to find the row in the rendering before counting.
+\hspace*{1em}row 1 of 2: \#5=exclude, \#3=exclude, \#6=exclude, \#7=exclude [order runs from the end nearest the table \#14 to the end nearest the trash can \#11]
+
+\hspace*{1em}row 2 of 2: \#4=exclude, \#1=exclude, \#2=IN-SET, \#9=exclude [order runs from the end nearest the window \#16 to the end nearest the table \#14] --- the target is third of 4 along this row
+
+\hspace*{1em}rows the target is not in: 1
+
+\hspace*{1em}on its own beside the trash can \#11: \#8=exclude
+
+\hspace*{1em}on its own beside the table \#14: \#0=exclude
+\end{promptframe}
+\promptcaption{box:rows}{The row block for one office chair (\#2) of the room in the lower left panel of \cref{fig:supp_operators}, as the operator returns it now.}
+\end{figure*}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{The writer}
@@ -818,18 +888,20 @@ ROW LAYOUT: of the 9 chairs, 7 stand in 2
 % RESULTS §3.1 (three arms, both tables, per-word survival), §3.3 (the unused "could not exclude" note: filled for 4% of 37
 % crowded targets where geometry found a miss in 49%; the judge's "unlabelled" verdict never used in 5,768 calls), §3.5.
 \Cref{tab:principles} lists the observations that fixed the design.
-Whatever we assert, the writer treats as an instruction, whether or not the assertion is right and however we hedge it.
-Rows 1--3 come from one experiment on 331 Multi3DRefer validation captions, which contain 114 words that our label lookup could not find.
-Its three arms differ only in how such a word is presented to the writer.
+A flat assertion the writer treats as an instruction, whether or not the assertion is right.
+The same assertion with a caveat it treats as if nothing had been said.
+It does not weigh.
+Rows 1--3 come from one experiment on 331 Multi3DRefer validation sentences, which contain 114 words that our label lookup could not find.
+Its three conditions differ only in how such a word is presented to the writer.
 In the first the prompt states a verdict (nothing in this scene answers to that word); in the second it gives the same information with the caveat that labels and vocabulary may be incomplete; in the third it says nothing.
-The rest of the prompt is the same, and in all three arms it tells the writer three times to keep the original's words.
+The rest of the prompt is the same, and in all three conditions it tells the writer three times to keep the original's words.
 The word survives in 22 of the 114 cases under the verdict and in 108 under each of the other two.
 In 86 cases the writer deletes the word when given the verdict and keeps it when told nothing; the reverse never happens.
 \input{tab/principles}
 
 % OUTLINE (11-24).  Two thirds of a page beyond what is written.
 \Cref{tab:supp_arms} gives the experiment in full.
-The three arms were run on the same 114 words.
+The three conditions were run on the same 114 words.
 Paired, the verdict deletes 87 words that the caveat keeps, against one the other way; the caveat and silence differ on twelve words, six each way.
 The 670 words that the lookup did find serve as a placebo: 660, 668 and 669 of them survive, so the verdict acts on the word it names and not on the sentence at large.
 Before any call we split the 114 words by whether the miss is provably the lookup's own, for instance because the head noun of the word is a class present in the scene; this holds for 29 of them.
@@ -837,23 +909,39 @@ Under the verdict the writer keeps 6 of these 29 and 16 of the other 85: it dele
 \input{tab/supp_arms}
 
 The fourth row of \cref{tab:principles} is the same behaviour seen from the other side.
-For 410 validation samples the row block said that the target stands in no row, and none of the rewrites says otherwise.
+For 410 validation items the row block said that the target stands in no row, and none of the rewrites says otherwise.
 
 \paragraph{The prompt.}
-% Seshat-Star/rewrite/m3d_run.py, the block ``WHAT A GOOD RESULT IS''; quoted verbatim, ellipses mark omissions.
+% Seshat-Star/rewrite/m3d_run.py, M3D_HEAD: the blocks ``WHAT A GOOD RESULT IS'' (first five passages of the frame) and ``WHERE
+% ATTRIBUTES COME FROM'' (the sixth), and the rules on the original's words and on side words (the last two).  Quoted verbatim;
+% ellipses mark omissions.  Compass words: the reason for the exclusion of supp:models and supp:qual is the second passage.
 The writer's prompt states the task, lists what a good result is, and then gives the object table, the evidence and the output format.
-The requirement to exclude every distractor reads, in the prompt's own words:
-\begin{quote}
-\small
-EXACT: it fits every object in the TARGET SET and NONE of the objects listed as MUST-EXCLUDE. This is a hard requirement, never traded away for brevity. [\ldots] Do not stop at one relation because it ``reads cleanly''---stop only when you have walked the whole MUST-EXCLUDE list and each of those objects is ruled out by something you actually wrote. [\ldots] Before you settle, walk the MUST-EXCLUDE list one object at a time and ask what in your sentence rules THAT one out. If the answer is the landmark it also sits beside, you are not exact yet.
-\end{quote}
+\boxref{box:writer} reproduces the passages that decide what is written: the requirement to exclude every distractor, the instruction to check it one distractor at a time, and the rules on what a person in the room can see, on number, on colour, on the annotator's words and on side words.
+\begin{figure*}[t]
+\begin{promptframe}
+- EXACT: it fits every object in the TARGET SET and NONE of the objects listed as MUST-EXCLUDE. This is a hard requirement, never traded away for brevity.
+
+- HUMAN \& NATURAL: reads like directions one person gives another while standing in the room. Never write ids (``\#5''), coordinates, axis names (``+x''), or compass words (``the north side'') --- nobody in the room can see those. [\ldots]
+
+- LENGTH IS NOT A COST, THOUGH PADDING IS. There is no word budget and no cue budget, and a shorter description is NOT a better one. Do not stop at one relation because it ``reads cleanly'' --- stop only when you have walked the whole MUST-EXCLUDE list and each of those objects is ruled out by something you actually wrote. [\ldots]
+
+- A WARNING ABOUT WEAK CUES: one proximity relation to a landmark almost never separates a same-class object from the others crowded around that same landmark. Before you settle, walk the MUST-EXCLUDE list one object at a time and ask what in your sentence rules THAT one out. If the answer is the landmark it also sits beside, you are not exact yet.
+
+- RIGHT NUMBER: if the set holds several objects, phrase it as a group and make the count audible. [\ldots]
+
+[\ldots] Every object we LIST is filled with a colour WE assigned, so its real colour is hidden: a colour or material word for a listed object is admissible only if the ORIGINAL CAPTION supplies it, and an invented one is a factual error in the data. [\ldots]
+
+- Keep the original's own wording for a thing it names. If the caption says ``waste receptacle'' and our list calls it a trash can, write ``waste receptacle'' --- the annotator's words are data, not noise to be normalised away. [\ldots]
+
+- A side word needs a place to be read FROM. [\ldots]
+\end{promptframe}
+\promptcaption{box:writer}{Passages of the writer's prompt.}
+\end{figure*}
 The rest of the prompt can be told in a few sentences.
-The sentence must read like directions given by someone standing in the room: no object ids, coordinates, axis names or compass words.
-Length is not a cost, and the writer is asked to draw on cues of different kinds and to add one true cue beyond the minimum.
+The writer is asked to draw on cues of different kinds and to add one true cue beyond the minimum.
 It may not change which objects are the targets.
 It may rewrite from scratch, and is asked to work out each spatial relation of the original against the geometry before writing.
-A colour or material word is allowed only if the original sentence supplies it, because the renderings fill every listed object with a colour of ours.
-For several targets it must make the number audible, and where no joint description fits it must describe the members one by one.
+Where no joint description fits several targets, it must describe the members one by one.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{The scorer}
@@ -865,7 +953,7 @@ For several targets it must make the number audible, and where no joint descript
 % relations vs the reader's in generation mode).
 We keep the reader blind because a reader that knows the answer finds it in the sentence, whether or not the sentence says it.
 In a probe we told the reader, on purpose, that an object other than the target was the target.
-In 2 of 15 trials it certified that object.
+In 2 of 15 trials the sentence was certified for that object.
 In one of them the same sentence yielded four relations when the reader was given the true target and two when it was given the wrong one: the two that would have excluded the wrong object were neither translated nor listed as unbound.
 Fifteen trials are too few for a rate; the case shows the mechanism.
 Blindness costs little: in an earlier run of 200 pairs, telling the reader the true target raised the certified rate of the original sentences from 16.5\% to 17.5\%.
@@ -876,11 +964,13 @@ For every clause it cannot bind to object ids the reader gives one of four reaso
 % Reasons for unbound clauses: the reader outputs of judge600_g (the present reader), 1,200 single-target originals and their
 % rewrites: originals 1,815 clauses (no viewpoint 797, ambiguous anchor 394, not spatial 329, not in list 295); rewrites 2,457
 % (ambiguous anchor 1,192, not in list 560, not spatial 497, no viewpoint 208).  80 / 55: RESULTS \S1.6 (80.0 against 54.7).
+% 11-27 (fix list V2), analysis/_judge600_viewpoint.py: of the 797, 596 name left / right (the paper's 602 clauses, 596 without a
+% viewpoint) and 201 do not (front 100, behind 49, back 20, far 7, the rest scattered); of the 208, 16 and 192 (front 110, behind 42, back 22).
 % (The by-family recovery table of RESULTS \S4.7 was made with an earlier reader and is not given; user, 11-24.)
 A relation that the writer puts into a sentence is scored only if the reader gets it out again.
 The reader's own reasons for leaving a clause unbound show where the loss arises.
-In the 1,200 single-target originals of \cref{tab:supp_data_ci} it leaves 1,815 clauses unbound, 797 of them because a side word comes with no viewpoint.
-In their rewrites it leaves 2,457; a missing viewpoint accounts for 208, and the commonest reason, with 1,192, is an anchor that the reader cannot tie to one object of the list, such as \emph{the nearby cluster of chairs} in item 4 of \cref{fig:supp_examples}.
+In the 1,200 single-target originals of \cref{tab:supp_data_ci} it leaves 1,815 clauses unbound, 797 of them for want of a viewpoint: 596 are the \emph{left} and \emph{right} clauses that the paper counts in \cref{sec:data}, and the other 201 are chiefly clauses with \emph{front} or \emph{behind}.
+In their rewrites it leaves 2,457; a missing viewpoint accounts for 208, of which 16 are \emph{left} or \emph{right}, and the commonest reason, with 1,192, is an anchor that the reader cannot tie to one object of the list, such as \emph{the nearby cluster of chairs} in item 4 of \cref{fig:supp_examples}.
 The cost shows most plainly when there is no original sentence: on ScanNet the writer's own relations certify 80\% of the sentences written from the scene alone, the blind reader's 55\% (300 targets).
 We score with the reader's.
 
@@ -894,11 +984,15 @@ The verifier is plain code, and its one random step, a subsample of points from 
 We recomputed the verdicts offline from the predicates stored with 9,738 rewrites: 9,719 records were identical in every field, the other 19 differed only in the number of predicates evaluated, and no verdict changed.
 % OUTLINE (11-24).  One page, most of it the table.
 \Cref{tab:supp_vocab} lists the predicates by family.
-% RESULTS §7.5: the verifier had 42 predicates at the count of 10-24 behind the 87% of sec/5.  PREDICATE_SPEC has had its 46 names
-% since commit 14a8c9e (11-03); the earliest reader outputs behind a score in the paper are of 11-09 (judge600_g).
+% 11-27 (fix list V1, checked).  The 42 is an old count: a comment in spatial/compose.py of 10-21 (``spec 21, evaluator 42'').  The
+% coverage of sec/5 (10-24: 15,108 rows, 68,177 relations, 13.1% unknown = 6.2% + 6.9%) was counted against 49 names and 8 other
+% spellings, which include all 46 names of the table (the other three, against_wall, front_of and back_of, are spellings of names
+% in it); the verifier dispatches the same names today.  The reader's list (PREDICATE_SPEC) went from 25 to 46 names in commit
+% 14a8c9e (11-03); the earliest reader outputs behind a score in the paper are of 11-09 (judge600_g).  Nothing changed after
+% submission.
 It has 46 names, \texttt{middle} standing in two families.
-The paper counts 42; that count is an earlier one, made when the coverage reported in its data section was measured.
-The vocabulary has had the 46 names of the table since before the paper's data table, its benchmark and its human check were scored.
+The paper counts 42, which is an older count.
+The verifier could evaluate every name of the table when the coverage reported in \cref{sec:data} was measured, and the reader has been given the same 46 since before \cref{tab:data}, the benchmark and the human check were scored.
 The verifier also accepts a few other spellings of the same relations, such as \texttt{beside} for \texttt{next\_to}.
 What the vocabulary lacks is counted in \cref{supp:data}: the faces and ends of furniture beyond those in the table, \emph{facing}, and \emph{across from}.
 \input{tab/supp_vocab}
@@ -919,6 +1013,7 @@ Union, not intersection: the pillow on the left bed need not be on the right bed
 Parts may overlap, and a part may pick out fewer members than its wording suggests, provided another part covers the rest.
 No part may admit a distractor: an object that satisfies one part is in $R$.
 The strict score also requires every stated count to equal the size of the set it describes; the lenient score skips predicates that hold for no target and ignores counts.
+Apart from the counts, the two scores differ where the verifier finds that a predicate does not hold for the target; such a predicate may be the writer's mistake, the reader's over-translation (\emph{along the wall} read as \emph{against the wall}) or the verifier's rigidity (a wall test in a room that is not a rectangle).
 A single-target sentence is the special case of no parts and $|T| = 1$, which gives \cref{eq:exact}.
 
 \subsection{Proof of Proposition 1 and sensitivity}
@@ -937,8 +1032,8 @@ Since $T = \bigcap_k \hat{E}_k$, $t \in \hat{E}_k$ for every $k$, hence $t \in \
 Take $x \in \bigcap_k E_k$ and suppose $x \notin T$, so $x \in D$.
 Then $x \in E_k \cap D \subseteq \hat{E}_k$ for every $k$ by (A2), hence $x \in \bigcap_k \hat{E}_k = T$, a contradiction. \hfill$\square$
 
-The converse fails: if a distractor truly satisfies every predicate and the verifier wrongly rejects it on one, the sentence is certified and is not exact.
-That is a violation of (A2), and it is the error to guard against.
+(A2) cannot be dropped: if a distractor truly satisfies every predicate and the verifier wrongly rejects it on one, the sentence is certified and is not exact.
+This is the error to guard against.
 (A1) and (A2) restrict errors in opposite directions on complementary sets, so a bound on the verifier's overall error rate implies neither.
 The proposition takes the predicates as given and does not cover the reader.
 
@@ -951,7 +1046,7 @@ If the verifier wrongly excludes a distractor with probability at most $q$ per p
 \end{equation}
 by a union bound over distractors.
 On the Multi3DRefer validation rewrites, 13.5\% of the distractors of certified sentences are excluded by a single predicate and 58.2\% by three or more; 17.0\% of certified sentences have a distractor that hangs on one predicate.
-\Cref{eq:margin}, averaged over these sentences, gives at most 3.5\%, 7.2\% and 14.5\% false certificates for $q = 0.05$, $0.10$ and $0.20$, most of it from the sentences with a single-predicate distractor.
+\Cref{eq:margin}, averaged over all certified sentences, gives at most 3.5\%, 7.2\% and 14.5\% false certificates for $q = 0.05$, $0.10$ and $0.20$, most of it from the sentences with a single-predicate distractor.
 % NOTE: this analysis runs on the WRITER's own relations (sealed val, 3,626 certified), not on the blind reader's; say so if the
 % paragraph is kept, and connect q to the human predicate check (near misses) once that table is final.
 These figures are computed on the relations stored with each rewrite, the writer's own list, and not on the blind reader's.
@@ -969,13 +1064,14 @@ In the latest case it measured the gap between two objects between their boundin
 In one scene a chair was 0.41\,m from a cabinet by its box and 1.04\,m by its points, and was judged the closest to the cabinet although the three other chairs were 0.61 to 0.66\,m away.
 Measured on 444 \emph{closest} and \emph{farthest} claims, the two ways of measuring disagree on the winner in 9.5\%.
 The verifier now measures between surface points.
-The certified rates in the paper all follow the correction; on the sample of the paper's data table it lowered the certified rate of the rewrites by about three points (57.3 to 54.2 on Multi3DRefer, 58.0 to 54.8 on ScanRefer) and moved that of the originals by less than one.
+The certified rates in the paper all follow the correction; on the sample of \cref{tab:data} it lowered the certified rate of the rewrites by about three points (57.3 to 54.2 on Multi3DRefer, 58.0 to 54.8 on ScanRefer) and moved that of the originals by less than one.
 
 % OUTLINE (11-24).  Half a column.
-Two earlier corrections were of the same kind.
+Two earlier corrections also began with a human reader.
 \emph{Above} and \emph{below} once refused a reference object of the target's own class, so that \emph{the towel above the other towel} could not be evaluated: every one of the 405 stacked pairs in the validation set returned the empty set, and the sentence failed.
 After the correction 383 validation sentences gained a certificate and 21 lost one.
 A stack was once recognised by fixed horizontal and vertical distances; it is now recognised by the overlap of the two footprints and by the upper object standing no lower than the top of the lower one.
 The case that exposed it was a scene in which six chairs stand in three stacks of two, described by its annotator as six stacked chairs, three on the top and three on the bottom; the present test finds the three stacks.
 Errors of this kind show on cases near a boundary, which is why half of the false statements in the human check are near misses (\cref{supp:human}).
-The training data were written before the last correction and were not regenerated: on the writer's own relations, 4.5\% of the Multi3DRefer validation rewrites and 4.0\% of ScanRefer's lost their certificate under it, which we take as an estimate of the share of training sentences that state a ranking relation which does not hold.
+The surface gap is one of the primitives that the verifier shares with the operators (\cref{supp:operators}), so the evidence handed to the writer carried the same error.
+The rewrites of the training and validation sets were written before the last correction and were not regenerated: on the writer's own relations, 4.5\% of the Multi3DRefer validation rewrites and 4.0\% of ScanRefer's lost their certificate under it, which we take as an estimate of the share of training sentences that state a ranking relation which does not hold.
