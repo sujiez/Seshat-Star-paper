@@ -36,7 +36,9 @@
 % font of OT1 does not have.
 \newcounter{promptbox}
 \newsavebox{\promptsavebox}
-\newenvironment{promptframe}{\begin{lrbox}{\promptsavebox}\begin{minipage}{\dimexpr\linewidth-2\fboxsep-2\fboxrule\relax}\footnotesize\setlength{\parskip}{3pt}\raggedright}{\end{minipage}\end{lrbox}\noindent\fbox{\usebox{\promptsavebox}}}
+\definecolor{promptbg}{rgb}{0.93,0.95,0.99}
+\definecolor{promptrule}{rgb}{0.30,0.42,0.62}
+\newenvironment{promptframe}{\begin{lrbox}{\promptsavebox}\begin{minipage}{\dimexpr\linewidth-2\fboxsep-1.6pt\relax}\footnotesize\sffamily\setlength{\parskip}{3pt}\raggedright}{\end{minipage}\end{lrbox}\noindent{\setlength{\fboxrule}{0.8pt}\fcolorbox{promptrule}{promptbg}{\usebox{\promptsavebox}}}}
 \newcommand{\boxref}[1]{Box~\ref{#1}}% not \cref: cleveref has no name for this counter, and preamble.tex stays as submitted
 \newcommand{\promptcaption}[2]{\par\vspace{4pt}\refstepcounter{promptbox}\label{#1}{\small\textbf{Box \thepromptbox.} #2 Text inside the frame is input to the model, reproduced verbatim; [\ldots] marks an omission.\par}}
 \noindent The paper lists what its evidence leaves open (\cref{sec:discussion}).
@@ -149,7 +151,7 @@ We changed the code only where a run would otherwise not start or not finish on 
 None of these touches the model, the loss or the data.
 Two settings differ from the released recipes, again identically in both arms: the number of GPUs, and the list of training corpora, so that the three models train on the same ones---ScanRefer, Multi3DRefer, Nr3D and Sr3D for grounding, Scan2Cap and Nr3D for captioning.
 The two arms read the same files, row for row, and differ only in the sentence.
-In the rewrite arm every row but four has our rewrite in place of the original sentence, as the question in the grounding corpora and as the answer in the captioning corpora (the four are the Multi3DRefer sentences of one pair of targets, for which the writer's call returned no sentence; they keep the original).
+In the rewrite arm every row but four has our rewrite in place of the original sentence, as the question in the grounding corpora and as the answer in the captioning corpora.
 % REWRITE_ARM_REPORT.md: six training files, 240,444 rows, 240,440 replaced; kept_ids.json m3drefer_{3480,8926,28384,29953}, scene0305_00 objects [1,2], not zero-target.
 Multi3DRefer's zero-target items are removed from the training set of both arms, and no score we report includes them.
 3D-LLaVA is tuned with LoRA for one epoch (4,826 steps).
@@ -334,7 +336,7 @@ Given every object's label and position, GPT-6 resolves 98.1\%, 95.6\% and 89.7\
 % hard/e5_fail/REPORT.md: strict group n = 536, from renderings n = 524; RESULTS \S1.5 and tab/gpt6.tex: 546, from renderings 533
 % (the images of scene0663 were refused by the provider's content filter).
 The first group has 536 items (items, not the 536 judgements of \cref{supp:human}); for all 546 single-target items of the benchmark, \cref{tab:gpt6} gives 98.2 and, from unlabelled renderings, 75.6.
-The renderings of one scene were refused by the provider's content filter, so the two figures from renderings are over 524 of the 536 items and 533 of the 546.
+GPT-6 returned no answer from the renderings of one scene, so the two figures from renderings are over 524 of the 536 items and 533 of the 546.
 The groups differ in difficulty: a choice at random among the target and its distractors would be right in 21.2\%, 18.2\% and 13.4\% of cases. The fall from 98 to 90 therefore mixes the scorer's verdict with the number of distractors.
 Within one tier the order holds more weakly: 98.8\%, 96.0\% and 96.0\% at two to four distractors, 96.8\%, 95.1\% and 87.1\% at five or more.
 We claim the order, not the size of the gap.
@@ -580,7 +582,6 @@ In the third task one statement is shown about objects that are boxed and tinted
 The annotators' first language is not English.
 The statements of the third task were written in their language.
 The sentences of the first two tasks could be displayed in a translation, made one sentence at a time by GPT-5.5 under the instruction to keep every relation, count and ambiguity as it stands, and 514 of the 536 judgements of the first task were given with the translation displayed.
-This use of GPT-5.5 is additional to those listed in the paper's LLM Usage Statement.
 \begin{figure*}[t]
 \centering
 \includegraphics[width=\linewidth]{fig/supp_ui_a.jpg}\\[3pt]
@@ -722,31 +723,24 @@ Nothing passes from the scorer back to the writer.
 % by section; the reader prompt may be given in full (it is short and defines the measurement).  One page.
 % Reader prompt: Seshat-Star/reader/_extract_skills.py (OPEN, BLIND, RULES, OUT; inventory_blind; compose.PREDICATE_SPEC).
 The writer, the reader and the translator used in the human check (\cref{supp:human}) are GPT-5.5; GPT-6 appears only as a test subject.
-The paper says that the writer's prompt is given in this supplement.
-We reproduce verbatim the passages that decide what is written (\boxref{box:writer} in \cref{supp:writer}) and summarise the rest; when there is no original sentence the same prompt runs without the paragraphs that mention one (\cref{supp:data}).
+The writer's prompt is described in \cref{supp:writer}, with three of its passages reproduced verbatim (\boxref{box:writer}); when there is no original sentence the same prompt runs without the paragraphs that mention one (\cref{supp:data}).
 
 The reader's prompt has three parts: its rules, the list of the room's objects, and the vocabulary of \cref{tab:supp_vocab}.
-\boxref{box:reader} reproduces the rules that decide what is measured.
+\boxref{box:reader} reproduces three of the rules that decide what is measured.
 The reader records what the sentence claims and not what is true of the room, and does not repair a claim it believes wrong.
-It binds a phrase to an object id only when the sentence names that object unambiguously.
+It binds a phrase to an object id only when the sentence names that object unambiguously; a phrase that could be several of the listed objects, or none, is left unbound.
 A side word needs a viewpoint that the sentence itself gives.
 Every relation the sentence states must appear in the answer, bound or unbound with one of four reasons, and their number must equal the number the reader reports; a relation dropped in silence is the one failure that cannot be seen afterwards.
-% Seshat-Star/reader/_extract_skills.py: BLIND, RULES (first, second and fourth passage of the frame, and the rule on viewpoints), OUT.
+% Seshat-Star/reader/_extract_skills.py: BLIND (first passage of the frame) and RULES (the other two).
 \begin{figure}[t]
 \begin{promptframe}
 You are NOT told which object it means and you must not try to work it out --- record what the sentence CLAIMS, not what its answer is.
 
-[\ldots] Bind each thing the sentence names to an id when the sentence names it unambiguously. When it names something that could be several of the listed objects (``the chair'', where there are nine), or something not in the list at all (``the window'', which our labels often omit), do NOT guess an id: leave that relation out and say so in ``unbound''.
-
-EVERY RELATION THE SENTENCE STATES MUST APPEAR SOMEWHERE IN YOUR ANSWER --- bound in ``skills'' or listed in ``unbound'' with a reason. A relation that is simply missing from both is the one failure this task cannot recover from [\ldots] Count them: the number of relations you list, across the two fields, should equal ``n\_stated''.
-
 [\ldots] Record only relations the sentence actually states. Do not add what is merely true of the room, and do not repair a relation you think is wrong --- a wrong claim recorded faithfully is the correct output here.
 
 A left/right/front/behind claim needs a viewpoint. If the sentence gives one, bind it. If it does not, put the relation in ``unbound'' with reason ``no viewpoint'' rather than assuming one. [\ldots]
-
-[\ldots] ``unbound'': [\{``text'': ``$<$the phrase$>$'', ``reason'': ``$<$ambiguous anchor $|$ not in list $|$ no viewpoint $|$ not spatial$>$''\}]
 \end{promptframe}
-\promptcaption{box:reader}{Passages of the reader's prompt.}
+\promptcaption{box:reader}{Three passages of the reader's prompt.}
 \end{figure}
 
 GPT-6 is given the sentence and four renderings of the scene with no labels or marks, and answers with a point (\cref{supp:external}); in the setting with labels it is given every object's label and position.
@@ -859,28 +853,24 @@ The score of a chain is a product of how straight it is, how even its spacing an
 \State \Return the rows, and the seats in no row as loose groups
 \end{algorithmic}
 \end{algorithm}
-\boxref{box:rows} gives the block that results for one target.
+\boxref{box:rows} gives part of the block that results for one target.
 It names each row and each end of a row by a landmark, so that no standpoint is needed, and it says what it cannot know: whether the line reads as a row to someone looking at the room.
 % Seshat-Star/analysis/_supp_row_block.py scene0575_00 "office chair" 2 (spatial.compose.grid_facts, the operator's present
-% output; the room is that of the lower left panel of fig:supp_operators).  Reproduced whole.
-\begin{figure*}[t]
+% output; the room is that of the lower left panel of fig:supp_operators).  A sample: the header in part, two of the seven lines.
+\begin{figure}[t]
 \begin{promptframe}
-ROW LAYOUT: of the 10 office chairs, 8 stand in 2 straight rows, listed in order across the room --- row 1 is the one nearest the table \#14, row 2 the one nearest the window \#16. Rows and in-row order are geometry, not a viewpoint; the ends are named by what they are nearest, so you can refer to them without stating where you stand. This is measured from footprint centres alone: it can say what lines up and in what order, and it cannot say whether the run reads as a run to someone looking at the room. Find the row in the renders before you count along it --- the top-down for the shape of the layout, the oblique views for whether it reads as one line from where a person would stand --- and if no view shows it, reach for what the target sits beside instead.
+ROW LAYOUT: of the 10 office chairs, 8 stand in 2 straight rows, listed in order across the room --- row 1 is the one nearest the table \#14, row 2 the one nearest the window \#16. [\ldots] This is measured from footprint centres alone: it can say what lines up and in what order, and it cannot say whether the run reads as a run to someone looking at the room. [\ldots]
 
 \hspace*{1em}the target sits in the second row of 2, counting from the end nearest the table \#14 (that row still holds 3 others, so the row alone does not pin it)
 
-\hspace*{1em}row 1 of 2: \#5=exclude, \#3=exclude, \#6=exclude, \#7=exclude [order runs from the end nearest the table \#14 to the end nearest the trash can \#11]
+[\ldots]
 
 \hspace*{1em}row 2 of 2: \#4=exclude, \#1=exclude, \#2=IN-SET, \#9=exclude [order runs from the end nearest the window \#16 to the end nearest the table \#14] --- the target is third of 4 along this row
 
-\hspace*{1em}rows the target is not in: 1
-
-\hspace*{1em}on its own beside the trash can \#11: \#8=exclude
-
-\hspace*{1em}on its own beside the table \#14: \#0=exclude
+[\ldots]
 \end{promptframe}
-\promptcaption{box:rows}{The row block for one office chair (\#2) of the room in the lower left panel of \cref{fig:supp_operators}, as the operator returns it now.}
-\end{figure*}
+\promptcaption{box:rows}{Part of the row block for one office chair (\#2) of the room in the lower left panel of \cref{fig:supp_operators}, as the operator returns it now.}
+\end{figure}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{The writer}
@@ -912,36 +902,28 @@ The fourth row of \cref{tab:principles} is the same behaviour seen from the othe
 For 410 validation items the row block said that the target stands in no row, and none of the rewrites says otherwise.
 
 \paragraph{The prompt.}
-% Seshat-Star/rewrite/m3d_run.py, M3D_HEAD: the blocks ``WHAT A GOOD RESULT IS'' (first five passages of the frame) and ``WHERE
-% ATTRIBUTES COME FROM'' (the sixth), and the rules on the original's words and on side words (the last two).  Quoted verbatim;
-% ellipses mark omissions.  Compass words: the reason for the exclusion of supp:models and supp:qual is the second passage.
+% Seshat-Star/rewrite/m3d_run.py, M3D_HEAD, the block ``WHAT A GOOD RESULT IS'': EXACT, HUMAN & NATURAL, and the end of A WARNING
+% ABOUT WEAK CUES.  Quoted verbatim; ellipses mark omissions.  Compass words: the reason for the exclusion of supp:models and supp:qual is the second passage.
 The writer's prompt states the task, lists what a good result is, and then gives the object table, the evidence and the output format.
-\boxref{box:writer} reproduces the passages that decide what is written: the requirement to exclude every distractor, the instruction to check it one distractor at a time, and the rules on what a person in the room can see, on number, on colour, on the annotator's words and on side words.
-\begin{figure*}[t]
+\boxref{box:writer} reproduces three passages: the requirement to exclude every distractor, the rule on what a person in the room can see, and the instruction to check the exclusion one distractor at a time.
+\begin{figure}[t]
 \begin{promptframe}
 - EXACT: it fits every object in the TARGET SET and NONE of the objects listed as MUST-EXCLUDE. This is a hard requirement, never traded away for brevity.
 
 - HUMAN \& NATURAL: reads like directions one person gives another while standing in the room. Never write ids (``\#5''), coordinates, axis names (``+x''), or compass words (``the north side'') --- nobody in the room can see those. [\ldots]
 
-- LENGTH IS NOT A COST, THOUGH PADDING IS. There is no word budget and no cue budget, and a shorter description is NOT a better one. Do not stop at one relation because it ``reads cleanly'' --- stop only when you have walked the whole MUST-EXCLUDE list and each of those objects is ruled out by something you actually wrote. [\ldots]
-
-- A WARNING ABOUT WEAK CUES: one proximity relation to a landmark almost never separates a same-class object from the others crowded around that same landmark. Before you settle, walk the MUST-EXCLUDE list one object at a time and ask what in your sentence rules THAT one out. If the answer is the landmark it also sits beside, you are not exact yet.
-
-- RIGHT NUMBER: if the set holds several objects, phrase it as a group and make the count audible. [\ldots]
-
-[\ldots] Every object we LIST is filled with a colour WE assigned, so its real colour is hidden: a colour or material word for a listed object is admissible only if the ORIGINAL CAPTION supplies it, and an invented one is a factual error in the data. [\ldots]
-
-- Keep the original's own wording for a thing it names. If the caption says ``waste receptacle'' and our list calls it a trash can, write ``waste receptacle'' --- the annotator's words are data, not noise to be normalised away. [\ldots]
-
-- A side word needs a place to be read FROM. [\ldots]
+[\ldots] Before you settle, walk the MUST-EXCLUDE list one object at a time and ask what in your sentence rules THAT one out. If the answer is the landmark it also sits beside, you are not exact yet.
 \end{promptframe}
-\promptcaption{box:writer}{Passages of the writer's prompt.}
-\end{figure*}
+\promptcaption{box:writer}{Three passages of the writer's prompt.}
+\end{figure}
 The rest of the prompt can be told in a few sentences.
-The writer is asked to draw on cues of different kinds and to add one true cue beyond the minimum.
+Length is not a cost, and the writer is asked to draw on cues of different kinds and to add one true cue beyond the minimum.
 It may not change which objects are the targets.
 It may rewrite from scratch, and is asked to work out each spatial relation of the original against the geometry before writing.
-Where no joint description fits several targets, it must describe the members one by one.
+It keeps the original's own word for a thing the original names.
+A colour or material word is allowed only if the original sentence supplies it, because the renderings fill every listed object with a colour of ours.
+A side word needs a place to be read from.
+For several targets it must make the number audible, and where no joint description fits it must describe the members one by one.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{The scorer}
