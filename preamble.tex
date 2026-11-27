@@ -41,7 +41,10 @@
 %%
 \newif\ifwithsupp
 \withsuppfalse
-\newcommand{\supp}[1]{the supplement\ifwithsupp~(\cref{#1})\fi}
+% 11-27: in the draft build the pointer REPLACES the words (``Appendix H'', shorter than ``the supplement'') instead of following
+% them (``the supplement (Appendix H)'').  The longer form, at twelve places, pushed the main text one line onto a ninth page.
+% The submitted build (\withsuppfalse) prints ``the supplement'' as before and is not affected.
+\newcommand{\supp}[1]{\ifwithsupp\cref{#1}\else the supplement\fi}
 
 %%
 %% Work harder in optimizing text layout. Typically shrinks text by 1/6 of page, enable
